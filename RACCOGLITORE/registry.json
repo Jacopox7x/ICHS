@@ -1,0 +1,27 @@
+{
+  "sandbox": [
+    {
+      "id": "cooperativa_cremona",
+      "nome": "CreAzioni Migranti",
+      "path": "SANDBOX/cooperativa_cremona",
+      "attiva": true,
+      "data_creazione": "2026-09-17",
+      "template": ["social", "sito"],
+      "contatti": {
+        "indirizzo": "Via Bonomelli 11, 26100 Cremona",
+        "whatsapp": "+39 388 822 6958",
+        "email": "creazioni.migranti@cosper.coop",
+        "instagram": "@creazionimigranti"
+      }
+    }
+  ],
+  "motori": [
+    {
+      "id": "icrawler",
+      "nome": "iCrawler",
+      "versione": "2.0",
+      "path": "iCRAWLER_KNOWLEDGE_BASE_v1.0",
+      "tipo": "generale"
+    }
+  ]
+}

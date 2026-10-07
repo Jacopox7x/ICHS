@@ -1,0 +1,17 @@
+#!/bin/bash
+# iCRAWLER V1.7 - Launch Script
+
+# Trova la directory dello script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Attiva l'ambiente virtuale
+source "$SCRIPT_DIR/venv/bin/activate"
+
+# Imposta PYTHONPATH per trovare i moduli
+export PYTHONPATH="$SCRIPT_DIR/src:$PYTHONPATH"
+
+# Esegui iCRAWLER con tutti gli argomenti passati
+python3 "$SCRIPT_DIR/src/icrawler_v17.py" "$@"
+
+# Disattiva l'ambiente virtuale (opzionale)
+deactivate 2>/dev/null

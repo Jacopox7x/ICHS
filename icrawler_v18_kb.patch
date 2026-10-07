@@ -1,0 +1,35 @@
+--- src/icrawler_v17.py
++++ src/icrawler_v17.py
+@@ -19,6 +19,11 @@
+ # Aggiungi src al path
+ sys.path.insert(0, str(Path(__file__).parent))
+ 
++# Aggiungi KB (iCRAWLER_KNOWLEDGE_BASE_v1.0) al path
++KB_ROOT = Path(__file__).parent.parent / "iCRAWLER_KNOWLEDGE_BASE_v1.0"
++sys.path.insert(0, str(KB_ROOT))
++from knowledge.knowledge_retriever import KnowledgeRetriever
++from core.prompt_builder import PromptBuilder
++
+ from fact_extractor import FactExtractor, format_facts, FactStatus
+ from deterministic_validator import DeterministicValidator
+ from fallback_generator import FallbackGenerator
+@@ -186,7 +191,16 @@
+         # Step 3: Qwen Generation
+         print("\n🤖 Step 3: Generazione piano con Qwen...")
+         start = time.time()
+         try:
+-            prompt = self._build_prompt(facts)
++            # V1.8: Retrieval KB + PromptBuilder strategico
++            print("\n📚 Step 3a: Retrieval Knowledge Base...")
++            retriever = KnowledgeRetriever()
++            context = retriever.retrieve(platform="instagram")
++            builder = PromptBuilder()
++            facts_dict = {k: (f.value if f and f.value else None) for k, f in facts.items()}
++            prompt = builder.build(facts_dict, context)
++            retriever.close()
++            # Fallback alla logica V17 se la KB è vuota
++            if not any(context.values()):
++                prompt = self._build_prompt(facts)
+             plan = self._call_qwen(prompt)
+             if plan is None:
+                 raise RuntimeError("Qwen non ha restituito output")

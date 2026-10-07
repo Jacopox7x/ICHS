@@ -1,0 +1,69 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Env e segreti — MAI in git
+.env
+.env.*
+*.key
+*.pem
+credentials.json
+secrets.json
+
+# Backup e archivio (singolare E plurale, con wildcard)
+backups/
+backup_*/
+logs_backup/
+.archive/
+*.tar.gz
+*.zip
+*.dmg
+*.bak
+*.bak2
+*.bak3
+*.save
+*.backup
+*.backup2
+*.backup_sera
+*.old
+*~
+
+# Output e cache
+outputs/
+cache/
+dist/
+build/
+*.log
+output_plan_*.txt
+*.duckdb
+*.db
+
+# Copie annidate del progetto dentro KB
+iCRAWLER_KNOWLEDGE_BASE_v1.0/backups/
+iCRAWLER_KNOWLEDGE_BASE_v1.0/backups_cleanup/
+
+# Output di test nel SANDBOX
+SANDBOX/**/output_test_*.json
+SANDBOX/**/output_test_*.md
+SANDBOX/**/mio_output.json
+
+# macOS
+.DS_Store
+._*
+
+# IDE
+.vscode/
+.idea/
+
+# Submodule
+icrawler_weknora/WeKnora/

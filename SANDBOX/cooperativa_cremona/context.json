@@ -1,0 +1,116 @@
+{
+  "id": "cooperativa_cremona",
+  "nome": "CreAzioni Migranti",
+  "tipo": "sartoria sociale",
+  "sito": "https://www.creazionimigranti.org/",
+  "casa_madre": {
+    "nome": "COSPER",
+    "tipo": "cooperativa sociale",
+    "dominio": "cosper.coop"
+  },
+  "contatti": {
+    "indirizzo": "Via Bonomelli 11, 26100 Cremona",
+    "whatsapp": "+39 388 822 6958",
+    "whatsapp_link": "https://wa.me/393888226958",
+    "email": "creazioni.migranti@cosper.coop",
+    "email_amministrazione": "amministrazione@cosper.coop",
+    "instagram": "@creazionimigranti",
+    "instagram_url": "https://www.instagram.com/creazionimigranti/",
+    "sito": "www.creazionimigranti.org"
+  },
+  "orari": {
+    "Lun": "Chiuso",
+    "Mar": "15-18",
+    "Mer": "09-13",
+    "Gio": "09-13",
+    "Ven": "15-19",
+    "Sab": "Chiuso",
+    "Dom": "Chiuso"
+  },
+  "tono": {
+    "registro": "caldo, poetico ma concreto, mai pietistico",
+    "evitare": ["pietismo", "vittimismo", "carità", "bisognosi", "aiuto (come beneficenza)"],
+    "usare": ["intrecciare", "mestiere", "competenze", "opportunità", "percorsi", "seconda vita", "artigianale", "creazioni", "tessuto", "economia circolare", "punto cucito"]
+  },
+  "valori": ["sociale", "inclusiva", "sostenibile", "circolare"],
+  "materiali": ["tessuti wax", "materiali di recupero", "tessuti di giacenza"],
+  "impatto": {
+    "tessuti_saved": "contatore da aggiornare",
+    "economia_circolare": true,
+    "green_shipping": "imballaggi eco-compatibili, privi di plastica vergine, riciclabili o compostabili"
+  },
+  "shop": {
+    "url": "https://www.creazionimigranti.org/negozio/",
+    "totale_prodotti": 61,
+    "categorie": ["Top", "Gonne", "Pajamas", "Bags"],
+    "fascia_prezzo": "31-80€",
+    "sconti_attivi": true,
+    "prodotti_esempio": {
+      "tote_bag_piccola": "35€",
+      "tote_bag_grande": "50€",
+      "gilet_wax_reversibile": "31,50€ (scontato da 45€)",
+      "gonna_lunga_frufru": "56€ (scontata da 80€)"
+    },
+    "valori": {
+      "pezzi_unici": true,
+      "qualità_cura": "Ogni nostra creazione è un pezzo unico che racchiude storie di terre lontane e nuove opportunità.",
+      "circularity": "Scegliere un nostro prodotto significa sostenere un'economia che non consuma risorse, ma rigenera valore umano e ambientale a ogni punto cucito.",
+      "green_shipping": "Utilizziamo imballaggi eco-compatibili, privi di plastica vergine e completamente riciclabili o compostabili."
+    }
+  },
+  "laboratori": {
+    "target": ["bambini", "adulti", "scuole", "gruppi", "associazioni"],
+    "descrizione": "Esperienze dove il tessuto diventa linguaggio, relazione e condivisione"
+  },
+  "testimonianze": [
+    {
+      "nome": "Fatima",
+      "città": "Cremona",
+      "testo": "Qui non ho solo imparato a cucire: ho trovato un'opportunità per ricominciare e costruire il mio futuro."
+    },
+    {
+      "nome": "Sara",
+      "città": "Cremona",
+      "testo": "Ogni acquisto sostiene un progetto che crea valore reale per le persone e il territorio."
+    },
+    {
+      "nome": "Amina",
+      "città": "Cremona",
+      "testo": "Indossare queste creazioni significa scegliere qualcosa di unico, fatto con cura e con una storia."
+    },
+    {
+      "nome": "Elena",
+      "città": "Cremona",
+      "testo": "Non è solo sartoria: è un luogo dove le persone crescono, imparano e ritrovano fiducia."
+    }
+  ],
+  "faq": [
+    {
+      "domanda": "Come posso contribuire al recupero dei tessuti per il progetto?",
+      "risposta": "Puoi sostenerci attivamente donando materiali di recupero provenienti da varie parti del mondo. Il tuo contributo ci permette di alimentare il processo di economia circolare della nostra sartoria sociale, trasformando tessuti inutilizzati in nuovi prodotti creati in Italia da persone con fragilità sociale."
+    },
+    {
+      "domanda": "Organizzate corsi di cucito aperti a tutti?",
+      "risposta": "Sì, la nostra sartoria è un luogo di formazione costante. Attraverso i nostri corsi, cerchiamo di trasmettere l'arte del cucito non solo come competenza tecnica, ma come mezzo per raggiungere libertà e autonomia. Le sessioni sono aperte a chiunque voglia imparare a creare prodotti unici partendo da materiali rigenerati."
+    },
+    {
+      "domanda": "Qual è l'impatto sociale del mio acquisto o della mia partecipazione ai corsi?",
+      "risposta": "Sia l'acquisto di un capo che la partecipazione ai nostri percorsi formativi sostengono direttamente persone con fragilità sociale nel loro cammino verso l'integrazione lavorativa. Ogni interazione con la nostra sartoria contribuisce a tessere una rete di solidarietà e libertà."
+    }
+  ],
+  "canali": {
+    "prioritari": ["Instagram", "Facebook"],
+    "secondari": ["Newsletter", "Sito web"],
+    "da_creare": ["Instagram (non attivo)"],
+    "esclusi": []
+  },
+  "anime": [
+    {
+      "nome": "sartoria sociale",
+      "parole_chiave": ["filo", "ago", "tessuto", "wax", "misura", "cura", "intreccio", "economia circolare", "punto cucito"],
+      "hashtag": ["#sartoriasociale", "#cucito", "#riparare", "#creazioni", "#wax", "#economiacircolare"]
+    }
+  ],
+  "obiettivi": ["visibilità", "laboratori aperti", "vendite shop", "donazioni materiali", "volontari"],
+  "data_creazione": "2026-09-17"
+}
