@@ -34,7 +34,7 @@ STORPIATURE = [
     "Ordimimesi", "Ordomimesis", "Ordo mimesi", "Ord o mimesi",
     "Ordo-mimesi", "Ordonimesi", "Ordinimesi", "ordinesi",
     "Ordinemimesi", "ordinemimesi", "ordinemìmesi",
-]]
+]
 
 VERBI_AZIONE = [
     "raccogli", "confronta", "attendi", "pubblica", "archivia",
