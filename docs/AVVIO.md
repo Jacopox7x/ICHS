@@ -288,7 +288,19 @@ Se il modello non è scaricato, `ollama pull <nome>` prima.
 - **v4.0** (obiettivo: entro dicembre 2026): app desktop con Tauri,
   bundle singolo, avvio con doppio click.
 - **v5.0** (data da definire): app mobile (Android o Flutter).
+## Versioning
 
+- **v3.5** (15 ottobre 2026): core completo, UI web funzionante,
+  tre fix applicati (placeholder, LinkedIn, calendario). Uso personale.
+- **v3.8** (26 ottobre 2026): modello qwen2.5:3b, prompt ritarato,
+  semantic hashtags con soglia 0.68, post-processing regex per
+  articoli orfani e frasi vietate. Pipeline stabile end-to-end su
+  brief ricchi e scarni.
+- **v3.9** (novembre 2026, obiettivo): A/B Llama3.2:3b vs Qwen2.5:3b
+  sui 5 brief di test, valutazione modello migliore su dati reali.
+- **v4.0** (dicembre 2026, obiettivo): app desktop con Tauri,
+  bundle singolo, avvio con doppio click.
+- **v5.0** (data da definire): app mobile (Android o Flutter).
 ---
 
 ## Note
