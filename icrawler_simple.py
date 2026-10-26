@@ -139,6 +139,27 @@ def _force_variety(data: dict) -> dict:
                 data[plat]["visual"] = "Un'immagine coinvolgente che mostri il progetto in azione, con i colori del brand."
     return data
 
+def _normalize_data(data):
+    """Se qwen genera liste dove servono dict, prendi il primo dict."""
+    if not isinstance(data, dict):
+        return {}
+    for plat in ["instagram", "linkedin", "facebook", "twitter", "tiktok",
+                 "stories", "calendario", "riassunto"]:
+        if plat in data and not isinstance(data[plat], dict):
+            if isinstance(data[plat], list):
+                for item in data[plat]:
+                    if isinstance(item, dict):
+                        data[plat] = item
+                        break
+                else:
+                    data[plat] = {}
+            else:
+                data[plat] = {}
+    if "analisi" in data and not isinstance(data["analisi"], dict):
+        data["analisi"] = {}
+    return data
+
+
 def _hard_clean_output(data: dict, hashtag_pool: list = None) -> dict:
     testi = {
         "instagram": ["hook", "corpo", "cta", "visual", "script"],
@@ -297,6 +318,8 @@ class ICrawler:
         
         for plat, title in [("instagram", "INSTAGRAM"), ("linkedin", "LINKEDIN"), ("facebook", "FACEBOOK")]:
             p = data.get(plat, {})
+            if not isinstance(p, dict):
+                p = {}
             lines.append(f"### {title}")
             lines.append(f"**Hook:** {p.get('hook', 'Non specificato')}")
             lines.append(f"**Corpo:** {p.get('corpo', 'Non specificato')}")
@@ -429,6 +452,7 @@ class ICrawler:
                     return structured
 
                 data = self._extract_json(output)
+                data = _normalize_data(data)
                 data = _force_variety(data)
                 data = _hard_clean_output(data, hashtag_pool)
                 print("✅ JSON parsato e pulito con successo")
