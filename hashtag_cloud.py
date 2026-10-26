@@ -43,20 +43,9 @@ class HashtagCloud:
         return self._get_fallback_hashtags(category)
     
     def _fetch_from_cloud(self, category: str, topic: str) -> Optional[List[str]]:
-        """Tenta di ottenere hashtag dall'API cloud."""
-        try:
-            response = requests.get(
-                self.api_url,
-                params={"category": category, "topic": topic},
-                timeout=2
-            )
-            if response.status_code == 200:
-                data = response.json()
-                return data.get("hashtags", [])
-        except:
-            pass
-        return None
-    
+        """Tenta di ottenere hashtag dall'API cloud (DISABILITATO)."""
+        # L'API è un placeholder, ritorniamo None per forzare il fallback locale.
+        return None    
     def _get_fallback_hashtags(self, category: str) -> List[str]:
         """Restituisce hashtag locali di fallback."""
         pool = FALLBACK_HASHTAGS.get(category, FALLBACK_HASHTAGS["default"])

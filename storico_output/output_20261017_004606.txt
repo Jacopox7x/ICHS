@@ -1,0 +1,67 @@
+BRIEF:
+Evento: presentazione libro
+Data: 15 novembre 2025
+Luogo: libreria Feltrinelli, Milano
+Target: lettori 25-45 anni
+Budget: 300 euro
+Hashtag: #presentazionelibro
+
+OUTPUT:
+### ANALISI
+- Target: lettori 25-45 anni
+- Mood: emozionale, informale
+- Concept: presentazione libro
+
+### INSTAGRAM
+**Hook:** Scopri il nuovo libro che cambierà la tua vita!
+**Corpo:** Unisciti a noi per la presentazione del nuovo libro!
+**CTA:** Scopri di più sul libro
+**Visual:** Una foto del libro con un'immagine di fondo di una libreria
+**Hashtag:** #presentazionelibro, #libro, #Milano, #lettori
+
+### LINKEDIN
+**Hook:** Nuova presentazione di libro: opportunità di networking e business
+**Corpo:** Unisciti a noi per la presentazione del nuovo libro e scopri come puoi utilizzare questo evento per il tuo business
+**CTA:** Scopri di più
+**Visual:** Una foto di un libro con un'immagine di fondo di una sala di riunioni
+**Hashtag:** #presentazionelibro, #libro, #Milano, #networking
+
+### X (TWITTER)
+**Tweet 1:** Nuova presentazione di libro a Milano! Scopri di più sul libro e su come puoi utilizzarlo per il tuo business #presentazionelibro #libro #Milano
+**Tweet 2:** Unisciti a noi per la presentazione del nuovo libro e scopri come puoi utilizzare questo evento per il tuo business #presentazionelibro #libro #Milano
+**Tweet 3:** Scopri di più sul nuovo libro e su come puoi utilizzarlo per il tuo business #presentazionelibro #libro #Milano
+**Tweet 4:** La presentazione del nuovo libro è un evento non da perdere! Scopri di più sul libro e su come puoi utilizzarlo per il tuo business #presentazionelibro #libro #Milano
+**Tweet 5:** Unisciti a noi per la presentazione del nuovo libro e scopri come puoi utilizzare questo evento per il tuo business #presentazionelibro #libro #Milano
+
+### FACEBOOK
+**Hook:** Scopri il nuovo libro che cambierà la tua vita!
+**Corpo:** Unisciti a noi per la presentazione del nuovo libro e scopri come puoi utilizzare questo evento per il tuo business
+**CTA:** Scopri di più sul libro
+**Visual:** Una foto del libro con un'immagine di fondo di una libreria
+**Hashtag:** #presentazionelibro, #libro, #Milano, #lettori
+
+### TIKTOK
+**Hook:** Scopri il nuovo libro che cambierà la tua vita!
+**Script:** Unisciti a noi per la presentazione del nuovo libro e scopri come puoi utilizzare questo evento per il tuo business
+**CTA:** Scopri di più sul libro
+
+### STORIES (5 frame)
+1. Una foto del libro con un'immagine di fondo di una libreria
+2. Un'immagine di un libro con un'immagine di fondo di una sala di riunioni
+3. Una foto del libro con un'immagine di fondo di una libreria
+4. Un'immagine di un libro con un'immagine di fondo di una sala di riunioni
+5. Una foto del libro con un'immagine di fondo di una libreria
+
+### CALENDARIO
+Giorno -2: 13 novembre 2025
+Giorno -1: 14 novembre 2025
+Giorno evento: 15 novembre 2025
+Giorno +1: 16 novembre 2025
+
+### RIASSUNTO
+- Obiettivi: Promuovere il nuovo libro e creare un evento di networking
+- KPI: Number di persone presenti, number di hashtag utilizzati
+- Budget: 300 euro
+
+CATEGORY: default
+TIMESTAMP: 2026-10-17T00:46:06.347478

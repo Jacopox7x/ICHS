@@ -30,11 +30,12 @@ class TopicExtractor:
         max_score = 0
         
         for cat, words in self.category_keywords.items():
-            score = sum(1 for w in words if w in text_lower)
+            matched = [w for w in words if re.search(r'\b' + re.escape(w.lower()) + r'\b', text_lower)]
+            score = len(matched)
             if score > max_score:
                 max_score = score
                 category = cat
-                keywords = [w for w in words if w in text_lower]
+                keywords = matched
         
         words = text_lower.split()[:20]
         main_topic = " ".join(words[:3]) if words else "evento"

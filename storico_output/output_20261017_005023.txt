@@ -1,0 +1,62 @@
+BRIEF:
+cd ~/Documents/ICHS
+
+OUTPUT:
+### ANALISI
+- Target: evento
+- Mood: energico
+- Concept: comunità
+
+### INSTAGRAM
+**Hook:** Unisciti alla nostra comunità!
+**Corpo:** Partecipa al nostro evento e scopri nuove opportunità!
+**CTA:** Registra il tuo interesse
+**Visual:** Una foto di una persona in mezzo a una folla di persone
+**Hashtag:** #community, #evento, #social
+
+### LINKEDIN
+**Hook:** Sviluppa le tue abilità e connetti con altri professionisti
+**Corpo:** Partecipa al nostro evento e scopri nuove opportunità di business
+**CTA:** Registra il tuo interesse
+**Visual:** Una foto di una persona seduta alla scrivania con un laptop
+**Hashtag:** #networking, #opportunita, #business
+
+### X (TWITTER)
+**Tweet 1:** Non perdere l'evento! Registra il tuo interesse e scopri nuove opportunità!
+**Tweet 2:** Partecipa alla nostra comunità e connetti con altri professionisti!
+**Tweet 3:** Sviluppa le tue abilità e scopri nuove opportunità di business!
+**Tweet 4:** Non è troppo tardi! Registra il tuo interesse ora!
+**Tweet 5:** Scopri cosa aspettarti dall'evento e registra il tuo interesse!
+
+### FACEBOOK
+**Hook:** Unisciti alla nostra comunità e scopri nuove opportunità!
+**Corpo:** Partecipa al nostro evento e connetti con altri professionisti!
+**CTA:** Registra il tuo interesse
+**Visual:** Una foto di una persona in mezzo a una folla di persone
+**Hashtag:** #community, #evento, #social
+
+### TIKTOK
+**Hook:** Unisciti alla nostra comunità!
+**Script:** Una serie di video che mostrano le attività dell'evento
+**CTA:** Registra il tuo interesse
+
+### STORIES (5 frame)
+1. Una foto di una persona in mezzo a una folla di persone
+2. Una foto di una persona seduta alla scrivania con un laptop
+3. Una foto di una persona che parla con un altro professionista
+4. Una foto di una persona che lavora con un computer
+5. Una foto di una persona che sorride
+
+### CALENDARIO
+Giorno -2: non specificato
+Giorno -1: non specificato
+Giorno evento: non specificato
+Giorno +1: non specificato
+
+### RIASSUNTO
+- Obiettivi: Promuovere l'evento e aumentare la consapevolezza della comunità
+- KPI: Aumentare del 20% la partecipazione all'evento
+- Budget: non specificato
+
+CATEGORY: default
+TIMESTAMP: 2026-10-17T00:50:23.484525

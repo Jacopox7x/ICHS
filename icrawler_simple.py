@@ -1,25 +1,205 @@
 
-#!/usr/bin/env options={"temperature": 0.3, "num_predict" 8192}
-# python3
+#!/usr/bin/env python3
 import sys
 import json
+
 import re
+
+
+
+
+
+
+
 import ollama
 from config import config
 from prompt_builder import PromptBuilder
 from topics import TopicExtractor
-from hashtags import HashtagEngine
+from semantic_hashtags import SemanticHashtagEngine
 from utils import setup_logging, save_output
 from validator import Validator
+from gliner_client import extract_entities, entities_to_dict, is_alive
+from execution_limits import ExecutionContext, check_execution_limits, record_model_call, check_input_size, check_output_size
 
 logger = setup_logging()
+def _fix_duplicate_articles(text: str) -> str:
+    pattern = r'\b(la|il|lo|le|gli|i|un|una)\s+(La|Il|Lo|Le|Gli|I|Un|Una|LA|IL|LO|LE|GLI|I|UN|UNA)\b'
+    return re.sub(pattern, r'\2', text)
+
+import unicodedata
+
+LABELS = ("TITOLO", "SLUG", "ESTRATTO", "CORPO", "SEO_TITLE", "META", "CATEGORIA", "TAG")
+
+_MISSING = "Non specificato"
+
+_LABEL_RE = re.compile(r"(?im)^[#*\s]*(?P<label>" + "|".join(LABELS) + r")[#*\s]*:\s*")
+
+def parse_article(text: str) -> dict:
+    data = {label: "" for label in LABELS}
+    if not text: return data
+    matches = list(_LABEL_RE.finditer(text))
+    for index, match in enumerate(matches):
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        data[match.group("label").upper()] = text[start:end].strip()
+    return data
+
+def slugify(title: str) -> str:
+    normalized = unicodedata.normalize("NFKD", title)
+    ascii_title = "".join(ch for ch in normalized if not unicodedata.combining(ch))
+    slug = re.sub(r"[^a-z0-9]+", "-", ascii_title.lower()).strip("-")
+    return slug
+
+def _field(data: dict, label: str) -> str:
+    value = (data.get(label) or "").strip()
+    return value if value else _MISSING
+
+def render_article(data: dict) -> str:
+    title = _field(data, "TITOLO")
+    slug = (data.get("SLUG") or "").strip()
+    if not slug and title != _MISSING:
+        slug = slugify(title) or _MISSING
+    elif not slug:
+        slug = _MISSING
+    corpo = data.get("CORPO", "").strip()
+    lines = corpo.split('\n')
+    if lines and lines[0].strip().upper() == "CORPO":
+        corpo = '\n'.join(lines[1:]).strip()
+    elif corpo.upper().startswith("CORPO"):
+        corpo = corpo[5:].strip()
+    if corpo.upper().startswith("CORPO"):
+        corpo = corpo[5:].strip()
+    return "\n".join([
+        f"# {title}", "", corpo, "", "---",
+        f"**Estratto:** {_field(data, 'ESTRATTO')}",
+        f"**Slug:** {slug}",
+        f"**SEO title:** {_field(data, 'SEO_TITLE')}",
+        f"**Meta:** {_field(data, 'META')}",
+        f"**Categoria:** {_field(data, 'CATEGORIA')}",
+        f"**Tag:** {_field(data, 'TAG')}", ""
+    ])
+
+def article_is_usable(data: dict) -> bool:
+    return bool((data.get("TITOLO") or "").strip() or (data.get("CORPO") or "").strip() or (data.get("SLUG") or "").strip() or (data.get("ESTRATTO") or "").strip())
+
+
+
+_EMOJI_RE = re.compile(r"[\U00010000-\U0010ffff\u2600-\u27BF\uFE0F\u200D]")
+_HASHTAG_RE = re.compile(r"#\w+")
+_URL_RE = re.compile(r"https?://\S+")
+_WS_RE = re.compile(r"\s+")
+_PUNCT_SPACE_RE = re.compile(r"\s+([.,!?;:])")
+_TRAIL_PUNCT_RE = re.compile(r"[\s.,!?;:(]+\Z")
+
+def _clean_text(text: str, drop_emoji: bool = False, default: str = "") -> str:
+    text = _HASHTAG_RE.sub("", text)
+    text = _URL_RE.sub("", text)
+    text = re.sub(r"<[^>]+>", "", text) # Rimuove tag HTML come <strong>
+    if drop_emoji:
+        text = _EMOJI_RE.sub("", text)
+    text = _WS_RE.sub(" ", text).strip()
+    text = _PUNCT_SPACE_RE.sub(r"\1", text)
+    text = _TRAIL_PUNCT_RE.sub("", text).strip()
+    return text or default
+
+def _fix_cta(cta: str) -> str:
+    cta = cta.strip()
+    if re.search(r"\b(scopri|prenota|registr|iscriv|unisci|visita|contatta|scarica|usa|partecipa|vieni|guarda|salva|condividi|clicca|prenota|torna|seguit)\w*", cta, re.I) or cta.endswith("!"):
+        return cta
+    return "Scopri di più sul nostro sito."
+
+
+def _force_variety(data: dict) -> dict:
+    """Forza la diversità di tweet e stories se il modello fa copia-incolla."""
+    tw = data.get("twitter", {})
+    if isinstance(tw, dict) and tw:
+        tweets = [tw.get(f"tweet{i}", "") for i in range(1, 6)]
+        if len(set(tweets)) < 3:
+            base = tweets[0] if tweets[0] else "Scopri di più"
+            tw["tweet1"] = base
+            tw["tweet2"] = f"📊 I numeri del progetto: {base}"
+            tw["tweet3"] = f"🤝 Unisciti a noi! {base}"
+            tw["tweet4"] = f"💡 Lo sapevi? {base}"
+            tw["tweet5"] = f"👉 Scopri di più sul nostro sito!"
+
+    st = data.get("stories", {})
+    if isinstance(st, dict) and st:
+        frames = [st.get(f"frame{i}", "") for i in range(1, 6)]
+        if len(set(frames)) < 3:
+            st["frame1"] = "Inquadratura del logo del progetto"
+            st["frame2"] = "Dettaglio di un oggetto rappresentativo"
+            st["frame3"] = "Testo grande: 'Scopri di più'"
+            st["frame4"] = "Una persona sorridente coinvolta nel progetto"
+            st["frame5"] = "Invito a partecipare con call to action"
+
+    for plat in ["instagram", "linkedin", "facebook"]:
+        if plat in data and "visual" in data[plat]:
+            vis = data[plat]["visual"].lower()
+            if "logo grande" in vis or "sfondo giallo" in vis or "testo in nero" in vis:
+                data[plat]["visual"] = "Un'immagine coinvolgente che mostri il progetto in azione, con i colori del brand."
+    return data
+
+def _hard_clean_output(data: dict, hashtag_pool: list = None) -> dict:
+    testi = {
+        "instagram": ["hook", "corpo", "cta", "visual", "script"],
+        "linkedin":  ["hook", "corpo", "cta", "visual", "script"],
+        "facebook":  ["hook", "corpo", "cta", "visual", "script"],
+        "tiktok":    ["hook", "script", "cta"],
+    }
+    for plat, fields in testi.items():
+        bloc = data.get(plat)
+        if not isinstance(bloc, dict):
+            continue
+        no_emoji = (plat == "linkedin")
+        for field in fields:
+            if isinstance(bloc.get(field), str):
+                default = "Un'immagine rappresentativa del progetto" if field == "visual" else ""
+                bloc[field] = _clean_text(bloc[field], drop_emoji=no_emoji, default=default)
+        if plat != "tiktok" and isinstance(bloc.get("cta"), str):
+            bloc["cta"] = _fix_cta(bloc["cta"])
+            
+        # --- IRON FIST: FORZIAMO GLI HASHTAG SEMANTICI ---
+        if plat != "tiktok" and hashtag_pool:
+            bloc["hashtag"] = hashtag_pool[:5]
+            
+        # --- IRON FIST: SOSTITUIAMO IL VISUAL FISSO ---
+        if isinstance(bloc.get("visual"), str) and "bici gialla" in bloc["visual"].lower():
+            bloc["visual"] = "Un'immagine rappresentativa del progetto" 
+            
+
+
+    # Pulizia allucinazioni (rimuove @username inventati)
+    for k, v in data.items():
+        if isinstance(v, dict):
+            for field, text in v.items():
+                if isinstance(text, str):
+                    v[field] = re.sub(r'@\w+', '', text)
+        elif isinstance(v, str):
+            data[k] = re.sub(r'@\w+', '', v)
+
+    tw = data.get("twitter")
+    if isinstance(tw, dict):
+        for i in range(1, 6):
+            f = f"tweet{i}"
+            if isinstance(tw.get(f), str):
+                tw[f] = _clean_text(tw[f])
+
+    st = data.get("stories")
+    if isinstance(st, dict):
+        for i in range(1, 6):
+            f = f"frame{i}"
+            if isinstance(st.get(f), str):
+                txt = _clean_text(st[f])
+                words = txt.split()
+                st[f] = " ".join(words[:20]) + ("…" if len(words) > 20 else "")
+    return data
 
 class ICrawler:
     def __init__(self):
-        self.model = config.get("OLLAMA_MODEL", "qwen3.5:4b")
+        self.model = config["OLLAMA_MODEL"]
         self.prompt_builder = PromptBuilder()
         self.topic_extractor = TopicExtractor()
-        self.hashtag_engine = HashtagEngine()
+        self.hashtag_engine = SemanticHashtagEngine()
         self.platforms = ["Instagram", "Twitter", "Facebook", "TikTok"]
         self.validator = Validator()
     
@@ -49,7 +229,7 @@ class ICrawler:
             "facebook": {"hook": "", "corpo": "", "cta": "", "visual": "", "hashtag": []},
             "tiktok": {"hook": "", "script": "", "cta": ""},
             "stories": {"frame1": "", "frame2": "", "frame3": "", "frame4": "", "frame5": ""},
-            "calendario": {"giorno_minus_2": "", "giorno_minus_1": ""},
+            "calendario": {"giorno_minus_2": "", "giorno_minus_1": "", "giorno_evento": "", "giorno_plus_1": ""},
             "riassunto": {"obiettivi": "", "kpi": "", "budget": ""}
         }
         
@@ -87,7 +267,7 @@ class ICrawler:
                 result["stories"][f"frame{i}"] = m.group(1)
         
         # Estrai calendario
-        for key in ["giorno_minus_2", "giorno_minus_1"]:
+        for key in ["giorno_minus_2", "giorno_minus_1", "giorno_evento", "giorno_plus_1"]:
             m = re.search(rf'"{key}"\s*:\s*"([^"]*)"', text)
             if m:
                 result["calendario"][key] = m.group(1)
@@ -106,7 +286,6 @@ class ICrawler:
         return result
     
     def _json_to_text(self, data: dict) -> str:
-        """Converte JSON in testo strutturato."""
         lines = []
         
         analisi = data.get("analisi", {})
@@ -116,50 +295,23 @@ class ICrawler:
         lines.append(f"- Concept: {analisi.get('concept', 'Non specificato')}")
         lines.append("")
         
-        # Instagram
-        ig = data.get("instagram", {})
-        lines.append("### INSTAGRAM")
-        lines.append(f"**Hook:** {ig.get('hook', 'Non specificato')}")
-        lines.append(f"**Corpo:** {ig.get('corpo', 'Non specificato')}")
-        lines.append(f"**CTA:** {ig.get('cta', 'Non specificato')}")
-        lines.append(f"**Visual:** {ig.get('visual', 'Non specificato')}")
-        hashtags = ig.get("hashtag", [])
-        lines.append(f"**Hashtag:** {', '.join(hashtags) if hashtags else 'Nessun hashtag autorizzato'}")
-        lines.append("")
-        
-        # LinkedIn
-        li = data.get("linkedin", {})
-        lines.append("### LINKEDIN")
-        lines.append(f"**Hook:** {li.get('hook', 'Non specificato')}")
-        lines.append(f"**Corpo:** {li.get('corpo', 'Non specificato')}")
-        lines.append(f"**CTA:** {li.get('cta', 'Non specificato')}")
-        lines.append(f"**Visual:** {li.get('visual', 'Non specificato')}")
-        hashtags = li.get("hashtag", [])
-        lines.append(f"**Hashtag:** {', '.join(hashtags) if hashtags else 'Nessun hashtag autorizzato'}")
-        lines.append("")
-        
-        # Twitter
+        for plat, title in [("instagram", "INSTAGRAM"), ("linkedin", "LINKEDIN"), ("facebook", "FACEBOOK")]:
+            p = data.get(plat, {})
+            lines.append(f"### {title}")
+            lines.append(f"**Hook:** {p.get('hook', 'Non specificato')}")
+            lines.append(f"**Corpo:** {p.get('corpo', 'Non specificato')}")
+            lines.append(f"**CTA:** {p.get('cta', 'Non specificato')}")
+            lines.append(f"**Visual:** {p.get('visual', 'Non specificato')}")
+            hashtags = p.get("hashtag", [])
+            lines.append(f"**Hashtag:** {', '.join(hashtags) if hashtags else 'Nessun hashtag autorizzato'}")
+            lines.append("")
+            
         tw = data.get("twitter", {})
         lines.append("### X (TWITTER)")
-        lines.append(f"**Tweet 1:** {tw.get('tweet1', 'Non specificato')}")
-        lines.append(f"**Tweet 2:** {tw.get('tweet2', 'Non specificato')}")
-        lines.append(f"**Tweet 3:** {tw.get('tweet3', 'Non specificato')}")
-        lines.append(f"**Tweet 4:** {tw.get('tweet4', 'Non specificato')}")
-        lines.append(f"**Tweet 5:** {tw.get('tweet5', 'Non specificato')}")
+        for i in range(1, 6):
+            lines.append(f"**Tweet {i}:** {tw.get(f'tweet{i}', 'Non specificato')}")
         lines.append("")
         
-        # Facebook
-        fb = data.get("facebook", {})
-        lines.append("### FACEBOOK")
-        lines.append(f"**Hook:** {fb.get('hook', 'Non specificato')}")
-        lines.append(f"**Corpo:** {fb.get('corpo', 'Non specificato')}")
-        lines.append(f"**CTA:** {fb.get('cta', 'Non specificato')}")
-        lines.append(f"**Visual:** {fb.get('visual', 'Non specificato')}")
-        hashtags = fb.get("hashtag", [])
-        lines.append(f"**Hashtag:** {', '.join(hashtags) if hashtags else 'Nessun hashtag autorizzato'}")
-        lines.append("")
-        
-        # TikTok
         tk = data.get("tiktok", {})
         lines.append("### TIKTOK")
         lines.append(f"**Hook:** {tk.get('hook', 'Non specificato')}")
@@ -167,60 +319,141 @@ class ICrawler:
         lines.append(f"**CTA:** {tk.get('cta', 'Non specificato')}")
         lines.append("")
         
-        # Stories
         st = data.get("stories", {})
         lines.append("### STORIES (5 frame)")
-        lines.append(f"1. {st.get('frame1', 'Non specificato')}")
-        lines.append(f"2. {st.get('frame2', 'Non specificato')}")
-        lines.append(f"3. {st.get('frame3', 'Non specificato')}")
-        lines.append(f"4. {st.get('frame4', 'Non specificato')}")
-        lines.append(f"5. {st.get('frame5', 'Non specificato')}")
+        for i in range(1, 6):
+            lines.append(f"{i}. {st.get(f'frame{i}', 'Non specificato')}")
         lines.append("")
         
-        # Calendario
         ca = data.get("calendario", {})
         lines.append("### CALENDARIO")
         lines.append(f"Giorno -2: {ca.get('giorno_minus_2', 'Non specificato')}")
         lines.append(f"Giorno -1: {ca.get('giorno_minus_1', 'Non specificato')}")
+        lines.append(f"Giorno evento: {ca.get('giorno_evento', 'Non specificato')}")
+        lines.append(f"Giorno +1: {ca.get('giorno_plus_1', 'Non specificato')}")
         lines.append("")
         
-        # Riassunto
         ri = data.get("riassunto", {})
         lines.append("### RIASSUNTO")
         lines.append(f"- Obiettivi: {ri.get('obiettivi', 'Non specificato')}")
-        lines.append(f"- KPI: {ri.get('kpi', 'Non specificato nel brief.')}")
-        lines.append(f"- Budget: {ri.get('budget', 'Non specificato nel brief.')}")
+        lines.append(f"- KPI: {ri.get('kpi', 'Non specificato')}")
+        lines.append(f"- Budget: {ri.get('budget', 'Non specificato')}")
         
-        return "\n".join(lines)
-    
-    def generate_strategy(self, brief: str, brief_data: dict = None) -> str:
+        testo_finale = "\n".join(lines)
+        
+
+        
+        return _fix_duplicate_articles(testo_finale)
+
+    def generate_strategy(self, brief: str, brief_data: dict = None, mode: str = 'social', sandbox: str = 'cosper') -> str:
+        if mode == 'both':
+            print("\n🔄 Modalità ENTRAMBI attivata: genero prima l'Articolo WP, poi il Piano Social...")
+            wp_result = self.generate_strategy(brief, brief_data, mode='wordpress', sandbox=sandbox)
+            social_result = self.generate_strategy(brief, brief_data, mode='social', sandbox=sandbox)
+            return f"# === ARTICOLO WORDPRESS ===\n\n{wp_result}\n\n\n# === PIANO SOCIAL ===\n\n{social_result}"
+
         if not brief or not brief.strip():
             return "⚠️ Inserisci un brief valido."
-        
+
+        ctx = ExecutionContext()
+
+        # Prova prima con GLiNER per estrarre entita strutturate
+        entities = None
+        if is_alive():
+            print("🔍 Estrazione entita con GLiNER...")
+            raw = extract_entities(brief)
+            if raw:
+                entities = entities_to_dict(raw)
+                if entities:
+                    print(f"✅ Entita estratte: {list(entities.keys())}")
+                else:
+                    print("⚠️ GLiNER non ha trovato entita utili, uso fallback")
+            else:
+                print("⚠️ GLiNER non ha risposto, uso fallback")
+        else:
+            print("⚠️ Microservizio GLiNER non attivo, uso fallback")
+
         topic = self.topic_extractor.extract(brief)
-        hashtag_pool = self.hashtag_engine.generate_pool_for_prompt(topic.main_topic, topic.category)
-        prompt = self.prompt_builder.build(brief, topic, hashtag_pool, self.platforms)
+        # Usa il motore semantico basato su Nomic + Numpy
+        raw_hashtags = self.hashtag_engine.get_top_hashtags(brief)
+        hashtag_pool = [tag for tag, score in raw_hashtags]
+        prompt = self.prompt_builder.build(brief, topic, hashtag_pool, self.platforms, entities=entities, mode=mode, sandbox=sandbox)
         
         print("\n🔄 Generazione in corso...")
         print(f"🔍 DEBUG: Lunghezza prompt: {len(prompt)}")
         
+        input_check = check_input_size(ctx, prompt)
+        if not input_check['allowed']:
+            return f"❌ Errore: {input_check['reason']}"
+
+        limit_check = check_execution_limits(ctx, "model_call")
+        if not limit_check['allowed']:
+            return f"❌ Errore: {limit_check['reason']}"
+
         try:
             response = ollama.chat(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
-                options={"temperature": 0.3, "num_predict": 8192}
+                options={
+                    "temperature": config["TEMPERATURE"],
+                    "num_predict": config["MAX_TOKENS"],
+                    "repeat_penalty": 1.1,
+                    "repeat_last_n": 512
+                },
             )
+            record_model_call(ctx)
             output = response["message"]["content"]
             print(f"🔍 DEBUG: Output ricevuto ({len(output)} caratteri)")
+            
+            output_check = check_output_size(ctx, output)
+            if not output_check['allowed']:
+                return f"❌ Errore: {output_check['reason']}"
+
+            output_check = check_output_size(ctx, output)
+            if not output_check['allowed']:
+                return f"❌ Errore: {output_check['reason']}"
             
             if len(output) == 0:
                 print("⚠️ WARNING: Output vuoto!")
                 return "❌ Errore: Il modello ha restituito output vuoto."
             
             try:
+                if mode == 'wordpress':
+                    wp_data = parse_article(output)
+                    if not article_is_usable(wp_data):
+                        with open("/tmp/errore_modello.txt", "w", encoding="utf-8") as f_err:
+                            f_err.write(output)
+                        return f"❌ Errore: Il modello non ha generato un testo valido. Output:\n{output[:200]}..."
+                    structured = render_article(wp_data)
+                    save_output(brief, structured, "WordPress", sandbox=sandbox)
+                    return structured
+
                 data = self._extract_json(output)
-                print("✅ JSON parsato con successo")
+                data = _force_variety(data)
+                data = _hard_clean_output(data, hashtag_pool)
+                print("✅ JSON parsato e pulito con successo")
+                
+                # FIX HASHTAG (gestisce sia liste che stringhe)
+                for plat in ["instagram", "linkedin", "facebook"]:
+                    if plat in data and "hashtag" in data[plat]:
+                        tags = data[plat]["hashtag"]
+                        if isinstance(tags, str):
+                            tags = [t.strip() for t in tags.split(",")]
+                        if isinstance(tags, list):
+                            data[plat]["hashtag"] = [f"#{t.strip('#').strip()}" for t in tags if t.strip()]
+
+                # FIX BULLETPROOF CALENDARIO (Regex sul Markdown finale)
+                has_specific_date = bool(re.search(r'\b\d{1,2}\s*(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)|\b(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)\s+\d{1,2}\b|\b\d{1,2}/\d{1,2}\b', brief.lower()))
+                
                 structured = self._json_to_text(data)
+                
+                # Se non c'è una data specifica nel brief, distruggiamo il calendario allucinato
+                if not has_specific_date:
+                    structured = re.sub(
+                        r'(### CALENDARIO\n)(?:Giorno.*\n){4}', 
+                        r'\1Giorno -2: Non specificato\nGiorno -1: Non specificato\nGiorno evento: Non specificato\nGiorno +1: Non specificato\n', 
+                        structured
+                    )
             except Exception as e:
                 print(f"⚠️ Errore parsing JSON: {e}")
                 print("\n📝 Output grezzo:")
@@ -242,7 +475,7 @@ class ICrawler:
                     print(structured)
                     return structured
             
-            save_output(brief, structured, topic.category)
+            save_output(brief, structured, topic.category, sandbox=sandbox)
             print("✅ Piano validato!")
             return structured
             

@@ -1,0 +1,32 @@
+BRIEF:
+EVENTO: 
+DATA: 
+LUOGO: 
+OBIETTIVO: 
+TARGET: 
+TONO: Evento: Business Connect 2026
+
+Data: 25 ottobre 2026
+Luogo: Grand Hotel Roma, Roma
+Target: Imprenditori tra 40 e 65 anni
+Mood: Professionale
+Obiettivo: Creare networking tra imprenditori.
+
+Hashtag autorizzati:
+#BusinessConnect
+#Networking
+
+Budget: €1000
+
+SOCIAL: Instagram, LinkedIn, X
+
+OUTPUT:
+Nel contesto di questo brief per una campagna pubblicitaria sui social media:
+1. Hashtag autorizzati dal brief (#BusinessConnect), quindi l'hashtag che rispetti tale requisito è "#BusinessConnect". Non creare hashtaggini o frasi non rilevanti a questo contesto come #prima, @example e simili:
+
+## HASHTAG AUTORIZZATO PER LA CAMPIONELLA DI UN CONCEPTUALE RELATE ALL'EVENTO "Business Connect" del 25 ottobre presso il Grand Hotel Roma - Hashtag autorizzato dal brief.
+
+#BusinessConnect
+
+CATEGORY: business
+TIMESTAMP: 2026-08-16T17:57:25.992464

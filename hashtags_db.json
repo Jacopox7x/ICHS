@@ -1,0 +1,12 @@
+[
+  {"tag": "#ciclofficina", "desc": "riparazione di biciclette, meccanica, catene, olio, gomme"},
+  {"tag": "#mobilitàSostenibile", "desc": "muoversi in città senza inquinare, bici, mezzi pubblici, ambiente"},
+  {"tag": "#inclusione", "desc": "disabilità, lavoro, diritti civili, integrazione sociale, comunità"},
+  {"tag": "#food", "desc": "cibo, ristoranti, cucina, ricette, chef, gourmet"},
+  {"tag": "#vino", "desc": "vini, cantine, degustazione, enologia"},
+  {"tag": "#tech", "desc": "tecnologia, software, intelligenza artificiale, computer"},
+  {"tag": "#startup", "desc": "nuove imprese, imprenditoria, investitori, business"},
+  {"tag": "#sport", "desc": "attività fisica, allenamento, corsa, competizione"},
+  {"tag": "#moda", "desc": "abbigliamento, stile, tendenze, sfilate, designer"},
+  {"tag": "#cultura", "desc": "arte, musei, mostre, teatro, libri"}
+]

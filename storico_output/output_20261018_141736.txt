@@ -1,0 +1,62 @@
+BRIEF:
+Evento: Fiera del mattone. Data: 10 settembre 2026. Luogo: Rovigo. Target: lavoratori del ferro. Budget: 5000 euro.
+
+OUTPUT:
+### ANALISI
+- Target: lavoratori del ferro
+- Mood: entusiasmo
+- Concept: Fiera del mattone
+
+### INSTAGRAM
+**Hook:** Non perdere la tua chance di scoprire le ultime tendenze nel mondo del mattone!
+**Corpo:** La nostra fiera del mattone è l'evento più importante per lavoratori del ferro come te!
+**CTA:** Scopri di più e iscriviti ora!
+**Visual:** Una foto di un lavoratore del ferro con un mattone in mano, con un fondo di una fiera.
+**Hashtag:** #FieraDelMattone, #LavoratoriDelFerro, #Mattone, #Rovigo
+
+### LINKEDIN
+**Hook:** Inizia a pianificare la tua carriera nel mondo del mattone con la nostra fiera!
+**Corpo:** La nostra fiera del mattone è un'opportunità unica per lavoratori del ferro come te di connettersi con esperti e di scoprire le ultime tendenze.
+**CTA:** Scopri di più e inizia a pianificare la tua carriera!
+**Visual:** Una foto di un lavoratore del ferro con un laptop, con un fondo di una fiera.
+**Hashtag:** #FieraDelMattone, #LavoratoriDelFerro, #Mattone, #Carriera
+
+### X (TWITTER)
+**Tweet 1:** Non perdere la tua chance di scoprire le ultime tendenze nel mondo del mattone! #FieraDelMattone #LavoratoriDelFerro
+**Tweet 2:** La nostra fiera del mattone è l'evento più importante per lavoratori del ferro come te! #Mattone #Rovigo
+**Tweet 3:** Inizia a pianificare la tua carriera nel mondo del mattone con la nostra fiera! #FieraDelMattone #Carriera
+**Tweet 4:** Scopri di più e iscriviti ora! #FieraDelMattone #LavoratoriDelFerro
+**Tweet 5:** La nostra fiera del mattone è un'opportunità unica per lavoratori del ferro come te di connettersi con esperti! #Mattone #Rovigo
+
+### FACEBOOK
+**Hook:** Non perdere la tua chance di scoprire le ultime tendenze nel mondo del mattone!
+**Corpo:** La nostra fiera del mattone è l'evento più importante per lavoratori del ferro come te!
+**CTA:** Scopri di più e iscriviti ora!
+**Visual:** Una foto di un lavoratore del ferro con un mattone in mano, con un fondo di una fiera.
+**Hashtag:** #FieraDelMattone, #LavoratoriDelFerro, #Mattone, #Rovigo
+
+### TIKTOK
+**Hook:** La nostra fiera del mattone è l'evento più importante per lavoratori del ferro come te!
+**Script:** Scopri di più e iscriviti ora!
+**CTA:** Inizia a pianificare la tua carriera nel mondo del mattone con la nostra fiera!
+
+### STORIES (5 frame)
+1. Una foto di un lavoratore del ferro con un mattone in mano, con un fondo di una fiera.
+2. Una foto di un lavoratore del ferro con un laptop, con un fondo di una fiera.
+3. Una foto di un lavoratore del ferro con un mattone in mano, con un fondo di una fiera.
+4. Una foto di un lavoratore del ferro con un laptop, con un fondo di una fiera.
+5. Una foto di un lavoratore del ferro con un mattone in mano, con un fondo di una fiera.
+
+### CALENDARIO
+Giorno -2: 8 settembre 2026
+Giorno -1: 9 settembre 2026
+Giorno evento: 10 settembre 2026
+Giorno +1: 11 settembre 2026
+
+### RIASSUNTO
+- Obiettivi: Promuovere la fiera del mattone e attrarre lavoratori del ferro
+- KPI: Numero di iscritti, engagement rate, budget
+- Budget: 5000 euro
+
+CATEGORY: default
+TIMESTAMP: 2026-10-18T14:17:36.934520

@@ -1,0 +1,71 @@
+BRIEF:
+event_name: Festa di compleanno di Marco
+  date: 25 agosto
+  location: Bologna
+  organizer: DA DEFINIRE
+  target: amici e parenti
+  objective: creare un'esperienza di divertimento e condivisione
+  time: DA DEFINIRE
+  venue: DA DEFINIRE
+  speaker: DA DEFINIRE
+  budget: DA DEFINIRE
+  link: DA DEFINIRE
+  hashtag: DA DEFINIRE
+
+OUTPUT:
+### ANALISI
+- Target: amici e parenti
+- Mood: divertimento e condivisione
+- Concept: Festa di compleanno di Marco
+
+### INSTAGRAM
+**Hook:** Celebra con noi il compleanno di Marco!
+**Corpo:** Un'esperienza di divertimento e condivisione per ricordare questo momento speciale.
+**CTA:** Scopri di più e partecipa!
+**Visual:** Una foto di Marco con un sorriso felice.
+**Hashtag:** #FestaDiCompleanno, #MarcoCanta, #AmiciEParenti
+
+### LINKEDIN
+**Hook:** Unisciti alla festa di compleanno di Marco!
+**Corpo:** Un evento di networking e divertimento per celebrare un anno di vita.
+**CTA:** Iscriviti ora!
+**Visual:** Una foto di Marco con un abito formale.
+**Hashtag:** #FestaDiCompleanno, #Networking, #Divertimento
+
+### X (TWITTER)
+**Tweet 1:** Celebra con noi il compleanno di Marco! #FestaDiCompleanno #MarcoCanta
+**Tweet 2:** Unisciti alla festa di compleanno di Marco! #FestaDiCompleanno #Networking
+**Tweet 3:** Non perdere l'occasione di divertirsi con noi! #FestaDiCompleanno #Divertimento
+**Tweet 4:** Scopri di più sulla festa di compleanno di Marco! #FestaDiCompleanno #AmiciEParenti
+**Tweet 5:** Iscriviti ora e partecipa alla festa di compleanno di Marco! #FestaDiCompleanno #MarcoCanta
+
+### FACEBOOK
+**Hook:** Celebra con noi il compleanno di Marco!
+**Corpo:** Un'esperienza di divertimento e condivisione per ricordare questo momento speciale.
+**CTA:** Scopri di più e partecipa!
+**Visual:** Una foto di Marco con un sorriso felice.
+**Hashtag:** #FestaDiCompleanno, #MarcoCanta, #AmiciEParenti
+
+### TIKTOK
+**Hook:** Celebra con noi il compleanno di Marco!
+**Script:** Una serie di video che mostrano Marco che celebra il suo compleanno con i suoi amici e parenti.
+**CTA:** Scopri di più e partecipa!
+
+### STORIES (5 frame)
+1. Una foto di Marco con un sorriso felice.
+2. Un video che mostra Marco che celebra il suo compleanno con i suoi amici e parenti.
+3. Un'immagine che mostra la festa di compleanno di Marco.
+4. Un video che mostra Marco che apre i regali.
+5. Una foto di Marco con un sorriso felice.
+
+### CALENDARIO
+Giorno -2: 23 agosto
+Giorno -1: 24 agosto
+
+### RIASSUNTO
+- Obiettivi: Creare un'esperienza di divertimento e condivisione
+- KPI: Engagement e partecipazioni
+- Budget: 1000 euro
+
+CATEGORY: default
+TIMESTAMP: 2026-10-08T21:00:26.352154

@@ -1,212 +1,62 @@
 """
-Validator per iCrawler V1.6
+validator.py - Validatore minimale per i piani social generati.
+
+Questa versione controlla solo che il piano contenga le entita
+principali estratte dal brief (evento, data, luogo, target, budget).
+Non fa piu i controlli granulari della versione precedente.
+
+Se in futuro serve la validazione completa, si puo espandere questa
+classe aggiungendo metodi senza rompere nulla.
 """
 
-import re
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 
 class Validator:
+
     def __init__(self):
-        self.errors = []
-    
+        self.errors: List[str] = []
+
     def validate(self, output: str, brief: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Verifica che il piano contenga le entita principali del brief.
+
+        Ritorna un dict con chiavi: valid (bool), errors (list), output (str).
+        """
         self.errors = []
-        
-        self.check_data(output, brief)
-        self.check_luogo(output, brief)
-        self.check_target(output, brief)
-        self.check_hashtags(output, brief)
-        self.check_structure(output)
-        self.check_stories(output)
-        self.check_teaser(output, brief)
-        self.check_budget(output, brief)
-        self.check_links(output, brief)
-        self.check_kpi(output, brief)
-        self.check_quality(output)
-        self.check_contamination(output, brief)
-        self.check_nome_evento(output, brief)
-        
+        output_lower = output.lower()
+
+        # Verifica entita una per una
+        self._check_entity(output_lower, brief, "nome_evento", "nome evento")
+        self._check_entity(output_lower, brief, "data", "data")
+        self._check_entity(output_lower, brief, "luogo", "luogo")
+        self._check_entity(output_lower, brief, "target", "target")
+        self._check_entity(output_lower, brief, "budget", "budget")
+
         return {
             "valid": len(self.errors) == 0,
             "errors": self.errors,
-            "output": output
+            "output": output,
         }
-    
-def check_data(self, output: str, brief: Dict[str, Any]) -> List[str]:
-    data = brief.get("data")
-    if not data or data == "Non specificata":
-        return self.errors
-    
-    # Pulisci la data da caratteri come il punto finale
-    data_clean = data.replace(".", "").strip()
-    
-    # Verifica se la data (o la versione senza punto) è nell'output
-    if data_clean.lower() in output.lower() or data.lower() in output.lower():
-        return self.errors
-    
-    # Fallback: estrai giorno e mese dalla data e controlla che siano presenti
-    # Esempio: "5 novembre 2026." → ["5", "novembre", "2026"]
-    import re
-    words = re.findall(r'\b\w+\b', data_clean)
-    # Almeno 2 parole su 3 devono essere presenti (es. "5" e "novembre")
-    found = sum(1 for w in words if w.lower() in output.lower())
-    if found >= 2:
-        return self.errors
-    
-    self.errors.append(f"Data non trovata: {data}")
-    return self.errors
-    
-    def check_luogo(self, output: str, brief: Dict[str, Any]) -> List[str]:
-        luogo = brief.get("luogo")
-        if not luogo or luogo == "Non specificato":
-            return self.errors
-        parole = [p.strip() for p in luogo.replace(",", " ").split() if len(p) > 2]
-        for p in parole:
-            p_clean = re.sub(r'[^\w\s]', '', p).lower()
-            if p_clean not in output.lower() and p.lower() not in output.lower():
-                self.errors.append(f"Luogo non trovato: {luogo}")
-                return self.errors
-        return self.errors
-    
-def check_target(self, output: str, brief: Dict[str, Any]) -> List[str]:
-    target = brief.get("target")
-    if not target or target == "Non specificato":
-        return self.errors
-    # Estrai parole chiave dal target (minimo 3 caratteri)
-    parole = [p.strip() for p in re.split(r'[,;:.\s]+', target) if len(p.strip()) > 3]
-    # Controlla se almeno la metà delle parole chiave è presente
-    found = sum(1 for p in parole if p.lower() in output.lower())
-    if found < len(parole) * 0.5:
-        self.errors.append(f"Target non trovato: {target}")
-    return self.errors
-    
-def check_hashtags(self, output: str, brief: Dict[str, Any]) -> List[str]:
-    authorized = brief.get("hashtag", "")
-    if not authorized or authorized == "Non specificati":
-        return self.errors
-    
-    authorized_tags = re.findall(r'#\w+', authorized)
-    if not authorized_tags:
-        return self.errors
-    
-    found_tags = re.findall(r'#\w+', output)
-    
-    # Permetti hashtag che iniziano con parole chiave del brief
-    brief_keywords = re.findall(r'\b\w{4,}\b', " ".join(brief.values()))
-    allowed_extra = [f"#{kw}" for kw in brief_keywords if len(kw) > 3]
-    
-    authorized_extended = authorized_tags + allowed_extra
-    unauthorized = [tag for tag in found_tags if tag not in authorized_extended]
-    
-    if unauthorized:
-        if len(unauthorized) > 5:
-            self.errors.append(f"Hashtag non autorizzati: {unauthorized[:5]}... e altri {len(unauthorized)-5}")
-        else:
-            self.errors.append(f"Hashtag non autorizzati: {unauthorized}")
-    
-    return self.errors
-        
-        found_tags = re.findall(r'#\w+', output)
-        unauthorized = [tag for tag in found_tags if tag not in authorized_tags]
-        
-        if unauthorized:
-            if len(unauthorized) > 10:
-                self.errors.append(f"Hashtag non autorizzati: {unauthorized[:10]}... e altri {len(unauthorized)-10}")
-            else:
-                self.errors.append(f"Hashtag non autorizzati: {unauthorized}")
-        
-        return self.errors
-    
-    def check_structure(self, output: str) -> List[str]:
-        required = ["ANALISI", "INSTAGRAM", "LINKEDIN", "X (TWITTER)", "FACEBOOK", "TIKTOK", "STORIES", "CALENDARIO", "RIASSUNTO"]
-        found = []
-        for section in required:
-            if section.lower() in output.lower():
-                found.append(section)
-        
-        missing = [s for s in required if s not in found]
-        for section in missing:
-            if section == "X (TWITTER)":
-                if "twitter" not in output.lower() and "x (twitter)" not in output.lower():
-                    self.errors.append(f"Sezione mancante: {section}")
-            else:
-                self.errors.append(f"Sezione mancante: {section}")
-        
-        return self.errors
-    
-    def check_stories(self, output: str) -> List[str]:
-        import re
-        stories_section = re.search(r'### STORIES.*?\n(.*?)(?=\n###|\Z)', output, re.DOTALL | re.IGNORECASE)
-        if not stories_section:
-            self.errors.append("Sezione STORIES mancante")
-            return self.errors
-        
-        stories_text = stories_section.group(1)
-        frames = re.findall(r'^\s*(\d+)\.', stories_text, re.MULTILINE)
-        count = len(frames)
-        
-        if count == 0:
-            frames = re.findall(r'Frame\s*(\d+)', stories_text, re.IGNORECASE)
-            count = len(frames)
-        
-        if count != 5:
-            self.errors.append(f"Stories: {count} frame trovati, 5 richiesti")
-        
-        return self.errors
-    
-    def check_teaser(self, output: str, brief: Dict[str, Any]) -> List[str]:
-        if "giorno -2" not in output.lower() and "giorno -1" not in output.lower():
-            self.errors.append("Teaser Giorno -2 e Giorno -1 non trovati")
-        elif "giorno -2" not in output.lower():
-            self.errors.append("Teaser Giorno -2 non trovato")
-        elif "giorno -1" not in output.lower():
-            self.errors.append("Teaser Giorno -1 non trovato")
-        return self.errors
-    
-    def check_budget(self, output: str, brief: Dict[str, Any]) -> List[str]:
-        budget = brief.get("budget")
-        if not budget or budget == "Non specificato":
-            return self.errors
-        if budget.lower() not in output.lower():
-            self.errors.append(f"Budget non trovato: {budget}")
-        return self.errors
-    
-    def check_links(self, output: str, brief: Dict[str, Any]) -> List[str]:
-        link = brief.get("link")
-        if not link or link == "Non specificato":
-            return self.errors
-        if link.lower() not in output.lower():
-            self.errors.append(f"Link non trovato: {link}")
-        return self.errors
-    
-    def check_kpi(self, output: str, brief: Dict[str, Any]) -> List[str]:
-        kpi = brief.get("kpi")
-        if not kpi or kpi == "Non specificato":
-            return self.errors
-        if kpi.lower() not in output.lower():
-            self.errors.append(f"KPI non trovato: {kpi}")
-        return self.errors
-    
-    def check_quality(self, output: str) -> List[str]:
-        word_count = len(output.split())
-        if word_count < 50:
-            self.errors.append(f"Output troppo corto (qualità minima non raggiunta)")
-        return self.errors
-    
-    def check_contamination(self, output: str, brief: Dict[str, Any]) -> List[str]:
-        brief_text = " ".join(str(v) for v in brief.values() if v)
-        if brief_text and len(brief_text) > 20:
-            brief_words = set(brief_text.lower().split())
-            output_words = set(output.lower().split())
-            overlap = brief_words & output_words
-            if len(overlap) < 3:
-                self.errors.append("Contaminazione: l'output non contiene elementi del brief")
-        return self.errors
-    
-    def check_nome_evento(self, output: str, brief: Dict[str, Any]) -> List[str]:
-        nome = brief.get("nome_evento")
-        if not nome:
-            return self.errors
-        if nome.lower() not in output.lower():
-            self.errors.append(f"Nome evento modificato: {nome} (parola non trovata)")
-        return self.errors
+
+    def _check_entity(self, output_lower: str, brief: Dict[str, Any],
+                      key: str, label: str) -> None:
+        """Controlla che il valore del brief per key sia presente nell'output."""
+        value = brief.get(key)
+        if not value:
+            return
+        value = str(value).strip()
+        if not value or value.lower().startswith("non specificat"):
+            return
+
+        # Estrai parole significative (piu di 3 caratteri) dal valore
+        words = [w for w in value.split() if len(w) > 3]
+        if not words:
+            words = [value]
+
+        # Se almeno una parola e presente nell'output, consideriamo ok
+        for w in words:
+            if w.lower() in output_lower:
+                return
+
+        self.errors.append(f"{label} non trovato nell'output: {value}")

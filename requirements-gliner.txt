@@ -1,0 +1,17 @@
+# Core
+fastapi>=0.142.0
+uvicorn>=0.54.0
+pydantic>=2.13.0
+
+# GLiNER e dipendenze
+gliner>=0.2.29
+torch>=2.14.0
+transformers>=5.16.0
+sentencepiece>=0.2.0
+
+# Required by transformers per tokenizer SentencePiece
+protobuf>=7.0.0
+tiktoken>=0.14.0
+
+# HuggingFace hub
+huggingface_hub>=1.33.0
