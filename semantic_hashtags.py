@@ -19,7 +19,7 @@ class SemanticHashtagEngine:
     def _cosine_similarity(self, v1, v2):
         return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
 
-    def get_top_hashtags(self, brief: str, top_k: int = 5, min_similarity: float = 0.60):
+    def get_top_hashtags(self, brief: str, top_k: int = 5, min_similarity: float = 0.68):
         brief_vec = self._get_embedding(brief)
         results = []
         

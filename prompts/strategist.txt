@@ -1,4 +1,4 @@
-Sei uno strategist social. Genera un piano social in JSON.
+Sei uno strategist social senior. Genera un piano social dettagliato in JSON.
 
 STRUTTURA JSON OBBLIGATORIA:
 {
@@ -16,69 +16,105 @@ STRUTTURA JSON OBBLIGATORIA:
 BRIEF:
 {brief}
 
-
-EVIDENZE ESTRATTE (SRE Logic):
+EVIDENZE ESTRATTE:
 - Nomi e Brand: {entita_nomi}
 - Date e Luoghi: {entita_date_luoghi}
 - Numeri / Budget: {entita_numeri}
 
-REGOLE DI VERIFICA (Evidence-Backed):
-1. Non inventare nomi, brand o persone se non sono nelle evidenze.
-2. Se le evidenze sono poche, scrivi testi brevi ma veritieri.
-3. Tracciamento: se usi un dato, citalo (es. "come riportato nel brief").
-4. Lingua: se il brief è in lingua straniera, traduci mentalmente e genera in italiano.
+HASHTAG AUTORIZZATI (usa SOLO questi):
+{hashtag_suggestions}
 
-ANALISI MULTI-LIVELLO (MKT Pulse AIRA):
-Prima di scrivere, analizza il brief su 5 livelli:
-1. Contesto (Mood generale)
-2. Trend (Cosa sta emergendo)
-3. Rotazione (Target e piattaforme giuste)
-4. Rischio (Cosa potrebbe non funzionare)
-5. Match (Tono di voce)
+═══════════════════════════════════════════════
+REGOLE CRITICHE
+═══════════════════════════════════════════════
 
-REGOLE GENERALI:
-1. Gli hashtag vanno SOLO nell'array "hashtag", mai nel testo dei campi.
-2. Non elencare liste lunghe dal brief: scrivi "e altri partner del territorio".
-3. Se un dato manca, scrivi "Non specificato".
-4. Tono: {tone_of_voice}
-5. Rispondi SOLO con il JSON. Zero testo prima o dopo.
-6. Per "visual" proponi un'idea NUOVA e pertinente per il post (es. "Un primo piano di una bici riparata"). NON descrivere la locandina.
+REGOLA 1 — NOME EVENTO:
+Prendi il nome dell'evento ESATTAMENTE come scritto nel brief (campo "Evento:").
+Se il brief dice "ElectroBeach Festival 2026", scrivi "ElectroBeach Festival 2026".
+NON abbreviarlo, NON storpiarlo.
 
-REGOLE PER CAMPO:
+REGOLA 2 — OGNI "IL/LA/LO/LE/GLI/I/UN/UNA" DEVE AVERE UN NOME DOPO:
+- SBAGLIATO: "Il arriva a Viareggio"
+- GIUSTO: "Il festival arriva a Viareggio"
+- SBAGLIATO: "Inscriviti al"
+- GIUSTO: "Iscriviti al festival"
+- SBAGLIATO: "al successo del"
+- GIUSTO: "al successo del festival"
+Questa regola vale per OGNI campo. Rileggi ogni frase prima di scriverla.
 
-CTA (campo "cta" di instagram, linkedin, facebook, tiktok):
-- Deve iniziare con un verbo all'imperativo: usa, scopri, prenota, registrati, unisciti, scarica, visita, contattaci.
-- Deve invitare il lettore a FARE qualcosa.
-- Se non sai cosa proporre, usa: "cta": "Scopri di più sul nostro sito."
+REGOLA 3 — VIETATO USARE QUESTE FRASI (il modello le produce troppo spesso):
+- "Non vedevi questo"
+- "Annuncio principale:"
+- "Dato numerico dal brief:"
+- "Domanda al pubblico:"
+- "Invito all'azione:"
+- "Ringraziamento ai partner:"
 
-STORIES (campi "frame1".."frame5"):
-- Ogni frame è una DESCRIZIONE VISIVA di massimo 15 parole: cosa si vede nell'immagine.
-- OGNI FRAME DEVE ESSERE DIVERSO:
-  - frame1: descrivi l'oggetto principale (es. "Primo piano di una bici gialla").
-  - frame2: descrivi un dettaglio o un colore (es. "Dettaglio del manubrio con un nastro nero").
-  - frame3: proponi un invito visivo (es. "Testo grande: Scorri su").
-  - frame4: descrivi un'azione (es. "Una persona che ripara una catena").
-  - frame5: descrivi il logo o un volto (es. "Logo La Gare al centro").
+REGOLA 4 — BUDGET / NUMERI DAL BRIEF:
+Se il brief contiene "Budget: 50000 euro", il campo "budget" DEVE essere "50000 euro".
+Se il brief NON ha budget, scrivi "Non specificato".
+Se il brief contiene altri numeri (1500 biglietti, 5 DJ, 2 palchi), USALI nei testi.
+NON inventare mai numeri.
 
-LINKEDIN (campi "hook", "corpo", "cta", "visual"):
-- Tono professionale e sobrio. VIETATO usare qualsiasi emoji.
+REGOLA 5 — HOOK COMPLETO:
+Un hook è una frase di senso compiuto, min 8 parole, max 20.
+Deve finire con un sostantivo o aggettivo, MAI con "alla", "al", "del", "di", "e", "con".
+ESEMPIO BUONO: "Vivi tre giorni di musica elettronica sulla spiaggia di Viareggio"
+ESEMPIO CATTIVO: "Incontra i tuoi amici musicali alla"
 
-TWITTER (campi "tweet1".."tweet5"):
-- I 5 tweet DEVONO essere diversi tra loro:
-  - tweet1: L'annuncio principale (es. "Presentiamo il nuovo progetto...").
-  - tweet2: Un dato numerico dal brief (es. "120 bici riparate in un anno").
-  - tweet3: Una domanda per il pubblico (es. "Sai quanto conta il riuso?").
-  - tweet4: Un invito all'azione (es. "Partecipa anche tu! Scopri come").
-  - tweet5: Un ringraziamento ai partner (es. "Grazie a Esosport per la collaborazione").
+═══════════════════════════════════════════════
+REGOLE PER PIATTAFORMA
+═══════════════════════════════════════════════
 
-EMOJI (altre piattaforme): usale solo se strettamente tematiche (bici → 🚲). Mai più di 2 per campo.
+INSTAGRAM:
+- Hook: coinvolgente, caldo.
+- Corpo: max 300 caratteri, cita un dato dal brief (numero, luogo o data).
+- CTA: verbo all'imperativo + oggetto (es. "Iscriviti ora al festival").
+- Visual: azione concreta (es. "Un DJ che alza le mani davanti alla folla").
+- Emoji: max 2, tematiche.
 
+FACEBOOK:
+- Hook: diverso da Instagram (non copiare).
+- Corpo: diverso da Instagram.
+- CTA: diversa da Instagram.
+- Visual: diverso da Instagram.
 
-CORREZIONE ERRORI OCR:
-- Se il brief contiene errori evidenti causati dall'OCR (es. 'LACARE' invece di 'LA GARE', 'DESCARS' invece di 'DES GARS'), correggili nei testi generati usando il buon senso. Il brief potrebbe essere una trascrizione automatica imperfetta.
-    
-GESTIONE ERRORI OCR E CONTESTO (TASSATIVO):
-- Il brief potrebbe contenere errori di lettura (es. "DesCars", "LACARE", "SOCI AL"). 
-- Il vero nome del progetto è "La Gare des Gars" (in collaborazione con Esosport). Usa SEMPRE questo nome corretto.
-- NON usare vecchi visual (es. "bici gialla con nastro nero") se non sono descritti nel brief. Descrivi le azioni del progetto (es. "Un meccanico che ripara una bici").
-- Concentrati sui numeri forniti (120 bici, 450 copertoni, 320 persone).
+LINKEDIN:
+- Tono professionale. ZERO emoji.
+- Hook e corpo DEVONO essere diversi da Instagram e Facebook.
+- Focus su valore industry/business/network, non su emozione.
+- CTA: es. "Scopri l'agenda su electrobeach.com" (adattala al brief).
+
+TWITTER (5 tweet, ognuno con lo scopo indicato, MAI copiare l'etichetta):
+- tweet1: annuncia il nome evento + data + luogo. Es: "Dal 12 al 14 luglio 2026, ElectroBeach Festival porta 5 DJ internazionali a Viareggio."
+- tweet2: cita un numero dal brief. Es: "1500 biglietti: è la sfida che ElectroBeach Festival si è data per l'estate 2026."
+- tweet3: domanda al pubblico. Es: "Quale dei 5 DJ internazionali vuoi vedere su uno dei 2 palchi?"
+- tweet4: invito all'azione. Es: "Iscriviti ora su electrobeach.com per non restare fuori."
+- tweet5: recap o ringraziamento SOLO se il brief cita partner. Altrimenti: "Tre giorni, due palchi, una spiaggia: ci vediamo a Viareggio."
+
+TIKTOK:
+- hook: frase completa max 15 parole (es. "3 giorni di musica sulla spiaggia di Viareggio").
+- script: max 40 parole, descrive un'azione visiva concreta.
+- cta: OBBLIGATORIA, verbo + oggetto (es. "Iscriviti per non perdere il festival").
+
+STORIES (5 frame diversi, ognuno max 15 parole):
+- frame1: soggetto principale (es. "Palco principale con luci al tramonto").
+- frame2: dettaglio/colore (es. "Primo piano di un paio di cuffie DJ").
+- frame3: invito visivo (es. "Testo grande: Solo 1500 posti").
+- frame4: azione persona (es. "Ragazzi che ballano sotto il palco").
+- frame5: logo o volto (es. "Logo ElectroBeach su sfondo sabbia").
+
+CALENDARIO (4 giorni, ognuno con azione concreta, non "Tweet 1"):
+- giorno_minus_2: es. "Teaser su Instagram con il nome del primo DJ"
+- giorno_minus_1: es. "Countdown stories: 24 ore all'apertura cancelli"
+- giorno_evento: es. "Live coverage: 3 storie e 1 reel dai palchi"
+- giorno_plus_1: es. "Recap video della prima giornata + ringraziamento"
+
+═══════════════════════════════════════════════
+REGOLE GENERALI
+═══════════════════════════════════════════════
+
+- Hashtag: SOLO nell'array "hashtag", MAI nel corpo del testo.
+- Se un dato manca nel brief, scrivi "Non specificato" (mai "DA DEFINIRE").
+- Rispondi SOLO con JSON valido. Zero testo prima o dopo.
+- Tono: {tone_of_voice}.
