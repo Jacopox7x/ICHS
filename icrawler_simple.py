@@ -160,6 +160,62 @@ def _normalize_data(data):
     return data
 
 
+def _post_process_fields(data):
+    """Pulizia regex dei campi testuali generati da qwen2.5:3b."""
+    if not isinstance(data, dict):
+        return data
+
+    # Frasi vietate: rimuovi intera frase
+    banned = [
+        r'Non vedevi questo[?!.]?\s*',
+    ]
+
+    # Correzioni articolo orfano
+    orphan = [
+        (r'\bIl arriva\b', "L'evento arriva"),
+        (r'\bLa arriva\b', "L'evento arriva"),
+        (r'\bLo arriva\b', "L'evento arriva"),
+        (r'\bIl \u00e8\b', "L'evento \u00e8"),
+        (r'\bLa \u00e8\b', "L'evento \u00e8"),
+        (r'\bIl offre\b', "L'evento offre"),
+        (r'\bIl offre\b', "L'evento offre"),
+    ]
+
+    # Typo
+    typo = [
+        (r'\bInscriviti\b', "Iscriviti"),
+        (r'\bInscriviti\b', "Iscriviti"),
+        # "Iscriviti al" orfano a fine frase -> "Iscriviti ora"
+        (r'\bInscriviti al\s*[.!]?\s*$', "Iscriviti ora."),
+        (r'\bIscriviti al\s*[.!]?\s*$', "Iscriviti ora."),
+    ]
+
+    def clean(text):
+        if not isinstance(text, str):
+            return text
+        for pattern in banned:
+            text = re.sub(pattern, '', text, flags=re.IGNORECASE)
+        for pattern, repl in orphan:
+            text = re.sub(pattern, repl, text)
+        for pattern, repl in typo:
+            text = re.sub(pattern, repl, text)
+        # Normalizza spazi multipli e rimuovi punteggiatura orfana
+        text = re.sub(r'\s+', ' ', text)
+        text = re.sub(r'\s+([.,!?])', r'\1', text)
+        return text.strip()
+
+    def walk(obj):
+        if isinstance(obj, dict):
+            return {k: walk(v) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            return [walk(v) for v in obj]
+        elif isinstance(obj, str):
+            return clean(obj)
+        return obj
+
+    return walk(data)
+
+
 def _hard_clean_output(data: dict, hashtag_pool: list = None) -> dict:
     testi = {
         "instagram": ["hook", "corpo", "cta", "visual", "script"],
@@ -453,6 +509,7 @@ class ICrawler:
 
                 data = self._extract_json(output)
                 data = _normalize_data(data)
+                data = _post_process_fields(data)
                 data = _force_variety(data)
                 data = _hard_clean_output(data, hashtag_pool)
                 print("✅ JSON parsato e pulito con successo")
