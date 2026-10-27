@@ -40,3 +40,15 @@ Riferimento: https://github.com/subircodz/Content_Intelligence_Engine
 - Non è un bug del codice: limite del modello 3B sul dominio non-evento.
 - v3.9: ritestare con qwen2.5:7b (richiede >8 GB RAM, valutare hardware).
 - v3.8: documentare come "best effort, non supportato ufficialmente".
+
+## Prefissi Nomic provati e scartati (27 ottobre 2026)
+- Esperimento: aggiunti prefissi "search_query:" (brief) e "search_document:"
+  (hashtag) in semantic_hashtags.py secondo linee guida Nomic.
+- Risultato: i punteggi si compattano (gap pertinenti/rumore scende da ~15
+  a ~1-2 punti su BICI/CENA). Soglia 0.68 non ha più senso.
+- Causa: con solo 8 hashtag nel db, i prefissi "search_document:" comprimono
+  l'embedding verso altri document. Il beneficio Nomic si vede con corpus
+  500-1000+ documenti.
+- Decisione: rollback a v3.8.1 (senza prefissi). Rivalutare se hashtags_db
+  cresce oltre 100 voci.
+- Alternativa futura: ChromaDB con 500+ hashtag reali, poi riprovare prefissi.
