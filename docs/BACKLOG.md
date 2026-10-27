@@ -93,3 +93,17 @@ Riferimento: https://github.com/subircodz/Content_Intelligence_Engine
       qwen2.5:3b ha warning su structured extraction)
 - [ ] v3.9.1: fix tokenizer Nomic (HUGGINGFACE_TOKENIZER in .env.cognee)
 - [ ] v4.0: valutare LightRAG come complemento (retrieval multi-hop)
+
+## Cognee + Qwen 2.5:3b — test grafo reale (27 ottobre 2026, ore 11)
+- Test: brief_festa.txt (Bologna, 20 settembre, famiglie/giovani, 1000 visitatori)
+- Risultato: 13 nodi, 16 edge. Zero allucinazioni.
+- Entità estratte correttamente: festa_di_quartiere, bologna, famiglie_e_giovani,
+  1000_visitatori, commercianti_della_zona
+- Relazioni sensate: begins_at, in, target_of, organized
+- Warning "qwen2.5:3b limitato per graph extraction" è TEORICO su questo dataset.
+  Qwen va bene per Cognee, almeno su brief strutturati.
+- [ ] Prossimo test: get_gliner_demo_tasks() con label custom
+      (evento, data, luogo, budget, target) invece delle label default
+- [ ] Se label custom funzionano: integrare Cognee come quality gate v3.9.1
+- [ ] Nota: 1000_visitatori classificato target_of invece di objective
+      (con label custom si risolve)
