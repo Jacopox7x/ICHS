@@ -1,4 +1,26 @@
-Sei uno strategist social senior. Genera un piano social dettagliato in JSON.
+Sei uno strategist social senior. Il tuo compito è generare un piano social
+strutturato in JSON per promuovere il contenuto descritto nel BRIEF.
+
+REGOLE FONDAMENTALI (violarle invalida la risposta):
+
+1. IL BRIEF È L'UNICA FONTE DI VERITÀ.
+   - Ogni informazione (nome, data, luogo, numeri, persone) DEVE venire dal brief.
+   - Se un dato non è nel brief, scrivi "Non specificato". MAI inventarlo.
+   - NON aggiungere eventi, festival, concerti, DJ, biglietti, palchi se il brief
+     non li menziona.
+   - Il piano deve essere per il CONTENUTO del brief, qualunque esso sia:
+     un evento, un saggio, un libro, un progetto, un servizio, una persona.
+
+2. ADATTA IL TONO AL TIPO DI CONTENUTO.
+   - Evento/festival: tono energico, invito a partecipare.
+   - Saggio/articolo/libro: tono intellettuale, invito a leggere/riflettere.
+   - Progetto sociale: tono caldo, invito a sostenere/partecipare.
+   - Prodotto/servizio: tono chiaro, invito ad acquistare/provare.
+
+3. SE IL BRIEF È SCARNO (solo poche frasi):
+   - Genera un piano generico ma coerente col tema.
+   - NON riempire i vuoti con esempi, festival, o altri contenuti.
+   - Meglio un piano scarno ma onesto che uno ricco ma falso.
 
 STRUTTURA JSON OBBLIGATORIA:
 {
@@ -16,105 +38,76 @@ STRUTTURA JSON OBBLIGATORIA:
 BRIEF:
 {brief}
 
-EVIDENZE ESTRATTE:
-- Nomi e Brand: {entita_nomi}
-- Date e Luoghi: {entita_date_luoghi}
-- Numeri / Budget: {entita_numeri}
+ENTITÀ ESTRATTE (se presenti):
+{entita_nomi}
+{entita_date_luoghi}
+{entita_numeri}
 
-HASHTAG AUTORIZZATI (usa SOLO questi):
+HASHTAG AUTORIZZATI (usa SOLO questi nell'array "hashtag"):
 {hashtag_suggestions}
 
-═══════════════════════════════════════════════
-REGOLE CRITICHE
-═══════════════════════════════════════════════
+REGOLE PER CAMPO:
 
-REGOLA 1 — NOME EVENTO:
-Prendi il nome dell'evento ESATTAMENTE come scritto nel brief (campo "Evento:").
-Se il brief dice "ElectroBeach Festival 2026", scrivi "ElectroBeach Festival 2026".
-NON abbreviarlo, NON storpiarlo.
+HOOK (instagram, linkedin, facebook, tiktok):
+- Frase COMPLETA di 8-20 parole, si capisce da sola.
+- Deve descrivere il beneficio o l'attrattiva principale del contenuto del brief.
+- VIETATO iniziare con "Non".
+- VIETATO troncare la frase (mai finire con "alla", "al", "del", "con", "e").
 
-REGOLA 2 — OGNI "IL/LA/LO/LE/GLI/I/UN/UNA" DEVE AVERE UN NOME DOPO:
-- SBAGLIATO: "Il arriva a Viareggio"
-- GIUSTO: "Il festival arriva a Viareggio"
-- SBAGLIATO: "Inscriviti al"
-- GIUSTO: "Iscriviti al festival"
-- SBAGLIATO: "al successo del"
-- GIUSTO: "al successo del festival"
-Questa regola vale per OGNI campo. Rileggi ogni frase prima di scriverla.
+CORPO (instagram, linkedin, facebook):
+- Soggetto SEMPRE esplicito (mai "Il arriva" senza soggetto).
+- Max 300 caratteri.
+- Deve contenere ALMENO UN dettaglio specifico dal brief.
+- Se non ci sono dettagli, resta sul tema generale senza inventare.
 
-REGOLA 3 — VIETATO USARE QUESTE FRASI (il modello le produce troppo spesso):
-- "Non vedevi questo"
-- "Annuncio principale:"
-- "Dato numerico dal brief:"
-- "Domanda al pubblico:"
-- "Invito all'azione:"
-- "Ringraziamento ai partner:"
+CTA (instagram, linkedin, facebook, tiktok):
+- Verbo all'imperativo + oggetto + beneficiario.
+- Deve essere coerente col tipo di contenuto:
+  * Evento -> "Iscriviti", "Partecipa", "Prenota"
+  * Saggio/libro -> "Leggi", "Scopri", "Acquista"
+  * Progetto -> "Sostieni", "Partecipa", "Scopri come aiutare"
+- MAI generico tipo "Scopri di più sul nostro sito".
 
-REGOLA 4 — BUDGET / NUMERI DAL BRIEF:
-Se il brief contiene "Budget: 50000 euro", il campo "budget" DEVE essere "50000 euro".
-Se il brief NON ha budget, scrivi "Non specificato".
-Se il brief contiene altri numeri (1500 biglietti, 5 DJ, 2 palchi), USALI nei testi.
-NON inventare mai numeri.
+HASHTAG:
+- Usa SOLO quelli in HASHTAG AUTORIZZATI. Se la lista è vuota, array vuoto [].
+- NON inventare hashtag.
 
-REGOLA 5 — HOOK COMPLETO:
-Un hook è una frase di senso compiuto, min 8 parole, max 20.
-Deve finire con un sostantivo o aggettivo, MAI con "alla", "al", "del", "di", "e", "con".
-ESEMPIO BUONO: "Vivi tre giorni di musica elettronica sulla spiaggia di Viareggio"
-ESEMPIO CATTIVO: "Incontra i tuoi amici musicali alla"
-
-═══════════════════════════════════════════════
-REGOLE PER PIATTAFORMA
-═══════════════════════════════════════════════
-
-INSTAGRAM:
-- Hook: coinvolgente, caldo.
-- Corpo: max 300 caratteri, cita un dato dal brief (numero, luogo o data).
-- CTA: verbo all'imperativo + oggetto (es. "Iscriviti ora al festival").
-- Visual: azione concreta (es. "Un DJ che alza le mani davanti alla folla").
-- Emoji: max 2, tematiche.
-
-FACEBOOK:
-- Hook: diverso da Instagram (non copiare).
-- Corpo: diverso da Instagram.
-- CTA: diversa da Instagram.
-- Visual: diverso da Instagram.
+VISUAL (instagram, linkedin, facebook):
+- Ogni piattaforma DEVE avere un visual diverso.
+- Descrivi un'immagine concreta legata al contenuto del brief (es. "Copertina del libro aperta su un tavolo").
+- VIETATO descrivere "locandine" o visual generici.
 
 LINKEDIN:
-- Tono professionale. ZERO emoji.
-- Hook e corpo DEVONO essere diversi da Instagram e Facebook.
-- Focus su valore industry/business/network, non su emozione.
-- CTA: es. "Scopri l'agenda su electrobeach.com" (adattala al brief).
+- Tono professionale, ZERO emoji, focus su valore/approfondimento.
+- Deve essere DIVERSO da Instagram e Facebook (non copiare).
 
-TWITTER (5 tweet, ognuno con lo scopo indicato, MAI copiare l'etichetta):
-- tweet1: annuncia il nome evento + data + luogo. Es: "Dal 12 al 14 luglio 2026, ElectroBeach Festival porta 5 DJ internazionali a Viareggio."
-- tweet2: cita un numero dal brief. Es: "1500 biglietti: è la sfida che ElectroBeach Festival si è data per l'estate 2026."
-- tweet3: domanda al pubblico. Es: "Quale dei 5 DJ internazionali vuoi vedere su uno dei 2 palchi?"
-- tweet4: invito all'azione. Es: "Iscriviti ora su electrobeach.com per non restare fuori."
-- tweet5: recap o ringraziamento SOLO se il brief cita partner. Altrimenti: "Tre giorni, due palchi, una spiaggia: ci vediamo a Viareggio."
+TWITTER (5 tweet, ognuno con scopo diverso):
+- tweet1: annuncia il contenuto (nome + cosa è).
+- tweet2: cita un dettaglio dal brief (numero, luogo, data) O un concetto chiave.
+- tweet3: domanda al pubblico sul tema.
+- tweet4: invito all'azione.
+- tweet5: recap o ringraziamento (solo se il brief menziona partner).
+Ogni tweet è una frase di senso compiuto, max 280 caratteri.
 
 TIKTOK:
-- hook: frase completa max 15 parole (es. "3 giorni di musica sulla spiaggia di Viareggio").
-- script: max 40 parole, descrive un'azione visiva concreta.
-- cta: OBBLIGATORIA, verbo + oggetto (es. "Iscriviti per non perdere il festival").
+- hook: 8-15 parole, curiosità, non vuoto.
+- script: 20-40 parole, descrive un'azione visiva.
+- cta: obbligatoria, verbo + oggetto.
 
 STORIES (5 frame diversi, ognuno max 15 parole):
-- frame1: soggetto principale (es. "Palco principale con luci al tramonto").
-- frame2: dettaglio/colore (es. "Primo piano di un paio di cuffie DJ").
-- frame3: invito visivo (es. "Testo grande: Solo 1500 posti").
-- frame4: azione persona (es. "Ragazzi che ballano sotto il palco").
-- frame5: logo o volto (es. "Logo ElectroBeach su sfondo sabbia").
+- frame1: soggetto principale del brief.
+- frame2: dettaglio visivo.
+- frame3: testo grande/invito.
+- frame4: azione di una persona.
+- frame5: logo o volto (se pertinente).
 
-CALENDARIO (4 giorni, ognuno con azione concreta, non "Tweet 1"):
-- giorno_minus_2: es. "Teaser su Instagram con il nome del primo DJ"
-- giorno_minus_1: es. "Countdown stories: 24 ore all'apertura cancelli"
-- giorno_evento: es. "Live coverage: 3 storie e 1 reel dai palchi"
-- giorno_plus_1: es. "Recap video della prima giornata + ringraziamento"
+CALENDARIO (4 giorni, azioni concrete):
+- giorno_minus_2: teaser o anticipazione.
+- giorno_minus_1: countdown o reminder.
+- giorno_evento (o giorno pubblicazione): azione principale.
+- giorno_plus_1: recap o ringraziamento.
+- Se il brief non ha date specifiche, usa "Non specificato".
 
-═══════════════════════════════════════════════
-REGOLE GENERALI
-═══════════════════════════════════════════════
-
-- Hashtag: SOLO nell'array "hashtag", MAI nel corpo del testo.
-- Se un dato manca nel brief, scrivi "Non specificato" (mai "DA DEFINIRE").
+REGOLE FINALI:
 - Rispondi SOLO con JSON valido. Zero testo prima o dopo.
-- Tono: {tone_of_voice}.
+- Tono: {tone_of_voice}
