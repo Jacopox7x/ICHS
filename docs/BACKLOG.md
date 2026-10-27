@@ -70,3 +70,13 @@ Riferimento: https://github.com/subircodz/Content_Intelligence_Engine
 - [ ] v3.9.x: escludere brief identici (score > 0.99) dal retrieval
 - [ ] v3.9.x: monitorare gonfiaggio output (brief_minimale +33%)
 - [ ] v3.9.x: salvare brief originale in file separato (ora uso txt[:500])
+
+## Memoria SQLite (v3.9.0, 27 ottobre 2026) — CHIUSA
+- [x] memory.py: tabella plans, embedding Nomic, cosine similarity
+- [x] Salvataggio automatico dopo ogni piano (id tracciato nei log)
+- [x] Retrieval top-2 per cliente (soglia 0.65) iniettato nel prompt
+- [x] Migrazione piani esistenti con filtro (91 piani importati, 1 scartato)
+- [x] Test 1-4 verdi (migrazione, retrieval, end-to-end, retest 5 brief)
+- [ ] v3.9.x: escludere brief identici (score > 0.99) dal retrieval
+- [ ] v3.9.x: monitorare gonfiaggio output (brief_minimale +33%)
+- [ ] v3.9.x: salvare brief originale in file separato (ora uso txt[:500])
