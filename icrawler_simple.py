@@ -18,6 +18,7 @@ from topics import TopicExtractor
 from semantic_hashtags import SemanticHashtagEngine
 from utils import setup_logging, save_output
 from validator import Validator
+import memory
 from gliner_client import extract_entities, entities_to_dict, is_alive
 from execution_limits import ExecutionContext, check_execution_limits, record_model_call, check_input_size, check_output_size
 
@@ -540,6 +541,18 @@ class ICrawler:
         raw_hashtags = self.hashtag_engine.get_top_hashtags(brief)
         hashtag_pool = [tag for tag, score in raw_hashtags]
         prompt = self.prompt_builder.build(brief, topic, hashtag_pool, self.platforms, entities=entities, mode=mode, sandbox=sandbox)
+
+        # Memoria: inietta 2 esempi simili (stesso cliente) se disponibili
+        try:
+            esempi = memory.find_similar(brief, sandbox, top_k=2, min_sim=0.65)
+            if esempi:
+                sez = "\n\n=== ESEMPI DI BRIEF SIMILI (solo stile, NON copiare contenuti) ===\n"
+                for i, (b, _plan, sc) in enumerate(esempi, 1):
+                    sez += f"\n--- Esempio {i} (similarita {sc:.2f}) ---\nBrief: {b[:300]}\n"
+                prompt += sez
+                print(f"📚 Memoria: {len(esempi)} esempio/i simile/i iniettato/i")
+        except Exception as e:
+            print(f"⚠️ Memoria non disponibile: {e}")
         
         print("\n🔄 Generazione in corso...")
         print(f"🔍 DEBUG: Lunghezza prompt: {len(prompt)}")
@@ -628,6 +641,14 @@ class ICrawler:
                 print("-" * 60)
                 return f"❌ Errore parsing JSON: {e}"
             
+            # Salva in memoria (best effort, non blocca la risposta)
+            try:
+                if structured and len(structured) > 200:
+                    memory.save_plan(brief, sandbox, structured)
+                    print(f"💾 Memoria: piano salvato (id {memory.count_plans(sandbox)} per {sandbox})")
+            except Exception as e:
+                print(f"⚠️ Salvataggio memoria fallito: {e}")
+
             if brief_data:
                 print("🔍 Controllo qualità in corso...")
                 result = self.validator.validate(structured, brief_data)

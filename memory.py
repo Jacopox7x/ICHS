@@ -1,0 +1,101 @@
+"""Memoria dei piani generati: SQLite + Nomic embedding. Zero dipendenze extra."""
+import sqlite3
+import json
+import time
+from pathlib import Path
+import numpy as np
+import ollama
+
+DB_PATH = Path(__file__).parent / "memory.db"
+MODEL = "nomic-embed-text"
+
+
+def _conn():
+    c = sqlite3.connect(DB_PATH)
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS plans (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            brief TEXT NOT NULL,
+            cliente TEXT NOT NULL,
+            plan_text TEXT NOT NULL,
+            embedding BLOB NOT NULL,
+            created_at REAL NOT NULL
+        )
+    """)
+    c.execute("CREATE INDEX IF NOT EXISTS idx_cliente ON plans(cliente)")
+    return c
+
+
+def _embed(text: str) -> np.ndarray:
+    r = ollama.embeddings(model=MODEL, prompt=text)
+    return np.array(r["embedding"], dtype=np.float32)
+
+
+def _cosine(a: np.ndarray, b: np.ndarray) -> float:
+    denom = (np.linalg.norm(a) * np.linalg.norm(b))
+    return float(np.dot(a, b) / denom) if denom else 0.0
+
+
+def save_plan(brief: str, cliente: str, plan_text: str) -> int:
+    """Salva brief+piano. Ritorna id. Se brief gia' presente per stesso cliente, aggiorna."""
+    emb = _embed(brief)
+    c = _conn()
+    cur = c.execute(
+        "INSERT INTO plans (brief, cliente, plan_text, embedding, created_at) VALUES (?,?,?,?,?)",
+        (brief, cliente, plan_text, emb.tobytes(), time.time())
+    )
+    c.commit()
+    c.close()
+    return cur.lastrowid
+
+
+def find_similar(brief: str, cliente: str, top_k: int = 2, min_sim: float = 0.65):
+    """Ritorna lista di (brief, plan_text, score) sopra soglia, per stesso cliente."""
+    c = _conn()
+    rows = c.execute(
+        "SELECT brief, plan_text, embedding FROM plans WHERE cliente = ?",
+        (cliente,)
+    ).fetchall()
+    c.close()
+    if not rows:
+        return []
+    q = _embed(brief)
+    scored = []
+    for b, p, e in rows:
+        v = np.frombuffer(e, dtype=np.float32)
+        s = _cosine(q, v)
+        if s >= min_sim:
+            scored.append((b, p, s))
+    scored.sort(key=lambda x: -x[2])
+    return scored[:top_k]
+
+
+def count_plans(cliente: str = None):
+    c = _conn()
+    if cliente:
+        n = c.execute("SELECT COUNT(*) FROM plans WHERE cliente = ?", (cliente,)).fetchone()[0]
+    else:
+        n = c.execute("SELECT COUNT(*) FROM plans").fetchone()[0]
+    c.close()
+    return n
+
+
+def clear(cliente: str = None):
+    c = _conn()
+    if cliente:
+        c.execute("DELETE FROM plans WHERE cliente = ?", (cliente,))
+    else:
+        c.execute("DELETE FROM plans")
+    c.commit()
+    c.close()
+
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "count":
+        print(f"Piani totali: {count_plans()}")
+        print(f"  cosper: {count_plans('cosper')}")
+        print(f"  creazioni_migranti: {count_plans('creazioni_migranti')}")
+    elif len(sys.argv) > 1 and sys.argv[1] == "clear":
+        clear()
+        print("DB svuotato")
