@@ -67,3 +67,12 @@ SANDBOX/**/mio_output.json
 
 # Submodule
 icrawler_weknora/WeKnora/
+
+# Aggiunte post v3.8 (27 ottobre 2026)
+storico_output/
+.bak*
+*.pre_qwen
+*.backup_*
+.venv/
+.coverage
+htmlcov/
