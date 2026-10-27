@@ -254,6 +254,51 @@ def _post_process_fields(data, brief="", hashtag_pool=None):
     return walk(data)
 
 
+def _fill_missing_sections(data):
+    """Fallback deterministico: riempie twitter/stories se il modello li salta."""
+    if not isinstance(data, dict):
+        return data
+
+    ig = data.get("instagram", {}) if isinstance(data.get("instagram"), dict) else {}
+    fb = data.get("facebook", {}) if isinstance(data.get("facebook"), dict) else {}
+    li = data.get("linkedin", {}) if isinstance(data.get("linkedin"), dict) else {}
+    analisi = data.get("analisi", {}) if isinstance(data.get("analisi"), dict) else {}
+
+    hook = ig.get("hook", "") or fb.get("hook", "") or li.get("hook", "")
+    corpo = ig.get("corpo", "") or fb.get("corpo", "")
+    cta = ig.get("cta", "") or "Scopri tutti i dettagli."
+    concept = analisi.get("concept", "")
+    target = analisi.get("target", "")
+
+    # --- TWITTER ---
+    tw = data.get("twitter", {})
+    if not isinstance(tw, dict) or len(tw) < 3:
+        base = hook or concept or "Un progetto da scoprire"
+        data["twitter"] = {
+            "tweet1": f"{base}",
+            "tweet2": (corpo[:200] + "...") if corpo else f"Per {target}: {concept}" if concept else "Approfondisci il tema.",
+            "tweet3": "Cosa ne pensi? Condividi la tua opinione nei commenti.",
+            "tweet4": f"{cta}",
+            "tweet5": "Grazie a chi ci segue e sostiene il progetto.",
+        }
+        print("🔧 Fallback: twitter rigenerato (modello non lo aveva prodotto)")
+
+    # --- STORIES ---
+    st = data.get("stories", {})
+    if not isinstance(st, dict) or len(st) < 3:
+        visual = ig.get("visual", "")
+        data["stories"] = {
+            "frame1": (visual[:80] if visual and visual != "Non specificato" else "Immagine principale del progetto"),
+            "frame2": "Primo piano di un dettaglio significativo",
+            "frame3": f"Testo grande: {concept[:60]}" if concept else "Testo grande: Scopri di più",
+            "frame4": f"Una persona coinvolta nel progetto: {target[:60]}" if target else "Una persona coinvolta nel progetto",
+            "frame5": "Logo del progetto su sfondo neutro",
+        }
+        print("🔧 Fallback: stories rigenerate (modello non le aveva prodotte)")
+
+    return data
+
+
 def _hard_clean_output(data: dict, hashtag_pool: list = None) -> dict:
     testi = {
         "instagram": ["hook", "corpo", "cta", "visual", "script"],
@@ -511,6 +556,7 @@ class ICrawler:
             response = ollama.chat(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
+            format="json",
                 options={
                     "temperature": config["TEMPERATURE"],
                     "num_predict": config["MAX_TOKENS"],
@@ -548,6 +594,7 @@ class ICrawler:
                 data = self._extract_json(output)
                 data = _normalize_data(data)
                 data = _post_process_fields(data, brief, hashtag_pool)
+                data = _fill_missing_sections(data)
                 data = _force_variety(data)
                 data = _hard_clean_output(data, hashtag_pool)
                 print("✅ JSON parsato e pulito con successo")

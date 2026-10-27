@@ -52,3 +52,11 @@ Riferimento: https://github.com/subircodz/Content_Intelligence_Engine
 - Decisione: rollback a v3.8.1 (senza prefissi). Rivalutare se hashtags_db
   cresce oltre 100 voci.
 - Alternativa futura: ChromaDB con 500+ hashtag reali, poi riprovare prefissi.
+
+## Fallback deterministico per sezioni vuote (v3.8.2, 27 ottobre 2026)
+- qwen2.5:3b non produce sempre twitter/stories (specie su brief non-evento).
+- _fill_missing_sections() genera template Python dai dati esistenti
+  (hook, concept, target, visual) quando il modello salta la sezione.
+- Output "meno creativo" ma "sempre completo". Scelta consapevole:
+  meglio template che buco.
+- v3.9: valutare two-stage generation se modello >3B disponibile.
