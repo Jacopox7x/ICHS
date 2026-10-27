@@ -1,8 +1,0 @@
-BRIEF:
-"ElectroBeach" – Festival di musica elettronica su spiaggia. 15-16 agosto a Viareggio. 5 DJ internazionali, 2 palchi, after-party. Target: 18-35 anni. Biglietti: €35 (giornaliero), €60 (weekend). Obiettivo: 1.500 partecipanti.
-
-OUTPUT:
-
-
-CATEGORY: musica
-TIMESTAMP: 2026-08-21T21:13:25.095220
