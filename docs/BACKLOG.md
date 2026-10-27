@@ -80,3 +80,16 @@ Riferimento: https://github.com/subircodz/Content_Intelligence_Engine
 - [ ] v3.9.x: escludere brief identici (score > 0.99) dal retrieval
 - [ ] v3.9.x: monitorare gonfiaggio output (brief_minimale +33%)
 - [ ] v3.9.x: salvare brief originale in file separato (ora uso txt[:500])
+
+## Cognee testato (27 ottobre 2026) — FATTIBILE
+- [x] Installato `cognee[gliner]` con successo
+- [x] Configurato Ollama (LLM + embedding) via `.env.cognee`
+- [x] Test: brief Tech Summit → cognify → search → risposta corretta
+      ("The budget for the event Tech Summit 2026 was 50000 euro.")
+- [x] Grafo: 11 nodi, 13 edge
+- [x] RAM: +165 MB rispetto a baseline (1.0 GB → 1.2 GB). Sostenibile.
+- [ ] v3.9.1: integrare Cognee come quality gate pre-generazione
+- [ ] v3.9.1: valutare Llama 3.2:3b per estrazione grafo (Cognee lo raccomanda;
+      qwen2.5:3b ha warning su structured extraction)
+- [ ] v3.9.1: fix tokenizer Nomic (HUGGINGFACE_TOKENIZER in .env.cognee)
+- [ ] v4.0: valutare LightRAG come complemento (retrieval multi-hop)
