@@ -33,3 +33,10 @@ Riferimento: https://github.com/subircodz/Content_Intelligence_Engine
 - [ ] Test automatici: `tests/` ha 20 file + 3 script obsoleti
   (pre-v3.5). Consolidare in `tests/run_all.sh` con i 5 brief critici.
 - [ ] A/B Llama3.2:3b vs Qwen2.5:3b (v3.9, vedi roadmap separata).
+
+## Saggio/articolo non supportato in v3.8
+- Brief non-evento (saggio, articolo, libro) producono piani social
+  scarni (twitter/stories vuoti 4 volte su 4 su qwen2.5:3b).
+- Non è un bug del codice: limite del modello 3B sul dominio non-evento.
+- v3.9: ritestare con qwen2.5:7b (richiede >8 GB RAM, valutare hardware).
+- v3.8: documentare come "best effort, non supportato ufficialmente".

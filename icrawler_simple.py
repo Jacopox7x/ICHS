@@ -160,12 +160,13 @@ def _normalize_data(data):
     return data
 
 
-def _post_process_fields(data, brief=""):
-    """Pulizia regex + strip esempi copiati dal prompt (testo e hashtag)."""
+def _post_process_fields(data, brief="", hashtag_pool=None):
+    """Pulizia regex + strip esempi + CTA specifiche + filtraggio hashtag."""
     if not isinstance(data, dict):
         return data
 
     brief_lower = brief.lower() if brief else ""
+    pool = list(hashtag_pool) if hashtag_pool else []
 
     banned = [
         r'Non vedevi questo[?!.]?\s*',
@@ -182,11 +183,13 @@ def _post_process_fields(data, brief=""):
     typo = [
         (r'\bInscriviti\b', "Iscriviti"),
         (r'\bIscriviti al\s*[.!]?\s*$', "Iscriviti ora."),
+        (r'\bMenisci\b', "Scopri"),
     ]
 
-    # Esempi dal prompt che qwen copia
-    echo_examples = ["Viareggio", "ElectroBeach"]
+    echo_examples = ["Viareggio", "ElectroBeach", "Elettric Beach", "electrobeach.com", "ElettricBeach"]
     bad_echoes = [e for e in echo_examples if e.lower() not in brief_lower]
+
+    trailing_prep = r'(?:\s+(?:su|per|con|da|in|a|di|del|della|dei|degli|al|alla|ai|agli|dal|dalla|nel|nella|sul|sulla|tra|fra|e|ed|o|od))+\s*[.,!?]?\s*$'
 
     def clean_text(text):
         if not isinstance(text, str):
@@ -199,18 +202,40 @@ def _post_process_fields(data, brief=""):
             text = re.sub(pattern, repl, text)
         for echo in bad_echoes:
             text = re.sub(rf'\b{re.escape(echo)}\b', '', text)
+        text = re.sub(trailing_prep, '', text, flags=re.IGNORECASE)
         text = re.sub(r'\s+', ' ', text)
         text = re.sub(r'\s+([.,!?])', r'\1', text)
         return text.strip()
 
-    def clean_hashtags(tags):
-        """Filtra hashtag che contengono esempi non presenti nel brief."""
+    def fix_cta(cta_text):
+        if not isinstance(cta_text, str):
+            return cta_text
+        lowered = cta_text.lower()
+        if 'scopri di più sul nostro sito' in lowered or len(cta_text.strip()) < 15:
+            if any(w in brief_lower for w in ['festival', 'concerto', 'evento', 'festa', 'rassegna', 'spettacolo']):
+                return "Iscriviti ora per non perdere l'evento."
+            elif any(w in brief_lower for w in ['libro', 'saggio', 'articolo', 'lettura', 'romanzo', 'racconto']):
+                return "Leggi ora e scopri il tema."
+            elif any(w in brief_lower for w in ['progetto', 'sociale', 'inclusione', 'comunita', 'solidarieta']):
+                return "Scopri come partecipare al progetto."
+            else:
+                return "Scopri tutti i dettagli."
+        return clean_text(cta_text)
+
+    def filter_hashtags(tags):
         if not isinstance(tags, list):
             return tags
-        return [
-            t for t in tags
-            if isinstance(t, str) and not any(e.lower() in t.lower() for e in bad_echoes)
-        ]
+        result = []
+        for t in tags:
+            if not isinstance(t, str):
+                continue
+            if any(e.lower() in t.lower() for e in bad_echoes):
+                continue
+            tag_l = t.lower().lstrip('#').strip()
+            if tag_l in brief_lower or t in pool:
+                # Assicura il cancelletto
+                result.append(t if t.startswith('#') else f'#{t}')
+        return result
 
     def walk(obj, key=None):
         if isinstance(obj, dict):
@@ -218,14 +243,15 @@ def _post_process_fields(data, brief=""):
         if isinstance(obj, list):
             cleaned = [walk(v) for v in obj]
             if key == "hashtag":
-                return clean_hashtags(cleaned)
+                return filter_hashtags(cleaned)
             return cleaned
         if isinstance(obj, str):
+            if key == "cta":
+                return fix_cta(obj)
             return clean_text(obj)
         return obj
 
     return walk(data)
-
 
 
 def _hard_clean_output(data: dict, hashtag_pool: list = None) -> dict:
@@ -521,7 +547,7 @@ class ICrawler:
 
                 data = self._extract_json(output)
                 data = _normalize_data(data)
-                data = _post_process_fields(data, brief)
+                data = _post_process_fields(data, brief, hashtag_pool)
                 data = _force_variety(data)
                 data = _hard_clean_output(data, hashtag_pool)
                 print("✅ JSON parsato e pulito con successo")
