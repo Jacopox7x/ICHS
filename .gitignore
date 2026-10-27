@@ -76,3 +76,11 @@ storico_output/
 .venv/
 .coverage
 htmlcov/
+
+# Aggiunte post v3.8 (27 ottobre 2026)
+storico_output/
+*.bak_*
+*.bak_semantic
+*.bak_rules
+*.bak4
+*.pre_qwen
