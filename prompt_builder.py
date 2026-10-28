@@ -1,6 +1,7 @@
 from pathlib import Path
 import config
 from hashtag_suggester import HashtagSuggester
+from cognee_memory import get_client_context
 
 
 PLACEHOLDER_VALUES = {
@@ -83,8 +84,13 @@ class PromptBuilder:
         
         cloud_hashtags = []
         
-        voice_file = Path(config.BASE_DIR) / "workspaces" / sandbox / "voice_template.txt"
-        voice_content = voice_file.read_text(encoding="utf-8") if voice_file.exists() else ""
+        # Proviamo a prendere il contesto da Cognee
+        voice_content = get_client_context(sandbox)
+        
+        # Se Cognee fallisce o non trova nulla, facciamo il fallback al file locale
+        if not voice_content:
+            voice_file = Path(config.BASE_DIR) / "workspaces" / sandbox / "voice_template.txt"
+            voice_content = voice_file.read_text(encoding="utf-8") if voice_file.exists() else ""
         prompt = system_prompt.replace("{tone_of_voice}", voice_content)
         prompt = prompt.replace("{voice_content}", voice_content)
         prompt = prompt.replace("{brief}", f"--- INIZIO DOCUMENTO DI RIFERIMENTO ---\n{brief}\n--- FINE DOCUMENTO DI RIFERIMENTO ---")
