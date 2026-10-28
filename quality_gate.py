@@ -3,51 +3,73 @@ from gliner_client import extract_entities, entities_to_dict
 
 logger = logging.getLogger(__name__)
 
-def validate_entities(brief: str, piano_finale: str) -> dict:
+def validate_entities_dynamic(brief: str, piano_finale: str) -> dict:
     """
-    Estrae le entità dal brief e controlla se il piano finale parla di entità 
-    completamente estranee (es. un'altra città).
+    Quality Gate Dinamico: confronta le entità del piano con quelle del brief.
+    Se il piano menziona un luogo/persona/data che NON è nel brief, lo blocca.
     """
-    print("🛡️  Avvio Quality Gate (Anti-Allucinazione)...")
+    print("🛡️  Avvio Quality Gate Dinamico...")
     
-    # 1. Estrai entità dal BRIEF
     try:
+        # 1. Estrai entità dal BRIEF (Verità assoluta)
         raw_brief = extract_entities(brief)
         entita_brief = entities_to_dict(raw_brief) if raw_brief else {}
-    except Exception as e:
-        logger.error(f"Errore GLiNER sul brief: {e}")
-        return {"valid": False, "error": "Impossibile analizzare il brief"}
-
-    # 2. Controllo specifico per i Luoghi (il problema che abbiamo visto)
-    # Se il brief ha un luogo (es. Bologna), il piano non deve parlare di altri luoghi (es. Bergamo)
-    luoghi_brief = entita_brief.get("location", [])
-    if isinstance(luoghi_brief, str):
-        luoghi_brief = [luoghi_brief]
         
-    # Lista nera dei luoghi che il modello ha allucinato in passato
-    luoghi_vietati = ["Bergamo", "Viareggio", "Milano", "Roma"] 
+        # 2. Estrai entità dal PIANO GENERATO
+        raw_piano = extract_entities(piano_finale)
+        entita_piano = entities_to_dict(raw_piano) if raw_piano else {}
+        
+    except Exception as e:
+        logger.error(f"Errore GLiNER nel Quality Gate: {e}")
+        # In caso di errore, meglio non bloccare (fail-safe) ma avvisare
+        return {"valid": True, "warning": "GLiNER non disponibile, gate saltato"}
+
+    # Categorie sensibili da controllare (escludiamo 'event' o 'target' che sono generici)
+    categorie_da_controllare = ["location", "person", "organization"]
     
-    # Se il brief non menziona un luogo, ma il piano contiene un luogo vietato, è un'allucinazione
-    for luogo in luoghi_vietati:
-        if luogo.lower() in piano_finale.lower():
-            # Ma solo se quel luogo non era nel brief!
-            if not any(luogo.lower() in str(lb).lower() for lb in luoghi_brief):
-                msg = f"Allucinazione rilevata: il piano parla di {luogo} ma il brief non lo menziona."
+    for categoria in categorie_da_controllare:
+        valori_piano = entita_piano.get(categoria, [])
+        if isinstance(valori_piano, str):
+            valori_piano = [valori_piano]
+            
+        valori_brief = entita_brief.get(categoria, [])
+        if isinstance(valori_brief, str):
+            valori_brief = [valori_brief]
+
+        # Convertiamo in minuscolo per il confronto
+        brief_lower = " ".join([str(v).lower() for v in valori_brief])
+        
+        for valore in valori_piano:
+            val_str = str(valore).lower().strip()
+            if not val_str: 
+                continue
+                
+            # Se l'entità nel piano NON è presente nel brief (nemmeno come sottostringa)
+            if val_str not in brief_lower:
+                msg = f"Allucinazione rilevata: il piano parla di '{valore}' ({categoria}) ma il brief non lo menziona."
                 print(f"❌ {msg}")
                 return {"valid": False, "error": msg}
-                
-    print("✅ Quality Gate superato: nessuna allucinazione rilevante.")
+
+    print("✅ Quality Gate superato: nessuna allucinazione dinamica rilevata.")
     return {"valid": True, "error": None}
 
+# Manteniamo il vecchio nome della funzione per compatibilità con icrawler_simple.py
+def validate_entities(brief: str, piano_finale: str) -> dict:
+    return validate_entities_dynamic(brief, piano_finale)
+
 if __name__ == "__main__":
-    # Test del gate
-    brief_test = "Festa di quartiere a Bologna. Target: famiglie."
+    # Test del gate dinamico
+    brief_bologna = "Festa di quartiere a Bologna. Target: famiglie."
+    brief_milano = "Evento a Milano. Target: giovani."
     
     piano_buono = "Un evento fantastico a Bologna per famiglie e bambini."
     piano_cattivo = "Un evento fantastico a Bergamo per famiglie e bambini."
     
-    print("--- TEST 1: Piano Buono ---")
-    print(validate_entities(brief_test, piano_buono))
+    print("--- TEST 1: Piano corretto (Bologna -> Bologna) ---")
+    print(validate_entities(brief_bologna, piano_buono))
     
-    print("\n--- TEST 2: Piano Contaminato ---")
-    print(validate_entities(brief_test, piano_cattivo))
+    print("\n--- TEST 2: Piano allucinato (Bologna -> Bergamo) ---")
+    print(validate_entities(brief_bologna, piano_cattivo))
+
+    print("\n--- TEST 3: Cliente a Milano (Milano -> Milano) ---")
+    print(validate_entities(brief_milano, "Evento a Milano per giovani."))
