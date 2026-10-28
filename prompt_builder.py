@@ -62,6 +62,8 @@ class PromptBuilder:
                         brief_data["luogo"] = value
                     elif "target" in key:
                         brief_data["target"] = value
+                    elif "budget" in key or "costo" in key:
+                        brief_data["budget"] = value
                     elif "hashtag" in key:
                         brief_data["hashtag"] = value
                     elif "descrizione" in key:

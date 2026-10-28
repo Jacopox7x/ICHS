@@ -1,75 +1,61 @@
 import logging
+import re
 from gliner_client import extract_entities, entities_to_dict
 
 logger = logging.getLogger(__name__)
 
+def _is_proper_noun(text: str) -> bool:
+    """Euristica: è un nome proprio? (es. 'Mario Rossi' sì, 'la nonna' no)."""
+    text = text.strip()
+    if not text:
+        return False
+    # Se è composto da parole che iniziano con la maiuscola ed è corto
+    words = text.split()
+    if len(words) <= 3 and all(w[0].isupper() for w in words if w):
+        # Escludiamo parole comuni che GLiNER potrebbe scambiare per nomi
+        comuni = ["Nonna", "Nonno", "Bambino", "Bambina", "Famiglia", "DJ", "Artista", "Ospite"]
+        if text not in comuni:
+            return True
+    return False
+
 def validate_entities_dynamic(brief: str, piano_finale: str) -> dict:
-    """
-    Quality Gate Dinamico: confronta le entità del piano con quelle del brief.
-    Se il piano menziona un luogo/persona/data che NON è nel brief, lo blocca.
-    """
     print("🛡️  Avvio Quality Gate Dinamico...")
-    
     try:
-        # 1. Estrai entità dal BRIEF (Verità assoluta)
-        raw_brief = extract_entities(brief)
-        entita_brief = entities_to_dict(raw_brief) if raw_brief else {}
-        
-        # 2. Estrai entità dal PIANO GENERATO
-        raw_piano = extract_entities(piano_finale)
-        entita_piano = entities_to_dict(raw_piano) if raw_piano else {}
-        
+        entita_brief = entities_to_dict(extract_entities(brief) or {})
+        entita_piano = entities_to_dict(extract_entities(piano_finale) or {})
     except Exception as e:
         logger.error(f"Errore GLiNER nel Quality Gate: {e}")
-        # In caso di errore, meglio non bloccare (fail-safe) ma avvisare
         return {"valid": True, "warning": "GLiNER non disponibile, gate saltato"}
 
-    # Categorie sensibili da controllare (escludiamo 'event' o 'target' che sono generici)
-    categorie_da_controllare = ["location", "person", "organization"]
-    
-    for categoria in categorie_da_controllare:
+    # Controlliamo Luoghi e Organizzazioni (sempre severi)
+    for categoria in ["location", "organization"]:
         valori_piano = entita_piano.get(categoria, [])
-        if isinstance(valori_piano, str):
-            valori_piano = [valori_piano]
-            
+        if isinstance(valori_piano, str): valori_piano = [valori_piano]
         valori_brief = entita_brief.get(categoria, [])
-        if isinstance(valori_brief, str):
-            valori_brief = [valori_brief]
-
-        # Convertiamo in minuscolo per il confronto
-        brief_lower = " ".join([str(v).lower() for v in valori_brief])
+        if isinstance(valori_brief, str): valori_brief = [valori_brief]
         
+        brief_lower = " ".join([str(v).lower() for v in valori_brief])
         for valore in valori_piano:
             val_str = str(valore).lower().strip()
-            if not val_str: 
-                continue
-                
-            # Se l'entità nel piano NON è presente nel brief (nemmeno come sottostringa)
-            if val_str not in brief_lower:
-                msg = f"Allucinazione rilevata: il piano parla di '{valore}' ({categoria}) ma il brief non lo menziona."
+            if val_str and val_str not in brief_lower:
+                msg = f"Allucinazione: il piano parla di '{valore}' ({categoria}) ma il brief non lo menziona."
                 print(f"❌ {msg}")
                 return {"valid": False, "error": msg}
 
-    print("✅ Quality Gate superato: nessuna allucinazione dinamica rilevata.")
+    # Controlliamo le Persone (solo se sono nomi propri!)
+    valori_persone = entita_piano.get("person", [])
+    if isinstance(valori_persone, str): valori_persone = [valori_persone]
+    brief_lower = " ".join([str(v).lower() for v in entita_brief.get("person", [])])
+    
+    for valore in valori_persone:
+        val_str = str(valore).strip()
+        if _is_proper_noun(val_str) and val_str.lower() not in brief_lower:
+            msg = f"Allucinazione: il piano cita la persona '{valore}' ma il brief non la menziona."
+            print(f"❌ {msg}")
+            return {"valid": False, "error": msg}
+
+    print("✅ Quality Gate superato: nessuna allucinazione critica.")
     return {"valid": True, "error": None}
 
-# Manteniamo il vecchio nome della funzione per compatibilità con icrawler_simple.py
 def validate_entities(brief: str, piano_finale: str) -> dict:
     return validate_entities_dynamic(brief, piano_finale)
-
-if __name__ == "__main__":
-    # Test del gate dinamico
-    brief_bologna = "Festa di quartiere a Bologna. Target: famiglie."
-    brief_milano = "Evento a Milano. Target: giovani."
-    
-    piano_buono = "Un evento fantastico a Bologna per famiglie e bambini."
-    piano_cattivo = "Un evento fantastico a Bergamo per famiglie e bambini."
-    
-    print("--- TEST 1: Piano corretto (Bologna -> Bologna) ---")
-    print(validate_entities(brief_bologna, piano_buono))
-    
-    print("\n--- TEST 2: Piano allucinato (Bologna -> Bergamo) ---")
-    print(validate_entities(brief_bologna, piano_cattivo))
-
-    print("\n--- TEST 3: Cliente a Milano (Milano -> Milano) ---")
-    print(validate_entities(brief_milano, "Evento a Milano per giovani."))
