@@ -18,6 +18,7 @@ from topics import TopicExtractor
 from semantic_hashtags import SemanticHashtagEngine
 from utils import setup_logging, save_output
 from validator import Validator
+from quality_gate import validate_entities
 import memory
 
 try:
@@ -683,6 +684,13 @@ class ICrawler:
                 has_specific_date = bool(re.search(r'\b\d{1,2}\s*(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)|\b(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)\s+\d{1,2}\b|\b\d{1,2}/\d{1,2}\b', brief.lower()))
                 
                 structured = self._json_to_text(data)
+
+                # --- QUALITY GATE (Anti-Allucinazione) ---
+                gate_result = validate_entities(brief, structured)
+                if not gate_result["valid"]:
+                    print(f"🛑 QUALITY GATE BLOCCATO: {gate_result['error']}")
+                    return f"❌ Errore di generazione: {gate_result['error']}\n\nIl piano è stato scartato per evitare allucinazioni."
+                # ----------------------------------------
                 
                 # Se non c'è una data specifica nel brief, distruggiamo il calendario allucinato
                 if not has_specific_date:
