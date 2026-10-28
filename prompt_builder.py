@@ -2,13 +2,12 @@ from pathlib import Path
 import config
 from hashtag_suggester import HashtagSuggester
 from cognee_memory import get_client_context
-
+from cascading_rag import retrieve_context
 
 PLACEHOLDER_VALUES = {
     "da definire", "n/a", "na", "non specificato", "non specificata",
     "non specificati", "none", "-", "--", "?", "tbd", "to be defined",
 }
-
 
 def _is_placeholder(value) -> bool:
     if value is None:
@@ -19,7 +18,6 @@ def _is_placeholder(value) -> bool:
     if s.lower() in PLACEHOLDER_VALUES:
         return True
     return False
-
 
 class PromptBuilder:
     def __init__(self):
@@ -70,7 +68,6 @@ class PromptBuilder:
                     elif "descrizione" in key:
                         brief_data["descrizione"] = value
 
-        # --- INIEZIONE EVIDENZE (SRE Logic) ---
         evidenze_nomi = brief_data.get("nome_evento", "Non specificato")
         evidenze_date = f"Data: {brief_data.get('data', 'Non specificata')} | Luogo: {brief_data.get('luogo', 'Non specificato')}"
         evidenze_numeri = brief_data.get("budget", "Non specificato")
@@ -84,17 +81,35 @@ class PromptBuilder:
         
         cloud_hashtags = []
         
-        # Proviamo a prendere il contesto da Cognee
+        # --- LOGICA CONTESTO CLIENTE (Cognee -> Web -> File Locale) ---
         voice_content = get_client_context(sandbox)
         
-        # Se Cognee fallisce o non trova nulla, facciamo il fallback al file locale
-        if not voice_content:
+        # Se Cognee fallisce, restituisce poco, o è troppo generico, andiamo sul web!
+        is_generic = voice_content and (sandbox.lower() not in voice_content.lower())
+        if not voice_content or len(voice_content) < 100 or is_generic:
+            print("⚠️ Contesto Cognee scarno. Cerco info sul web per:", sandbox)
+            query_web = f"{sandbox} cooperativa sociale progetti e attività"
+            # Soglia 1.0 per forzare la ricerca web e non usare la memoria locale per il contesto
+            rag_web = retrieve_context(query_web, cliente=sandbox, soglia_locale=1.0) 
+            
+            if rag_web.get("fonte") == "web" and rag_web.get("risultati"):
+                testi_web = [r["testo"] for r in rag_web["risultati"][:2]]
+                # Usiamo chr(10) per andare a capo in modo sicuro, senza rompere la stringa
+                voice_content = "CONTESTO AZIENDALE (da ricerca web):" + chr(10) + chr(10).join(testi_web)
+                print("✅ Contesto trovato sul web e iniettato nel prompt!")
+            else:
+                print("⚠️ Web search fallita. Uso il file template locale.")
+        
+        # Se anche il web fallisce, usiamo il file locale
+        if not voice_content or len(voice_content) < 10:
             voice_file = Path(config.BASE_DIR) / "workspaces" / sandbox / "voice_template.txt"
             voice_content = voice_file.read_text(encoding="utf-8") if voice_file.exists() else ""
+        # -------------------------------------------------------------
+
         prompt = system_prompt.replace("{tone_of_voice}", voice_content)
         prompt = prompt.replace("{voice_content}", voice_content)
         prompt = prompt.replace("{brief}", f"--- INIZIO DOCUMENTO DI RIFERIMENTO ---\n{brief}\n--- FINE DOCUMENTO DI RIFERIMENTO ---")
-        # Uniamo gli hashtag semantici al prompt
+        
         if hashtag_pool:
             suggested_str = ", ".join(hashtag_pool)
         
@@ -102,4 +117,3 @@ class PromptBuilder:
         prompt = prompt.replace("{cloud_hashtags}", ", ".join(cloud_hashtags))
         
         return prompt
-
