@@ -32,25 +32,98 @@ def _embed(text: str) -> np.ndarray:
 
 
 def _cosine(a: np.ndarray, b: np.ndarray) -> float:
-    denom = (np.linalg.norm(a) * np.linalg.norm(b))
-    return float(np.dot(a, b) / denom) if denom else 0.0
+    """Calcola la similarità coseno, rifiutando vettori non validi."""
+    a = np.asarray(a, dtype=np.float32)
+    b = np.asarray(b, dtype=np.float32)
+
+    if a.ndim != 1 or b.ndim != 1:
+        raise ValueError("Gli embedding devono essere vettori monodimensionali.")
+
+    if a.shape != b.shape:
+        raise ValueError("Gli embedding devono avere dimensioni compatibili.")
+
+    if not np.all(np.isfinite(a)) or not np.all(np.isfinite(b)):
+        raise ValueError("Gli embedding contengono valori non finiti.")
+
+    denom = np.linalg.norm(a) * np.linalg.norm(b)
+    if denom == 0.0:
+        return 0.0
+
+    score = float(np.dot(a, b) / denom)
+
+    if not np.isfinite(score):
+        raise ValueError("La similarità coseno non è un valore finito.")
+
+    return max(-1.0, min(1.0, score))
 
 
 def save_plan(brief: str, cliente: str, plan_text: str) -> int:
-    """Salva brief+piano. Ritorna id. Se brief gia' presente per stesso cliente, aggiorna."""
-    emb = _embed(brief)
+    """Salva un piano, evitando duplicati esatti. Ritorna l'ID esistente o nuovo."""
+    # Percorso rapido: evita embedding e scrittura se il piano esiste già.
     c = _conn()
-    cur = c.execute(
-        "INSERT INTO plans (brief, cliente, plan_text, embedding, created_at) VALUES (?,?,?,?,?)",
-        (brief, cliente, plan_text, emb.tobytes(), time.time())
-    )
-    c.commit()
-    c.close()
-    return cur.lastrowid
+    try:
+        row = c.execute(
+            """
+            SELECT id FROM plans
+            WHERE cliente = ? AND brief = ? AND plan_text = ?
+            ORDER BY id LIMIT 1
+            """,
+            (cliente, brief, plan_text),
+        ).fetchone()
+        if row is not None:
+            return int(row[0])
+    finally:
+        c.close()
+
+    # Calcolo potenzialmente costoso eseguito fuori dalla transazione.
+    emb = _embed(brief)
+
+    # Ricontrollo protetto per evitare duplicati da richieste concorrenti.
+    c = _conn()
+    try:
+        c.execute("BEGIN IMMEDIATE")
+        row = c.execute(
+            """
+            SELECT id FROM plans
+            WHERE cliente = ? AND brief = ? AND plan_text = ?
+            ORDER BY id LIMIT 1
+            """,
+            (cliente, brief, plan_text),
+        ).fetchone()
+
+        if row is not None:
+            c.commit()
+            return int(row[0])
+
+        cur = c.execute(
+            """
+            INSERT INTO plans
+                (brief, cliente, plan_text, embedding, created_at)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (brief, cliente, plan_text, emb.tobytes(), time.time()),
+        )
+        plan_id = int(cur.lastrowid)
+        c.commit()
+        return plan_id
+    except Exception:
+        c.rollback()
+        raise
+    finally:
+        c.close()
 
 
 def find_similar(brief: str, cliente: str, top_k: int = 2, min_sim: float = 0.65):
-    """Ritorna lista di (brief, plan_text, score) sopra soglia, per stesso cliente."""
+    """Ritorna i piani più simili sopra soglia, per lo stesso cliente."""
+    if not isinstance(top_k, int) or isinstance(top_k, bool) or top_k <= 0:
+        return []
+
+    if not isinstance(min_sim, (int, float)) or isinstance(min_sim, bool):
+        raise ValueError("min_sim deve essere un numero compreso tra -1 e 1.")
+
+    if not np.isfinite(min_sim) or not -1.0 <= min_sim <= 1.0:
+        raise ValueError("min_sim deve essere un numero finito compreso tra -1 e 1.")
+
     c = _conn()
     rows = c.execute(
         "SELECT brief, plan_text, embedding FROM plans WHERE cliente = ?",
@@ -61,11 +134,22 @@ def find_similar(brief: str, cliente: str, top_k: int = 2, min_sim: float = 0.65
         return []
     q = _embed(brief)
     scored = []
+    seen = set()
+
     for b, p, e in rows:
+        # Deduplica soltanto coppie brief/piano esattamente identiche.
+        # Le varianti creative dello stesso brief restano disponibili.
+        key = (b, p)
+        if key in seen:
+            continue
+
         v = np.frombuffer(e, dtype=np.float32)
         s = _cosine(q, v)
+
         if s >= min_sim:
+            seen.add(key)
             scored.append((b, p, s))
+
     scored.sort(key=lambda x: -x[2])
     return scored[:top_k]
 

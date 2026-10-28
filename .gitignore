@@ -84,3 +84,9 @@ storico_output/
 *.bak_rules
 *.bak4
 *.pre_qwen
+
+# Backup locali
+*.backup-*
+*.backup_*
+*.stabile_*
+*.bak*
