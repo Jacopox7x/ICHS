@@ -5,496 +5,151 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <title>iCrawler Knowledge Studio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      color-scheme: light;
-      --paper: #F2E6CC;
-      --paper-muted: #E4D5B7;
-      --surface: #FAF4E8;
-      --ink: #282723;
-      --ink-soft: #575349;
-      --red: #D94A32;
-      --orange: #D96B35;
-      --turquoise: #4D9D9A;
-      --petrol: #28566A;
-      --ochre: #E8BD62;
-      --olive: #7C8050;
-      --line: 3px solid var(--ink);
-      --line-thin: 2px solid var(--ink);
-      --shadow: 5px 5px 0 var(--ink);
-      --shadow-small: 3px 3px 0 var(--ink);
-      --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
-      --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-meta: "Space Mono", "Courier New", monospace;
-      --radius: 0;
-      --sidebar-width: 270px;
+      --bg-main: #070B12;
+      --bg-sidebar: #0D141D;
+      --bg-violet: #0D0A14;
+      --border-dark: #1B3842;
+      --violet-neon: #B930FF;
+      --border-violet: rgba(185, 48, 255, 0.3);
+      --cyan: #00EAF5;
+      --orange: #FF5038;
+      --text-main: #E6EAF2;
+      --text-muted: #929BA8;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { min-height: 100%; background: var(--paper); }
+    
     body {
-      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-main);
+      background-image: radial-gradient(circle at 50% 0%, rgba(22, 19, 38, 0.8) 0%, transparent 50%);
+      color: var(--text-main);
       height: 100vh;
       display: flex;
       overflow: hidden;
-      line-height: 1.55;
-      font-family: var(--font-body);
-      color: var(--ink);
-      background-color: var(--paper);
-      background-image: radial-gradient(circle, rgba(40,39,35,.13) 1px, transparent 1.25px);
-      background-size: 7px 7px;
+      line-height: 1.6;
     }
 
-    button, input, select, textarea { font: inherit; }
-    button, select, input[type="checkbox"] { cursor: pointer; }
-    button { color: inherit; }
-    button:focus-visible, select:focus-visible, textarea:focus-visible,
-    input:focus-visible, .nav-links li:focus-visible, .drop-zone:focus-visible {
-      outline: 3px dashed var(--petrol);
-      outline-offset: 4px;
-    }
-
-    /* SIDEBAR: indice editoriale */
+    /* --- SIDEBAR --- */
     .sidebar {
-      flex: 0 0 var(--sidebar-width);
-      width: var(--sidebar-width);
-      min-width: 0;
-      background: var(--ochre);
-      border-right: var(--line);
-      display: flex;
-      flex-direction: column;
-      padding: 1.5rem 1.15rem;
-      position: relative;
-      z-index: 10;
-      overflow-y: auto;
+      width: 290px; background: var(--bg-sidebar);
+      border-right: 1px solid rgba(185, 48, 255, 0.4);
+      display: flex; flex-direction: column; padding: 2rem 1.5rem; z-index: 10;
     }
-    .sidebar::before {
-      content: "INDICE / VOL. 01";
-      display: block;
-      font: 700 .68rem var(--font-meta);
-      letter-spacing: .08em;
-      border-bottom: var(--line-thin);
-      padding-bottom: .7rem;
-      margin-bottom: 1rem;
+    .logo { 
+      font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 3rem; 
+      text-shadow: 0 0 10px #fff, 0 0 20px var(--violet-neon), 0 0 40px var(--violet-neon);
+      animation: auraPulse 2.5s infinite alternate;
     }
-    .logo {
-      position: relative;
-      display: inline-block;
-      align-self: flex-start;
-      color: var(--surface);
-      background: var(--red);
-      border: var(--line);
-      box-shadow: var(--shadow);
-      padding: .3rem .65rem .42rem;
-      margin: .15rem 0 2.5rem .1rem;
-      font: 2.15rem/.98 var(--font-display);
-      letter-spacing: .015em;
-      transform: rotate(-2deg);
-      text-shadow: 2px 2px 0 var(--ink);
+    @keyframes auraPulse {
+      from { text-shadow: 0 0 5px rgba(255,255,255,0.8), 0 0 15px rgba(185, 48, 255, 0.6); }
+      to { text-shadow: 0 0 10px rgba(255,255,255,1), 0 0 25px rgba(185, 48, 255, 0.8), 0 0 40px rgba(185, 48, 255, 0.4); }
     }
-    .logo::after {
-      content: "®";
-      position: absolute;
-      right: -.7rem;
-      top: -.65rem;
-      color: var(--ink);
-      font: 700 .7rem var(--font-meta);
-      text-shadow: none;
+    .nav-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .nav-links li { 
+      cursor: pointer; padding: 0.8rem 1rem; border-radius: 6px; 
+      color: var(--text-muted); font-weight: 600; border-left: 3px solid transparent; 
+      transition: all 0.2s;
     }
-    .nav-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: .7rem;
-    }
-    .nav-links li {
-      position: relative;
-      cursor: pointer;
-      padding: .8rem .75rem .8rem 2.2rem;
-      color: var(--ink);
-      font-weight: 800;
-      font-size: .9rem;
-      text-transform: uppercase;
-      border: var(--line-thin);
-      background: var(--surface);
-      box-shadow: var(--shadow-small);
-      transition: transform .12s ease, background-color .12s ease, box-shadow .12s ease;
-    }
-    .nav-links li::before {
-      content: "›";
-      position: absolute;
-      left: .72rem;
-      top: 50%;
-      transform: translateY(-53%);
-      font: 700 1.5rem/1 var(--font-meta);
-    }
-    .nav-links li:hover { transform: translate(-1px,-1px); background: #fff9ec; }
-    .nav-links li.active {
-      color: var(--surface);
-      background: var(--red);
-      box-shadow: 2px 2px 0 var(--ink);
-      transform: translate(2px,2px);
-    }
-    .nav-links li.active::before { content: "★"; font-size: .95rem; }
-    .status-panel {
-      margin-top: auto;
-      padding: 1rem .75rem .25rem;
-      border-top: var(--line);
-      font: .72rem/1.7 var(--font-meta);
-      color: var(--ink);
-    }
-    .status-panel::before {
-      content: "SISTEMI / LIVE";
-      display: block;
-      font-weight: 700;
-      margin-bottom: .6rem;
-      letter-spacing: .04em;
-    }
-    .status-item { display: flex; align-items: center; gap: 9px; margin-bottom: 8px; }
-    .dot {
-      flex: 0 0 10px;
-      width: 10px;
-      height: 10px;
-      border: 1.5px solid var(--ink);
-      border-radius: 50%;
-      background: var(--paper-muted);
-    }
-    .dot.active { background: var(--turquoise); box-shadow: 2px 2px 0 var(--ink); }
+    .nav-links li:hover { background: rgba(185, 48, 255, 0.05); color: var(--violet-neon); }
+    .nav-links li.active { background: rgba(185, 48, 255, 0.15); color: var(--violet-neon); border-left: 3px solid var(--violet-neon); }
+    
+    .status-panel { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border-dark); font-size: 0.8rem; color: var(--text-muted); font-family: monospace; }
+    .status-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #333; }
+    .dot.active { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
 
-    /* AREA DI LAVORO */
-    .main-content {
-      flex: 1 1 auto;
-      min-width: 0;
-      overflow-y: auto;
-      padding: clamp(1.25rem, 4vw, 3.5rem);
-      position: relative;
-      background: rgba(242,230,204,.76);
-    }
-    .view { display: none; animation: pageIn .22s ease-out; }
+    /* --- MAIN --- */
+    .main-content { flex-grow: 1; overflow-y: auto; padding: 3rem 4rem; position: relative; }
+    .view { display: none; animation: fadeIn 0.3s ease-out; }
     .view.active { display: block; }
-    @keyframes pageIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .hero-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .hero-text { min-width: 0; }
-    .hero-text h1, h2, .hero-header > h2 {
-      font-family: var(--font-display);
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: .015em;
-      line-height: .98;
-    }
-    .hero-text h1 {
-      display: inline-block;
-      font-size: clamp(2.4rem, 5vw, 4.5rem);
-      max-width: 100%;
-      color: var(--ink);
-      background: var(--ochre);
-      border: var(--line);
-      box-shadow: var(--shadow);
-      padding: .2em .24em .28em;
-      margin: .2rem 0 .85rem;
-      overflow-wrap: anywhere;
-    }
-    .hero-text p {
-      font-size: 1rem;
-      color: var(--red);
-      font-weight: 800;
-      letter-spacing: .015em;
-    }
-    .hero-image {
-      flex: 0 0 128px;
-      width: 128px;
-      height: 128px;
-      object-fit: cover;
-      padding: 7px;
-      background: var(--surface);
-      border: var(--line);
-      border-radius: 50%;
-      box-shadow: var(--shadow);
-      filter: grayscale(20%) contrast(120%);
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* CONTROLLO WORKSPACE */
-    .sandbox-select {
-      max-width: 100%;
-      background: var(--surface);
-      color: var(--ink);
-      border: var(--line-thin);
-      box-shadow: var(--shadow-small);
-      padding: .65rem 2.2rem .65rem .8rem;
-      font: 700 .75rem var(--font-meta);
-      margin-bottom: .8rem;
-      border-radius: 0;
-    }
-    .sandbox-select option { background: var(--surface); color: var(--ink); }
+    .hero-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; }
+    .hero-text h1 { font-size: 3rem; font-weight: 600; margin-bottom: 0.5rem; color: transparent; -webkit-text-stroke: 1.5px var(--text-main); letter-spacing: 1px; }
+    .hero-text p { font-size: 1.1rem; color: var(--violet-neon); opacity: 0.9; font-weight: 500; }
+    .hero-image { width: 140px; height: 140px; border-radius: 20px; box-shadow: 0 0 40px rgba(185, 48, 255, 0.4); border: 1px solid var(--border-violet); object-fit: cover; }
 
-    /* CARD / INPUT */
-    .input-card, .kb-card, .detail-content {
-      background-color: var(--surface);
-      background-image: radial-gradient(circle, rgba(40,39,35,.07) .8px, transparent 1px);
-      background-size: 8px 8px;
-      border: var(--line);
-      border-radius: 0;
-      box-shadow: var(--shadow);
-    }
-    .input-card { padding: clamp(1rem, 3vw, 2.25rem); }
-    textarea {
-      display: block;
-      width: 100%;
-      min-height: 180px;
-      height: 180px;
-      background-color: #FFFCF4;
-      background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 31px, rgba(40,39,35,.09) 32px);
-      color: var(--ink);
-      border: var(--line-thin);
-      border-radius: 0;
-      padding: 1rem 1.1rem;
-      font-family: var(--font-meta);
-      font-size: .86rem;
-      line-height: 2;
-      resize: vertical;
-      margin-bottom: 1.25rem;
-      box-shadow: inset 3px 3px 0 rgba(40,39,35,.06);
-      transition: box-shadow .15s ease, background-color .15s ease;
-    }
-    textarea::placeholder { color: #777064; opacity: 1; }
-    textarea:focus {
-      outline: 3px solid var(--turquoise);
-      outline-offset: 2px;
-      box-shadow: inset 3px 3px 0 rgba(40,39,35,.06), 4px 4px 0 var(--ink);
-    }
+    /* --- INPUT E TOGGLE --- */
+    .input-card { background: var(--bg-violet); border: 1px solid rgba(185, 48, 255, 0.5); border-radius: 16px; padding: 2.5rem; box-shadow: 0 0 40px rgba(185, 48, 255, 0.1); }
+    textarea { width: 100%; height: 180px; background: rgba(0,0,0,0.3); color: var(--text-main); border: 1px solid var(--border-dark); border-radius: 10px; padding: 1.5rem; font-family: monospace; font-size: 14px; resize: vertical; margin-bottom: 1.5rem; transition: all 0.3s; }
+    textarea:focus { outline: none; border-color: var(--violet-neon); box-shadow: 0 0 20px rgba(185, 48, 255, 0.2); }
 
-    .drop-zone {
-      position: relative;
-      overflow: hidden;
-      border: 3px dashed var(--ink);
-      border-radius: 0;
-      padding: 1.35rem;
-      text-align: center;
-      margin-bottom: 1rem;
-      cursor: pointer;
-      transition: background-color .15s ease, color .15s ease, transform .15s ease;
-      color: var(--ink);
-      background-color: var(--ochre);
-      background-image: radial-gradient(circle, rgba(40,39,35,.16) 1px, transparent 1.2px);
-      background-size: 7px 7px;
-      font-size: .9rem;
-      font-weight: 700;
-    }
-    .drop-zone:hover, .drop-zone.dragover {
-      background-color: #F4D58D;
-      color: var(--ink);
-      transform: translate(-1px,-1px);
-    }
-    .drop-zone.loading { background-color: var(--paper-muted); cursor: progress; }
-    .drop-zone.success { border-style: solid; background-color: #DDEBE3; }
-    .drop-zone img.preview {
-      max-height: 110px;
-      max-width: 100%;
-      border-radius: 0;
-      margin: 10px auto 0;
-      display: block;
-      box-shadow: 4px 4px 0 var(--ink);
-      border: var(--line-thin);
-    }
-    .drop-zone.loading img.preview { opacity: .55; filter: grayscale(20%); }
-    .spinner-ocr {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(40,39,35,.25);
-      border-radius: 50%;
-      border-top-color: var(--red);
-      animation: spin 1s linear infinite;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* BUTTONS: timbri editoriali */
-    .btn-row { display: flex; gap: .85rem; flex-wrap: wrap; align-items: center; }
+    .btn-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    
+    /* IL TOGGLE A PILLOLA */
     .mode-toggle {
-      display: inline-flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      background: var(--paper-muted);
-      border: var(--line-thin);
-      border-radius: 0;
-      padding: 4px;
+      display: inline-flex; background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border-dark); border-radius: 8px; padding: 3px;
     }
     .mode-btn {
-      padding: .65rem .95rem;
-      border: 2px solid transparent;
-      border-radius: 0;
-      background: transparent;
-      color: var(--ink);
-      font-weight: 800;
-      font-size: .78rem;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background-color .12s ease, transform .12s ease;
+      padding: 0.6rem 1.2rem; border-radius: 6px; border: none; background: transparent;
+      color: var(--text-muted); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.3s;
     }
-    .mode-btn:hover { background: var(--surface); }
-    .mode-btn.active {
-      color: var(--surface);
-      background: var(--petrol);
-      border-color: var(--ink);
-      box-shadow: 2px 2px 0 var(--ink);
-    }
-    button.btn-primary, button.secondary {
-      min-height: 44px;
-      border: var(--line);
-      border-radius: 0;
-      padding: .8rem 1.25rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .025em;
-      box-shadow: var(--shadow-small);
-      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-    }
+    .mode-btn.active { background: rgba(185, 48, 255, 0.15); color: var(--violet-neon); box-shadow: 0 0 10px rgba(185,48,255,0.1); }
+
     button.btn-primary {
-      background: var(--red);
-      color: #fffaf0;
-      font-size: .9rem;
+      background: var(--orange); color: #000; border: none; padding: 0.9rem 2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
     }
-    button.btn-primary:hover:not(:disabled), button.secondary:hover:not(:disabled) {
-      transform: translate(-2px,-2px);
-      box-shadow: 5px 5px 0 var(--ink);
-      filter: saturate(1.12);
-    }
-    button.btn-primary:active:not(:disabled), button.secondary:active:not(:disabled) {
-      transform: translate(2px,2px);
-      box-shadow: 1px 1px 0 var(--ink);
-    }
-    button.secondary { background: var(--turquoise); color: var(--ink); font-size: .78rem; }
-    button:disabled { opacity: .55; cursor: not-allowed; filter: grayscale(35%); }
+    button.btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255, 80, 56, 0.3); }
+    
+    button.secondary { background: rgba(185, 48, 255, 0.05); border: 1px solid rgba(185, 48, 255, 0.4); color: var(--violet-neon); padding: 0.9rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    button.secondary:hover { border-color: var(--violet-neon); box-shadow: 0 0 15px rgba(185, 48, 255, 0.2); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    #autoGenerate { accent-color: var(--red); width: 16px; height: 16px; }
-    label[for="autoGenerate"] { color: var(--ink) !important; font-size: .82rem !important; font-weight: 700; }
+    /* --- OUTPUT & KB --- */
+    .kb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+    .kb-card { background: var(--bg-violet); border: 1px solid rgba(185, 48, 255, 0.3); border-radius: 12px; padding: 1.8rem; cursor: pointer; transition: all 0.2s; }
+    .kb-card:hover { border-color: var(--violet-neon); transform: translateY(-4px); box-shadow: 0 0 20px rgba(185, 48, 255, 0.2); }
+    .kb-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--violet-neon); }
+    .kb-card .meta { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; font-family: monospace; }
+    
+    .detail-content { background: var(--bg-violet); border: 1px solid rgba(185, 48, 255, 0.4); border-radius: 12px; padding: 3rem; font-family: monospace; font-size: 14px; line-height: 1.8; white-space: pre-wrap; box-shadow: 0 0 30px rgba(185, 48, 255, 0.05); }
 
-    #entities {
-      padding: .8rem 1rem;
-      background: var(--ochre);
-      border: var(--line-thin);
-      color: var(--ink) !important;
-      overflow-wrap: anywhere;
-    }
-    #entities span { color: var(--ink) !important; font-weight: 800; }
-
-    /* OUTPUT E ARCHIVIO */
-    #generationResult { margin-top: 2.5rem !important; }
-    #generationResult .hero-header { align-items: center; }
-    #outputTitle {
-      font: 400 clamp(1.6rem, 3vw, 2.4rem)/1 var(--font-display);
-      text-transform: uppercase;
-      background: var(--turquoise);
-      border: var(--line);
-      padding: .35rem .5rem;
-      box-shadow: var(--shadow-small);
-    }
-    .detail-content {
-      padding: clamp(1rem, 3vw, 2rem);
-      font: .84rem/1.8 var(--font-meta);
-      color: var(--ink);
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      box-shadow: var(--shadow);
-    }
-    .kb-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
-      gap: 1.25rem;
-    }
-    .kb-card {
-      min-width: 0;
-      padding: 1.4rem;
-      cursor: pointer;
-      transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
-    }
-    .kb-card:nth-child(3n + 1) { border-top: 9px solid var(--red); }
-    .kb-card:nth-child(3n + 2) { border-top: 9px solid var(--turquoise); }
-    .kb-card:nth-child(3n) { border-top: 9px solid var(--ochre); }
-    .kb-card:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--ink); }
-    .kb-card:focus-visible { outline: 3px dashed var(--petrol); outline-offset: 4px; }
-    .kb-card h3 {
-      font: 400 1.45rem/1.12 var(--font-display);
-      text-transform: uppercase;
-      overflow-wrap: anywhere;
-      margin-bottom: .55rem;
-      color: var(--red);
-    }
-    .kb-card .meta {
-      font: .7rem var(--font-meta);
-      color: var(--ink-soft);
-      margin-bottom: .8rem;
-    }
-    #detailMeta { color: var(--petrol) !important; font: .75rem var(--font-meta) !important; }
-    #view-patterns .input-card { text-align: center; padding: 4rem 2rem !important; }
-    #view-patterns .input-card p { color: var(--ink-soft) !important; }
-
-    /* RESPONSIVE */
     @media (max-width: 900px) {
-      body { flex-direction: column; height: 100vh; min-height: 100vh; overflow: hidden; }
-      .sidebar {
-        flex: 0 0 auto;
-        width: 100%;
-        border-right: 0;
-        border-bottom: var(--line);
-        padding: .8rem 1rem 1rem;
-        overflow: visible;
-      }
-      .sidebar::before { display: none; }
-      .logo { margin: .1rem 0 1rem .1rem; font-size: 1.8rem; }
-      .nav-links { flex-direction: row; overflow-x: auto; gap: .6rem; padding: 3px 3px 8px; }
-      .nav-links li { flex: 0 0 auto; padding: .6rem .8rem .6rem 1.8rem; font-size: .76rem; white-space: nowrap; }
-      .nav-links li::before { left: .55rem; }
+      body { flex-direction: column; height: auto; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-dark); padding: 1rem; flex-direction: row; }
+      .logo { margin-bottom: 0; margin-right: 2rem; }
+      .nav-links { flex-direction: row; overflow-x: auto; }
       .status-panel { display: none; }
-      .main-content { flex: 1 1 auto; min-height: 0; padding: 1.25rem; }
-      .hero-header { flex-direction: column; gap: 1rem; }
-      .hero-image { width: 88px; height: 88px; flex-basis: 88px; }
-      .hero-text h1 { font-size: clamp(2rem, 9vw, 3.2rem); }
-      .btn-row { align-items: stretch; }
-      .mode-toggle { width: fit-content; max-width: 100%; }
-      button.btn-primary, button.secondary { width: auto; }
-      #generationResult .hero-header > div { display: flex; flex-wrap: wrap; gap: .5rem; }
-    }
-    @media (max-width: 520px) {
-      .main-content { padding: 1rem .85rem 1.5rem; }
-      .input-card { padding: 1rem; }
-      .hero-header { margin-bottom: 1.5rem; }
-      .hero-text h1 { font-size: clamp(1.8rem, 10vw, 2.7rem); }
-      .hero-image { align-self: flex-start; }
-      .btn-row { flex-direction: column; align-items: stretch; }
-      .mode-toggle { width: 100%; }
-      .mode-btn { flex: 1; padding-inline: .45rem; }
-      button.btn-primary, button.secondary { width: 100%; }
-      #generationResult .hero-header > div { width: 100%; }
-      #generationResult .hero-header > div button { flex: 1; }
-      .detail-content { font-size: .75rem; padding: 1rem; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-      }
+      .main-content { padding: 2rem; }
+      .hero-header { flex-direction: column; gap: 1.5rem; }
+      .hero-image { width: 100px; height: 100px; }
+      .hero-text h1 { font-size: 2.2rem; }
+      .btn-row { flex-direction: column; }
+      button { width: 100%; }
     }
   
-    .detail-content { font-family: var(--font-body) !important; line-height: 1.6 !important; }
-    .detail-content h1, .detail-content h2, .detail-content h3 { margin-top: 1.2rem; margin-bottom: 0.6rem; }
-    .detail-content li { margin-bottom: 0.4rem; }
+    .sandbox-select {
+      background: rgba(0,0,0,0.5); color: var(--violet-neon);
+      border: 1px solid var(--violet-neon); border-radius: 6px;
+      padding: 0.5rem 1rem; font-weight: 600; font-family: monospace;
+      cursor: pointer; outline: none; margin-bottom: 1rem;
+    }
+    .sandbox-select option { background: var(--bg-main); color: var(--text-main); }
+
+    .drop-zone {
+      border: 2px dashed var(--border-dark); border-radius: 12px;
+      padding: 1.5rem; text-align: center; margin-bottom: 1rem;
+      cursor: pointer; transition: all 0.3s; color: var(--text-muted);
+      background: rgba(0,0,0,0.2); font-size: 0.9rem;
+    }
+    .drop-zone:hover, .drop-zone.dragover { border-color: var(--cyan); color: var(--cyan); background: rgba(0,234,245,0.05); }
+
+  
+    .drop-zone { position: relative; overflow: hidden; }
+    .drop-zone img.preview {
+      max-height: 100px; border-radius: 8px; margin-top: 10px; display: block; margin-left: auto; margin-right: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: 1px solid var(--border-dark);
+    }
+    .drop-zone.loading img.preview { opacity: 0.5; filter: blur(1px); }
+    .drop-zone.success { border-color: var(--cyan); background: rgba(0, 234, 245, 0.05); }
+    .spinner-ocr {
+      display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%; border-top-color: var(--cyan); animation: spin 1s linear infinite;
+      vertical-align: middle; margin-right: 8px;
+    }
 
   </style>
 </head>
@@ -527,61 +182,32 @@
         </div>
         <img src="/static/icon.png" class="hero-image" alt="iCrawler" onerror="this.style.display='none'">
       </div>
-
+      
       <div class="input-card">
         <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
           📸 Trascina qui una locandina o premi Cmd+V per incollare
           <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(this.files[0])">
         </div>
         <textarea id="brief" placeholder="Incolla qui il brief strategico..."></textarea>
-
+        
         <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
           <input type="checkbox" id="autoGenerate" style="cursor: pointer;">
           <label for="autoGenerate" style="color: var(--cyan); font-size: 0.85rem; cursor: pointer;">Auto-genera piano dopo l'OCR</label>
         </div>
-
-        <div class="btn-row" style="display: flex; flex-direction: column; gap: 1rem;">
+        
+        <div class="btn-row">
+          <!-- IL TOGGLE -->
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="btn-mode-social" onclick="setMode('social')">Social</button>
+            <button class="mode-btn" id="btn-mode-wp" onclick="setMode('wordpress')">WP</button>
+            <button class="mode-btn" id="btn-mode-both" onclick="setMode('both')">Entrambi</button>
+          </div>
           
-          <!-- Riga 1: Scelta della modalità e Generazione -->
-          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-            <div class="mode-toggle">
-              <button class="mode-btn active" id="btn-mode-social" onclick="setMode('social')">Social</button>
-              <button class="mode-btn" id="btn-mode-wp" onclick="setMode('wordpress')">WP</button>
-              <button class="mode-btn" id="btn-mode-both" onclick="setMode('both')">Entrambi</button>
-            </div>
-            <button class="btn-primary" onclick="genera()" id="btnGenera" style="flex-grow: 1;">Genera</button>
-          </div>
-
-          <!-- Riga 2: Strumenti di laboratorio (EyeCrawler) -->
-          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; border-top: 2px solid var(--ink); padding-top: 1rem;">
-            <span style="font-family: var(--font-meta); font-size: 0.75rem; font-weight: bold; margin-right: 0.5rem;">STRUMENTI:</span>
-            <button class="instrument-btn" onclick="inspectGLiNER()" id="btnInspect">🔍 Ispeziona GLiNER</button>
-            <button class="instrument-btn" onclick="analyzeVision()" id="btnVision">👁️ Analisi Visiva</button>
-            <button class="instrument-btn" onclick="summarizeText()" id="btnSummarize" style="background: var(--red); color: white;">📚 Sintetizza</button>
-          </div>
+          <button class="btn-primary" onclick="genera()" id="btnGenera">Genera</button>
+          
           
         </div>
-
         <div id="entities" style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--cyan); display: none;"></div>
-      </div>
-
-      <div id="inspectResult" style="display: none; margin-top: 2rem;">
-        <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1rem; color: var(--red); text-transform: uppercase;">Appendice Tecnica: EyeCrawler L1/L2</h3>
-
-        <div id="judgeVerdict" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border: 3px solid var(--ink); font-family: var(--font-meta); font-weight: bold; font-size: 1rem; box-shadow: 4px 4px 0 var(--ink); background: var(--surface);"></div>
-        <div id="entityChips" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem;"></div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
-          <div>
-            <h4 style="font-family: var(--font-meta); color: var(--red); margin-bottom: 0.5rem; text-transform: uppercase;">Testo Estratto (Apple Vision)</h4>
-            <div id="rawBriefOut" style="background: var(--paper-muted); padding: 1rem; border: 3px solid var(--ink); font-family: var(--font-meta); font-size: 0.85rem; white-space: pre-wrap; height: 300px; overflow-y: auto;"></div>
-          </div>
-          <div>
-            <h4 style="font-family: var(--font-meta); color: var(--petrol); margin-bottom: 0.5rem; text-transform: uppercase;">Entità (GLiNER JSON)</h4>
-            <pre class="detail-content" id="eyeOut" style="background: var(--ink); color: var(--surface); font-size: 0.8rem; border: none; height: 300px; overflow-y: auto; margin: 0; padding: 1rem; white-space: pre-wrap;"></pre>
-          </div>
-        </div>
-      </div>
       </div>
 
       <div id="generationResult" style="display: none; margin-top: 3rem;">
@@ -606,6 +232,7 @@
     <div id="view-detail" class="view">
       <div class="hero-header">
         <div>
+          
           <h1 id="detailTitle">Titolo</h1>
           <p style="color:var(--violet-neon); font-family: monospace;" id="detailMeta">Data</p>
         </div>
@@ -631,19 +258,19 @@
     let briefOriginale = '';
     let currentMode = 'social';
     let currentSandbox = 'cosper';
-    window.judgeBlocked = false;
 
     function aggiornaSandbox() {
       currentSandbox = document.getElementById('sandbox').value;
       caricaKnowledgeBase(); // Ricarica la KB per mostrare i file della sandbox attiva
     }
 
+
     function setMode(mode) {
       currentMode = mode;
       document.getElementById('btn-mode-social').classList.toggle('active', mode === 'social');
       document.getElementById('btn-mode-wp').classList.toggle('active', mode === 'wordpress');
       document.getElementById('btn-mode-both').classList.toggle('active', mode === 'both');
-
+      
       const labels = {'social': 'Genera', 'wordpress': 'Genera WP', 'both': 'Genera Tutto'};
       document.getElementById('btnGenera').textContent = labels[mode];
     }
@@ -683,33 +310,29 @@
     }
 
     async function genera() {
-      if (window.judgeBlocked) {
-        alert("⚠️ BLOCCO DI SICUREZZA: Il Judge ha rilevato dati insufficienti. Qwen inventerebbe una storia. Aggiungi più contesto o carica un'immagine migliore.");
-        return;
-      }
       const brief = document.getElementById('brief').value.trim();
       if (!brief) return alert('Incolla un brief prima.');
       const btn = document.getElementById('btnGenera');
       btn.disabled = true; btn.textContent = 'Elaborazione...';
       document.getElementById('generationResult').style.display = 'none';
-
+      
       try {
-        const r = await fetch('/genera', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({brief: brief, mode: currentMode, sandbox: currentSandbox})
+        const r = await fetch('/genera', { 
+          method: 'POST', 
+          headers: {'Content-Type': 'application/json'}, 
+          body: JSON.stringify({brief: brief, mode: currentMode, sandbox: currentSandbox}) 
         });
         const data = await r.json();
         ultimoPiano = cleanMarkdown(data.piano || '');
         briefOriginale = brief;
-
+        
         document.getElementById('outputTitle').textContent = currentMode === 'social' ? 'Piano Social Generato' : (currentMode === 'wordpress' ? 'Articolo WordPress Generato' : 'Articolo WP + Piano Social');
-        document.getElementById('out').innerHTML = renderMarkdown(ultimoPiano);
+        document.getElementById('out').textContent = ultimoPiano;
         document.getElementById('generationResult').style.display = 'block';
       } catch (e) { alert('Errore generazione'); }
-      finally {
-        btn.disabled = false;
-        btn.textContent = currentMode === 'social' ? 'Genera' : (currentMode === 'wordpress' ? 'Genera WP' : 'Genera Tutto');
+      finally { 
+        btn.disabled = false; 
+        btn.textContent = currentMode === 'social' ? 'Genera' : (currentMode === 'wordpress' ? 'Genera WP' : 'Genera Tutto'); 
       }
     }
 
@@ -731,7 +354,7 @@
           const conceptMatch = content.match(/(?:- Concept:|#) (.*)/);
           const title = conceptMatch ? conceptMatch[1].replace(/^\*\*|\*\*$/g, '') : 'Contenuto';
           const date = new Date(p.mtime * 1000).toLocaleDateString('it-IT');
-
+          
           const card = document.createElement('div');
           card.className = 'kb-card';
           card.onclick = () => apriDettaglio(p.name, content, date);
@@ -753,7 +376,7 @@
       const conceptMatch = ultimoPiano.match(/(?:- Concept:|#) (.*)/);
       document.getElementById('detailTitle').textContent = conceptMatch ? conceptMatch[1].replace(/^\*\*|\*\*$/g, '') : 'Contenuto';
       document.getElementById('detailMeta').textContent = `Archiviato il ${date}`;
-      document.getElementById('detailOut').innerHTML = renderMarkdown(ultimoPiano);
+      document.getElementById('detailOut').textContent = ultimoPiano;
       document.querySelector('button[onclick="riutilizzaBrief()"]').disabled = !briefOriginale;
       nav('detail');
     }
@@ -779,6 +402,7 @@
       a.click();
     }
 
+    
     // --- LOGICA INCOLLA (Command+V) ---
     document.addEventListener('paste', (e) => {
       const items = (e.clipboardData || e.originalEvent.clipboardData).items;
@@ -793,6 +417,7 @@
       }
     });
 
+    
     let ultimoFileCaricato = null;
 
     async function sosOcr() {
@@ -800,21 +425,21 @@
         alert("Carica prima un'immagine con Apple Vision.");
         return;
       }
-
+      
       const btn = document.getElementById('btnSosOcr');
       btn.disabled = true;
       btn.innerHTML = '⏳ Qwen Vision in azione (20s)...';
-
+      
       const formData = new FormData();
       formData.append('file', ultimoFileCaricato);
-
+      
       try {
         const response = await fetch('/ocr_qwen', {
           method: 'POST',
           body: formData
         });
         if (!response.ok) throw new Error('Errore server');
-
+        
         const data = await response.json();
         document.getElementById('brief').value = data.testo;
         alert("✅ Qwen Vision ha riletto l'immagine. Controlla il brief.");
@@ -826,6 +451,7 @@
       }
     }
 
+    
     function svuota() {
       document.getElementById('brief').value = '';
       document.getElementById('entities').classList.remove('visible');
@@ -841,253 +467,6 @@
 
     // Controlla lo stato ogni 3 secondi per aggiornare i pallini
     setInterval(checkHealth, 3000);
-    
-    async function inspectGLiNER() {
-      const brief = document.getElementById('brief').value.trim();
-      if (!brief) return alert('Carica prima un\'immagine o incolla un testo.');
-      
-      const btn = document.getElementById('btnInspect');
-      const out = document.getElementById('eyeOut');
-      const rawOut = document.getElementById('rawBriefOut');
-      const res = document.getElementById('inspectResult');
-      const verdictBox = document.getElementById('judgeVerdict');
-      const chipsContainer = document.getElementById('entityChips');
-      
-      btn.disabled = true;
-      btn.innerHTML = '⏳ Scansione...';
-      out.textContent = 'In attesa...';
-      rawOut.textContent = brief;
-      chipsContainer.innerHTML = '';
-      res.style.display = 'block';
-      verdictBox.style.display = 'none';
-
-      try {
-        const r = await fetch('/extract', { 
-          method: 'POST', 
-          headers: {'Content-Type': 'application/json'}, 
-          body: JSON.stringify({ brief: brief, mode: 'social', sandbox: currentSandbox }) 
-        });
-        const data = await r.json();
-        out.textContent = JSON.stringify(data, null, 2);
-
-        // --- JUDGE RICALIBRATO (SRE Logic v2) ---
-        const numParole = brief.split(/\s+/).filter(w => w.length > 2).length;
-        const numEntita = Object.keys(data.entities || {}).length;
-        const keysEntita = Object.keys(data.entities || {});
-        
-        // 1. Blacklist di rumore (parole tipiche di UI, biglietti, menu)
-        const rumore = ["carte fedeltà", "solo diretti", "precedenti", "ritorno", "andata", "continua", "seleziona"];
-        const testoLower = brief.toLowerCase();
-        const haRumore = rumore.some(r => testoLower.includes(r));
-
-        // 2. Controllo semantico dell'evento
-        const eventValue = (data.entities.event || "").toLowerCase();
-        const badEvents = ["andata", "ritorno", "precedenti", "milano", "roma"];
-        const badEventFound = badEvents.includes(eventValue);
-
-        verdictBox.style.display = 'block';
-        window.judgeBlocked = false;
-
-        if (haRumore || badEventFound) {
-          verdictBox.textContent = '❌ CRITICO: Rilevata interfaccia utente o biglietto, non un brief. Qwen allucinerebbe.';
-          verdictBox.style.borderColor = 'var(--red)';
-          verdictBox.style.color = 'var(--red)';
-          window.judgeBlocked = true;
-        } else if (numParole < 15 || numEntita === 0) {
-          verdictBox.textContent = '❌ CRITICO: Dati insufficienti.';
-          verdictBox.style.borderColor = 'var(--red)';
-          verdictBox.style.color = 'var(--red)';
-          window.judgeBlocked = true;
-        } else if (!keysEntita.includes('event') && !keysEntita.includes('topic')) {
-          verdictBox.textContent = '⚠️ ATTENZIONE: Manca un evento chiaro.';
-          verdictBox.style.borderColor = 'var(--ochre)';
-          verdictBox.style.color = 'var(--ink)';
-        } else {
-          verdictBox.textContent = '✅ OK: Dati solidi.';
-          verdictBox.style.borderColor = 'var(--turquoise)';
-          verdictBox.style.color = 'var(--turquoise)';
-        }
-
-        // --- CREAZIONE CHIP ---
-        const rawEntities = data.raw || [];
-        if (rawEntities.length > 0) {
-          rawEntities.forEach(ent => {
-            const chip = document.createElement('button');
-            chip.style.cssText = 'background: var(--ochre); border: 2px solid var(--ink); padding: 6px 12px; font-family: var(--font-meta); font-size: 0.8rem; cursor: pointer; font-weight: bold; color: var(--ink); box-shadow: 2px 2px 0 var(--ink);';
-            // Evidenziamo in rosso le entità che sono chiaramente rumore
-            if (badEvents.includes(ent.text.toLowerCase())) {
-               chip.style.background = 'var(--red)';
-               chip.style.color = 'white';
-            }
-            chip.innerHTML = `<strong>${ent.label}</strong>: ${ent.text}`;
-            chip.onclick = (e) => { e.preventDefault(); highlightText(ent.text); };
-            chipsContainer.appendChild(chip);
-          });
-        }
-      } catch (e) {
-        out.textContent = '❌ Errore: ' + e.message;
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '🔍 Ispeziona GLiNER';
-      }
-    }
-
-    function highlightText(textToFind) {
-      const rawOut = document.getElementById('rawBriefOut');
-      const originalText = document.getElementById('brief').value;
-      
-      // Usiamo una Regex per trovare la parola esatta
-      const regex = new RegExp(`(${textToFind})`, 'gi');
-      
-      // Evidenziamo il testo con un colore di sfondo
-      const highlighted = originalText.replace(regex, '<mark style="background: var(--ochre); color: var(--ink); font-weight: bold;">$1</mark>');
-      
-      // Dobbiamo fare l'escape dell'HTML per il testo che non è evidenziato
-      // Un piccolo trucco: usiamo un div temporaneo
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = highlighted;
-      rawOut.innerHTML = tempDiv.innerHTML;
-      
-      // Scrolliamo fino alla parola evidenziata
-      const mark = rawOut.querySelector('mark');
-      if (mark) mark.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    
-    function renderMarkdown(md) {
-      if (!md) return '';
-      let html = md;
-      
-      // Titoli (H1, H2, H3)
-      html = html.replace(/^### (.*$)/gim, '<h3 style="font-family: var(--font-display); font-size: 1.4rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--red); text-transform: uppercase;">$1</h3>');
-      html = html.replace(/^## (.*$)/gim, '<h2 style="font-family: var(--font-display); font-size: 1.8rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--red); text-transform: uppercase;">$1</h2>');
-      html = html.replace(/^# (.*$)/gim, '<h1 style="font-family: var(--font-display); font-size: 2.2rem; margin-top: 1.5rem; margin-bottom: 1rem; color: var(--red); text-transform: uppercase;">$1</h1>');
-      
-      // Grassetto
-      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      
-      // Corsivo
-      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-      
-      // Liste puntate
-      html = html.replace(/^\s*[-*] (.*$)/gim, '<li style="margin-left: 1.5rem; margin-bottom: 0.3rem;">$1</li>');
-      
-      // Paragrafi (doppio a capo)
-      html = html.replace(/\n\n/g, '<br><br>');
-      html = html.replace(/\n/g, '<br>');
-      
-      return html;
-    }
-
-    
-    async function analyzeVision() {
-      if (!ultimoFileCaricato) {
-        alert("Carica prima un'immagine!");
-        return;
-      }
-
-      const btn = document.getElementById('btnVision');
-      const out = document.getElementById('eyeOut');
-      const res = document.getElementById('inspectResult');
-      
-      btn.disabled = true;
-      btn.innerHTML = '⏳ Osservazione in corso (20s)...';
-      res.style.display = 'block';
-      out.textContent = 'Caricamento Qwen VL in RAM...';
-
-      const formData = new FormData();
-      formData.append('file', ultimoFileCaricato);
-
-      try {
-        const r = await fetch('/analyze_vision', { method: 'POST', body: formData });
-        if (!r.ok) throw new Error("Errore HTTP dal server");
-        const data = await r.json();
-        
-        // 1. Gestione Errori del modello
-        if (data.error) {
-            out.textContent = "❌ ERRORE DI PARSING:\n" + data.error + "\n\nTesto grezzo generato:\n" + data.raw;
-            alert("Il modello ha risposto male. Guarda il pannello nero in basso.");
-            return;
-        }
-
-        // 2. Successo: mostriamo il JSON
-        out.textContent = JSON.stringify(data, null, 2);
-        
-        // 3. Prepariamo il testo da aggiungere al brief
-        const visEnt = data.visual_entities || {};
-        const classes = data.classifications || [];
-        
-        let visionText = `\n\n--- ANALISI VISIVA (Apple Vision) ---\n`;
-        
-        if (classes.length > 0) {
-            visionText += `Oggetti Rilevati: ${classes.map(c => c.label).join(', ')}\n`;
-        }
-        
-        if (Object.keys(visEnt).length > 0) {
-            visionText += `Codici Visivi (GLiNER):\n`;
-            for (const [key, value] of Object.entries(visEnt)) {
-                visionText += `- ${key}: ${value}\n`;
-            }
-        }
-        
-        // 4. Aggiungiamo i codici visivi estratti da GLiNER
-        if (Object.keys(visEnt).length > 0) {
-            visionText += `Codici Visivi (GLiNER):\n`;
-            for (const [key, value] of Object.entries(visEnt)) {
-                visionText += `- ${key}: ${value}\n`;
-            }
-        }
-        
-        const briefArea = document.getElementById('brief');
-        if (!briefArea.value.includes("--- ANALISI VISIVA")) {
-            briefArea.value += visionText;
-        }
-
-        alert("✅ Vision + GLiNER completati. I codici visivi sono nel brief!");
-
-      } catch (e) {
-        out.textContent = '❌ Errore JS: ' + e.message;
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '👁️ Analisi Visiva (Apple)';
-      }
-    }
-
-    
-    async function summarizeText() {
-      const brief = document.getElementById('brief').value.trim();
-      if (brief.length < 100) {
-        return alert('Incolla un testo più lungo (almeno 100 caratteri) per usare la sintesi.');
-      }
-
-      const btn = document.getElementById('btnSummarize');
-      const originalText = btn.innerHTML;
-      
-      btn.disabled = true;
-      btn.innerHTML = '⏳ Sintesi (Nomic+Qwen)...';
-      
-      try {
-        const r = await fetch('/summarize', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({text: brief})
-        });
-        const data = await r.json();
-        
-        if (data.summary && !data.summary.startsWith('Errore')) {
-          document.getElementById('brief').value = data.summary;
-          alert("✅ Testo sintetizzato con successo!\n\nOra puoi premere 'Genera' per creare l'articolo o il piano social.");
-        } else {
-          alert('❌ Errore durante la sintesi: ' + (data.summary || 'Errore sconosciuto'));
-        }
-      } catch (e) {
-        alert('❌ Errore di rete: ' + e.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
-      }
-    }
-
     checkHealth();
     async function checkHealth() {
       try {
@@ -1096,11 +475,12 @@
         document.getElementById('dot-gliner').className = d.gliner_alive ? 'dot active' : 'dot';
       } catch(e) {}
     }
-
+  
     async function handleFileUpload(file) {
       if (!file) return;
       ultimoFileCaricato = file;
-
+      ultimoFileCaricato = file;
+      
       // Troviamo l'elemento in modo locale, senza dipendere da variabili globali
       const dz = document.getElementById('dropZone');
       if (!dz) {
@@ -1111,9 +491,9 @@
       const originalText = '📸 Trascina qui una locandina o premi Cmd+V per incollare';
       const formData = new FormData();
       formData.append('file', file);
-
+      
       const objectUrl = URL.createObjectURL(file);
-
+      
       dz.style.pointerEvents = 'none';
       dz.className = 'drop-zone loading';
       dz.innerHTML = `
@@ -1122,76 +502,71 @@
         </div>
         <img src="${objectUrl}" class="preview">
       `;
-
+      
       try {
         const response = await fetch('/ocr', {
           method: 'POST',
           body: formData
         });
-
+        
         if (!response.ok) {
           const errData = await response.json().catch(() => ({}));
           throw new Error(errData.detail || `Errore HTTP ${response.status}`);
         }
-
-        const data = await response.json();
         
-        // Controlla se il testo è vuoto o troppo corto (es. un paesaggio)
-        if (!data.testo || data.testo.trim().length < 5) {
-            document.getElementById('brief').value = '';
-            dz.className = 'drop-zone';
-            dz.innerHTML = `
-              <div style="color: var(--orange); font-weight: bold; margin-bottom: 8px;">
-                ⚠️ Nessun testo trovato (immagine visiva).
-              </div>
-              <div style="font-size: 0.8rem; margin-bottom: 8px;">Usa il pulsante "👁️ Analisi Visiva" per farla descrivere da Qwen.</div>
-              <img src="${objectUrl}" class="preview">
-            `;
-        } else {
-            document.getElementById('brief').value = data.testo;
-            dz.className = 'drop-zone success';
-            dz.innerHTML = `
-              <div style="color: var(--turquoise); font-weight: bold; margin-bottom: 8px;">
-                ✅ Testo estratto con successo!
-              </div>
-              <img src="${objectUrl}" class="preview">
-            `;
-        }
+        const data = await response.json();
+        document.getElementById('brief').value = data.testo;
+        
+        dz.className = 'drop-zone success';
+        dz.innerHTML = `
+          <div style="color: var(--cyan); font-weight: bold; margin-bottom: 8px;">
+            ✅ Testo estratto con successo!
+          </div>
+          <img src="${objectUrl}" class="preview">
+        `;
       } catch (e) {
         alert('Errore durante l\'OCR:\n' + e.message);
         dz.className = 'drop-zone';
         dz.innerHTML = '❌ Errore durante l\'estrazione. ' + e.message;
       } finally {
-        // Ripristiniamo solo i click, ma lasciamo l'immagine visibile
-        dz.style.pointerEvents = 'auto';
-        if (document.getElementById('autoGenerate').checked) {
-          setTimeout(genera, 800);
-        }
+        setTimeout(() => {
+          if(dz.classList.contains('success') || dz.innerHTML.includes('Errore')) {
+             dz.style.pointerEvents = 'auto';
+             dz.className = 'drop-zone';
+             dz.innerHTML = originalText;
+          if (document.getElementById('autoGenerate').checked) {
+             setTimeout(genera, 500);
+          }
+          }
+        }, 5000);
       }
     }
+
   </script>
-</body>
-</html>
 
-
-<div id="cognee-box" style="background: #1e1e2e; color: #cdd6f4; padding: 15px; border-radius: 8px; margin: 20px; border-left: 4px solid #cba6f7; position: relative; z-index: 9999;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <strong style="font-size: 1.1em;">🧠 Memoria Cliente (Cognee)</strong>
-        <button onclick="caricaContesto()" style="background: #cba6f7; color: #1e1e2e; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Mostra Contesto</button>
+<!-- PANNELLO COGNEE -->
+<div style="position: fixed; top: 20px; right: 20px; background: #1a1a2e; border: 1px solid #cba6f7; border-radius: 8px; padding: 15px; width: 300px; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); color: #cdd6f4; font-family: monospace;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <strong style="color: #cba6f7; font-size: 1em;">🧠 Memoria Cliente</strong>
+        <button onclick="caricaContesto()" style="background: #cba6f7; color: #1a1a2e; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8em;">Interroga</button>
     </div>
-    <div id="cognee-output" style="margin-top: 10px; font-size: 0.9em; font-family: monospace; white-space: pre-wrap; color: #a6adc8;">Clicca su 'Mostra Contesto' per interrogare il Knowledge Graph.</div>
+    <div id="cognee-output" style="font-size: 0.85em; white-space: pre-wrap; max-height: 200px; overflow-y: auto; color: #a6adc8;">Clicca 'Interroga' per leggere il Knowledge Graph.</div>
 </div>
 
 <script>
 async function caricaContesto() {
     const out = document.getElementById('cognee-output');
-    out.textContent = "Interrogo Cognee... (potrebbe volerci qualche secondo)";
+    out.textContent = "Interrogo Cognee... (attendi)";
     try {
         const res = await fetch('/api/contesto_cliente?cliente=cosper');
+        if (!res.ok) throw new Error("Errore server: " + res.status);
         const data = await res.json();
-        out.textContent = data.contesto;
+        out.textContent = data.contesto || "Nessun contesto trovato.";
     } catch (e) {
-        out.textContent = "Errore: " + e.message;
+        out.textContent = "❌ " + e.message;
     }
 }
 </script>
+
+</body>
+</html>

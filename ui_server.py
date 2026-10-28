@@ -27,6 +27,7 @@ from pydantic import BaseModel
 
 from icrawler_simple import ICrawler
 from summarization_agent import SummarizationAgent
+from cognee_memory import get_client_context
 from gliner_client import extract_entities, entities_to_dict, is_alive
 
 app = FastAPI(title="iCrawler UI")
@@ -219,6 +220,15 @@ def leggi_piano(name: str, sandbox: str = "cosper"):
     if not path.exists() or not path.name.startswith("output_plan_"):
         raise HTTPException(status_code=404, detail="Piano non trovato")
     return {"content": path.read_text(encoding="utf-8")}
+
+
+@app.get("/api/contesto_cliente")
+def api_contesto_cliente(cliente: str = "cosper"):
+    try:
+        ctx = get_client_context(cliente)
+        return {"status": "ok", "contesto": ctx}
+    except Exception as e:
+        return {"status": "error", "contesto": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
