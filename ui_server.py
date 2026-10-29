@@ -44,6 +44,7 @@ class BriefRequest(BaseModel):
     brief: str
     mode: str = "social"
     sandbox: str = "cosper"
+    usa_contesto: bool = True
 
 class SummarizeRequest(BaseModel):
     text: str
@@ -82,7 +83,7 @@ def genera(req: BriefRequest):
     if len(brief.split()) < 10:
         return {"piano": "❌ Il brief è troppo corto (meno di 10 parole). Se hai caricato un'immagine, clicca su 'Analisi Visiva' o spunta 'Forza Generazione'."}
 
-    piano = crawler.generate_strategy(brief, mode=req.mode, sandbox=req.sandbox)
+    piano = crawler.generate_strategy(brief, mode=req.mode, sandbox=req.sandbox, usa_contesto=req.usa_contesto)
     return {"piano": piano}
 
 @app.post("/summarize")
@@ -126,7 +127,7 @@ Non aggiungere commenti, restituisci solo il testo estratto."""
         model="qwen2.5vl:3b",
         messages=[{"role": "user", "content": prompt, "images": [img_b64]}],
         options={"temperature": 0.0, "num_ctx": 8192},
-        keep_alive=0
+        
     )
     return response["message"]["content"]
 
@@ -149,6 +150,7 @@ def ocr(file: UploadFile = File(...)):
         
         if HAS_APPLE_VISION:
             testo_estratto = run_apple_ocr(contents)
+            print(f"🍎 OCR Apple Vision: '{testo_estratto}'")
         else:
             print("⚠️ Apple Vision non disponibile. Uso Qwen VL per l'OCR...")
             testo_estratto = run_qwen_ocr(contents)
@@ -163,42 +165,49 @@ def ocr(file: UploadFile = File(...)):
 def analyze_vision(file: UploadFile = File(...)):
     try:
         contents = file.file.read()
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_img:
-            temp_img.write(contents)
-            temp_path = temp_img.name
+        
+        # 1. PRIMA PROVIAMO CON APPLE VISION (Istantaneo, zero RAM)
+        if HAS_APPLE_VISION:
+            print("🍎 Uso Apple Vision per l'OCR...")
+            testo_estratto = run_apple_ocr(contents)
+            print(f"🍎 OCR Apple Vision: '{testo_estratto}'")
+        else:
+            testo_estratto = ""
+
+        # 2. SE ABBIAMO IL TESTO, PROVIAMO A DESCRIVERE L'IMMAGINE CON QWEN-VL (Opzionale)
+        descrizione = "Descrizione visiva non disponibile."
         try:
-            if HAS_APPLE_VISION:
-                url = NSURL.fileURLWithPath_(temp_path)
-                source = Quartz.CGImageSourceCreateWithURL(url, None)
-                image = Quartz.CGImageSourceCreateImageAtIndex(source, 0, None)
-                request = Vision.VNClassifyImageRequest.alloc().init()
-                handler = Vision.VNImageRequestHandler.alloc().initWithCGImage_options_(image, None)
-                handler.performRequests_error_([request], None)
-                results = request.results()
-                classifications = []
-                if results:
-                    for obs in results[:10]:
-                        classifications.append({"label": obs.identifier(), "confidence": float(obs.confidence())})
+            print("👁️ Chiedo a Qwen-VL una descrizione visiva...")
+            img_b64 = base64.b64encode(contents).decode("utf-8")
+            prompt = "Descrivi questa immagine in modo breve e oggettivo in italiano. Cosa si vede? Rispondi in 1 o 2 frasi."
+            
+            response = ollama.chat(
+                model="qwen2.5vl:3b",
+                messages=[{"role": "user", "content": prompt, "images": [img_b64]}],
+                options={"temperature": 0.0, "num_ctx": 2048},
                 
-                text_to_analyze = " ".join([c["label"] for c in classifications if c["confidence"] > 0.1])
-                vis_entities = {}
-                if text_to_analyze:
-                    vis_raw = extract_entities(text_to_analyze)
-                    vis_entities = entities_to_dict(vis_raw) if vis_raw else {}
-                
-                return {
-                    "classifications": classifications,
-                    "visual_entities": vis_entities,
-                    "engine": "Apple Vision (Neural Engine)"
-                }
-            else:
-                return {"error": "Apple Vision non disponibile.", "classifications": [], "visual_entities": {}}
-        finally:
-            os.remove(temp_path)
+            )
+            descrizione = response["message"]["content"].strip()
+        except Exception as e:
+            import traceback
+            print(f"❌ ERRORE VISION: {e}")
+            traceback.print_exc()
+
+        # 3. Restituiamo un formato standard (che la UI si aspetta)
+        vision_data = {
+            "descrizione_generica": descrizione,
+            "testo_visibile": testo_estratto,
+            "oggetti": [], 
+            "colori": [],
+            "non_inferences": []
+        }
+        
+        return {"vision": vision_data}
+        
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return {"error": str(e), "raw": "Errore critico nel backend", "vision": None, "visual_entities": {}}
+        return {"error": str(e), "vision": None}
 
 @app.get("/storico")
 def storico(sandbox: str = "cosper"):
@@ -229,6 +238,47 @@ def api_contesto_cliente(cliente: str = "cosper"):
         return {"status": "ok", "contesto": ctx}
     except Exception as e:
         return {"status": "error", "contesto": str(e)}
+
+
+@app.get("/api/grafo_cliente")
+def api_grafo_cliente(cliente: str = "cosper"):
+    import sqlite3
+    import os
+    from pathlib import Path
+    
+    # Percorso del DB di Cognee
+    db_path = Path.home() / ".cognee" / "system" / "databases" / "cognee_db"
+    if not db_path.exists():
+        # Fallback al percorso dentro il venv (come visto nei log)
+        db_path = Path(__file__).parent / "venv" / "lib" / "python3.12" / "site-packages" / "cognee" / ".cognee_system" / "databases" / "cognee_db"
+        
+    if not db_path.exists():
+        return {"error": f"Database Cognee non trovato in {db_path}", "nodes": [], "edges": []}
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+        c = conn.cursor()
+        
+        # 1. Leggiamo i nodi
+        c.execute("SELECT id, name FROM nodes")
+        raw_nodes = c.fetchall()
+        
+        # 2. Leggiamo gli archi (source, target)
+        c.execute("SELECT source_id, target_id FROM edges")
+        raw_edges = c.fetchall()
+        
+        conn.close()
+
+        # Formattiamo per la UI
+        nodes = [{"id": str(n[0]), "label": str(n[1]) if n[1] else "Nodo"} for n in raw_nodes]
+        edges = [{"from": str(e[0]), "to": str(e[1])} for e in raw_edges]
+
+        return {"nodes": nodes, "edges": edges}
+        
+    except Exception as e:
+        return {"error": f"Errore lettura DB: {e}", "nodes": [], "edges": []}
+
+
 
 if __name__ == "__main__":
     import uvicorn

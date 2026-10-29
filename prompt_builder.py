@@ -24,7 +24,7 @@ class PromptBuilder:
         self.prompt_file = Path(config.PROMPT_DIR) / "strategist.txt"
         self.suggester = HashtagSuggester()
 
-    def build(self, brief: str, topic, hashtag_pool: list, platforms: list = None, entities: dict = None, mode: str = 'social', sandbox: str = 'cosper') -> str:
+    def build(self, brief: str, topic, hashtag_pool: list, platforms: list = None, entities: dict = None, mode: str = 'social', sandbox: str = 'cosper', usa_contesto: bool = True) -> str:
         file_name = "wordpress_planner.txt" if mode == "wordpress" else "strategist.txt"
         prompt_file = Path(config.PROMPT_DIR) / file_name
         
@@ -81,8 +81,14 @@ class PromptBuilder:
         
         cloud_hashtags = []
         
-        # --- LOGICA CONTESTO CLIENTE (Cognee -> Web -> File Locale) ---
-        voice_content = get_client_context(sandbox)
+        # --- LOGICA CONTESTO CLIENTE ---
+        # Se il brief è un'immagine (Brief Ibrido) o l'utente ha disattivato il contesto,
+        # NON iniettiamo il contesto aziendale.
+        if "[BRIEF IBRIDO" in brief or not usa_contesto:
+            voice_content = "Tono: ironico, adatto a meme e social media. Concentrati SOLO sull'immagine."
+            print("🛡️ Brief Ibrido rilevato: salto Cognee e SearXNG per evitare contaminazioni.")
+        else:
+            voice_content = get_client_context(sandbox)
         
         # Se Cognee fallisce, restituisce poco, o è troppo generico, andiamo sul web!
         is_generic = voice_content and (sandbox.lower() not in voice_content.lower())
@@ -105,6 +111,10 @@ class PromptBuilder:
             voice_file = Path(config.BASE_DIR) / "workspaces" / sandbox / "voice_template.txt"
             voice_content = voice_file.read_text(encoding="utf-8") if voice_file.exists() else ""
         # -------------------------------------------------------------
+
+        # Filtro anti-contaminazione: il contesto serve per il tono, non per i fatti!
+        if voice_content:
+            voice_content = f"[NOTA PER IL MODELLO: Usa questo contesto SOLO per capire il tono di voce. NON copiare i contenuti (es. se parla di bici o feste, ignorali se non sono nel brief).]\n\n" + voice_content
 
         prompt = system_prompt.replace("{tone_of_voice}", voice_content)
         prompt = prompt.replace("{voice_content}", voice_content)

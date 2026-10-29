@@ -456,6 +456,16 @@ class ICrawler:
         lines = []
         
         analisi = data.get("analisi", {})
+        if not isinstance(analisi, dict): analisi = {}
+        
+        # Fallback se il modello lascia ANALISI vuota
+        if not analisi.get("target"):
+            analisi["target"] = "Famiglie e giovani (pubblico generico)"
+        if not analisi.get("mood"):
+            analisi["mood"] = "Ironico e coinvolgente"
+        if not analisi.get("concept"):
+            analisi["concept"] = "Contenuto per i social media"
+            
         lines.append("### ANALISI")
         lines.append(f"- Target: {analisi.get('target', 'Non specificato')}")
         lines.append(f"- Mood: {analisi.get('mood', 'Non specificato')}")
@@ -506,7 +516,7 @@ class ICrawler:
         lines.append("### RIASSUNTO")
         lines.append(f"- Obiettivi: {ri.get('obiettivi', 'Non specificato')}")
         lines.append(f"- KPI: {ri.get('kpi', 'Non specificato')}")
-        lines.append(f"- Budget: {ri.get('budget', 'Non specificato')}")
+        lines.append(f"- Budget: {ri.get('budget', 'Non specificato') or 'Non specificato'}")
         
         testo_finale = "\n".join(lines)
         
@@ -514,7 +524,7 @@ class ICrawler:
         
         return _fix_duplicate_articles(testo_finale)
 
-    def generate_strategy(self, brief: str, brief_data: dict = None, mode: str = 'social', sandbox: str = 'cosper') -> str:
+    def generate_strategy(self, brief: str, brief_data: dict = None, mode: str = 'social', sandbox: str = 'cosper', usa_contesto: bool = True) -> str:
         if mode == 'both':
             print("\n🔄 Modalità ENTRAMBI attivata: genero prima l'Articolo WP, poi il Piano Social...")
             wp_result = self.generate_strategy(brief, brief_data, mode='wordpress', sandbox=sandbox)
@@ -544,13 +554,18 @@ class ICrawler:
 
         topic = self.topic_extractor.extract(brief)
         # Usa il motore semantico basato su Nomic + Numpy
-        raw_hashtags = self.hashtag_engine.get_top_hashtags(brief)
-        hashtag_pool = [tag for tag, score in raw_hashtags]
-        prompt = self.prompt_builder.build(brief, topic, hashtag_pool, self.platforms, entities=entities, mode=mode, sandbox=sandbox)
+        if "[BRIEF IBRIDO" in brief or not usa_contesto:
+            # Per i meme/immagini o se disattivato, non vogliamo hashtag semantici aziendali
+            hashtag_pool = ["#memes", "#ironia"]
+        else:
+            raw_hashtags = self.hashtag_engine.get_top_hashtags(brief)
+            hashtag_pool = [tag for tag, score in raw_hashtags]
+        prompt = self.prompt_builder.build(brief, topic, hashtag_pool, self.platforms, entities=entities, mode=mode, sandbox=sandbox, usa_contesto=usa_contesto)
 
         # RAG: recupera contesto locale o web a ogni generazione valida.
+        is_hybrid = "[BRIEF IBRIDO" in brief
         try:
-            if retrieve_context is not None:
+            if retrieve_context is not None and not is_hybrid and usa_contesto:
                 rag = retrieve_context(brief, cliente=sandbox)
                 fonte_rag = rag.get("fonte", "nessuna")
                 risultati_rag = rag.get("risultati", [])
