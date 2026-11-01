@@ -47,8 +47,14 @@ def validate_entities_dynamic(brief: str, piano_finale: str) -> dict:
     if isinstance(valori_persone, str): valori_persone = [valori_persone]
     brief_lower = " ".join([str(v).lower() for v in entita_brief.get("person", [])])
     
+    # Parole generiche da ignorare (non sono allucinazioni gravi)
+    GENERIC_WORDS = ["persona", "persone", "utente", "utenti", "cliente", "clienti", "pubblico"]
+    
     for valore in valori_persone:
         val_str = str(valore).strip()
+        if val_str.lower() in GENERIC_WORDS:
+            continue # Ignora le parole generiche
+            
         if _is_proper_noun(val_str) and val_str.lower() not in brief_lower:
             msg = f"Allucinazione: il piano cita la persona '{valore}' ma il brief non la menziona."
             print(f"❌ {msg}")

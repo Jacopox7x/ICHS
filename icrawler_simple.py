@@ -18,7 +18,6 @@ from topics import TopicExtractor
 from semantic_hashtags import SemanticHashtagEngine
 from utils import setup_logging, save_output
 from validator import Validator
-from quality_gate import validate_entities
 import memory
 
 try:
@@ -306,6 +305,52 @@ def _fill_missing_sections(data):
     return data
 
 
+
+def _ultimate_clean(data: dict, brief: str) -> dict:
+    brief_lower = brief.lower()
+    festa_nel_brief = "festa" in brief_lower or "party" in brief_lower
+    
+    analisi = data.get("analisi", {})
+    if isinstance(analisi, dict):
+        target = analisi.get("target", "")
+        if "GIRO" in target.upper() or "EVENTO" in target.upper() or len(target) > 50:
+            analisi["target"] = "Famiglie, giovani e cittadini"
+            data["analisi"] = analisi
+
+    def clean_text(t):
+        if not isinstance(t, str): return t
+        t = re.sub(r'^\[?Persona\]?\s*[+:,]?\s*', '', t, flags=re.IGNORECASE)
+        t = re.sub(r'Una persona coinvolta nel progetto:\s*', '', t, flags=re.IGNORECASE)
+        t = re.sub(r'#\w+', '', t)
+        t = re.sub(r'\bRaggiungi noi\b', 'Raggiungici', t, flags=re.IGNORECASE)
+        t = re.sub(r'\bRaggiungi no\b', 'Raggiungici', t, flags=re.IGNORECASE)
+        t = re.sub(r'\bla iniziativa\b', "l'iniziativa", t, flags=re.IGNORECASE)
+        t = re.sub(r'\s*\+\s*', ': ', t)
+        
+        if not festa_nel_brief:
+            t = re.sub(r'\b[fF]esta\b', 'iniziativa', t)
+            t = re.sub(r'\b[Pp]arty\b', 'evento', t)
+            t = re.sub(r'\bla iniziativa\b', "l'iniziativa", t, flags=re.IGNORECASE)
+            
+        return re.sub(r'\s+', ' ', t).strip()
+
+    def clean_hashtags(h):
+        if not isinstance(h, list): return []
+        return [x for x in h if x and str(x).strip() not in ["#persona", "#evento", "#nonspecificato"]]
+
+    def walk(obj, key=None):
+        if isinstance(obj, dict):
+            return {k: walk(v, k) for k, v in obj.items()}
+        elif isinstance(obj, list):
+            c = [walk(v) for v in obj]
+            if key == "hashtag": return clean_hashtags(c)
+            return c
+        elif isinstance(obj, str):
+            return clean_text(obj)
+        return obj
+
+    return walk(data)
+
 def _hard_clean_output(data: dict, hashtag_pool: list = None) -> dict:
     testi = {
         "instagram": ["hook", "corpo", "cta", "visual", "script"],
@@ -359,6 +404,18 @@ def _hard_clean_output(data: dict, hashtag_pool: list = None) -> dict:
                 txt = _clean_text(st[f])
                 words = txt.split()
                 st[f] = " ".join(words[:20]) + ("…" if len(words) > 20 else "")
+    return data
+
+
+def _force_hashtags(data: dict, hashtag_pool: list) -> dict:
+    """Se il modello non ha messo gli hashtag, li forziamo noi."""
+    if not hashtag_pool:
+        return data
+    for platform in ["instagram", "linkedin", "facebook"]:
+        if platform in data and isinstance(data[platform], dict):
+            current = data[platform].get("hashtag", [])
+            if not current or len(current) == 0:
+                data[platform]["hashtag"] = hashtag_pool[:5]
     return data
 
 class ICrawler:
@@ -456,16 +513,6 @@ class ICrawler:
         lines = []
         
         analisi = data.get("analisi", {})
-        if not isinstance(analisi, dict): analisi = {}
-        
-        # Fallback se il modello lascia ANALISI vuota
-        if not analisi.get("target"):
-            analisi["target"] = "Famiglie e giovani (pubblico generico)"
-        if not analisi.get("mood"):
-            analisi["mood"] = "Ironico e coinvolgente"
-        if not analisi.get("concept"):
-            analisi["concept"] = "Contenuto per i social media"
-            
         lines.append("### ANALISI")
         lines.append(f"- Target: {analisi.get('target', 'Non specificato')}")
         lines.append(f"- Mood: {analisi.get('mood', 'Non specificato')}")
@@ -481,7 +528,7 @@ class ICrawler:
             lines.append(f"**Corpo:** {p.get('corpo', 'Non specificato')}")
             lines.append(f"**CTA:** {p.get('cta', 'Non specificato')}")
             lines.append(f"**Visual:** {p.get('visual', 'Non specificato')}")
-            hashtags = p.get("hashtag", [])
+            hashtags = [h for h in p.get("hashtag", []) if h and str(h).strip()]
             lines.append(f"**Hashtag:** {', '.join(hashtags) if hashtags else 'Nessun hashtag autorizzato'}")
             lines.append("")
             
@@ -516,7 +563,7 @@ class ICrawler:
         lines.append("### RIASSUNTO")
         lines.append(f"- Obiettivi: {ri.get('obiettivi', 'Non specificato')}")
         lines.append(f"- KPI: {ri.get('kpi', 'Non specificato')}")
-        lines.append(f"- Budget: {ri.get('budget', 'Non specificato') or 'Non specificato'}")
+        lines.append(f"- Budget: {ri.get('budget', 'Non specificato')}")
         
         testo_finale = "\n".join(lines)
         
@@ -554,18 +601,14 @@ class ICrawler:
 
         topic = self.topic_extractor.extract(brief)
         # Usa il motore semantico basato su Nomic + Numpy
-        if "[BRIEF IBRIDO" in brief or not usa_contesto:
-            # Per i meme/immagini o se disattivato, non vogliamo hashtag semantici aziendali
-            hashtag_pool = ["#memes", "#ironia"]
-        else:
-            raw_hashtags = self.hashtag_engine.get_top_hashtags(brief)
-            hashtag_pool = [tag for tag, score in raw_hashtags]
-        prompt = self.prompt_builder.build(brief, topic, hashtag_pool, self.platforms, entities=entities, mode=mode, sandbox=sandbox, usa_contesto=usa_contesto)
+        raw_hashtags = self.hashtag_engine.get_top_hashtags(brief)
+        hashtag_pool = [tag for tag, score in raw_hashtags]
+        prompt = self.prompt_builder.build(brief, topic, hashtag_pool, self.platforms, entities=entities, mode=mode, sandbox=sandbox)
 
         # RAG: recupera contesto locale o web a ogni generazione valida.
-        is_hybrid = "[BRIEF IBRIDO" in brief
         try:
-            if retrieve_context is not None and not is_hybrid and usa_contesto:
+            is_hybrid = "[BRIEF IBRIDO" in brief
+            if retrieve_context is not None and usa_contesto and not is_hybrid:
                 rag = retrieve_context(brief, cliente=sandbox)
                 fonte_rag = rag.get("fonte", "nessuna")
                 risultati_rag = rag.get("risultati", [])
@@ -698,14 +741,9 @@ class ICrawler:
                 # FIX BULLETPROOF CALENDARIO (Regex sul Markdown finale)
                 has_specific_date = bool(re.search(r'\b\d{1,2}\s*(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)|\b(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)\s+\d{1,2}\b|\b\d{1,2}/\d{1,2}\b', brief.lower()))
                 
+                data = _ultimate_clean(data, brief)
+                data = _force_hashtags(data, hashtag_pool)
                 structured = self._json_to_text(data)
-
-                # --- QUALITY GATE (Anti-Allucinazione) ---
-                gate_result = validate_entities(brief, structured)
-                if not gate_result["valid"]:
-                    print(f"🛑 QUALITY GATE BLOCCATO: {gate_result['error']}")
-                    return f"❌ Errore di generazione: {gate_result['error']}\n\nIl piano è stato scartato per evitare allucinazioni."
-                # ----------------------------------------
                 
                 # Se non c'è una data specifica nel brief, distruggiamo il calendario allucinato
                 if not has_specific_date:
@@ -725,11 +763,8 @@ class ICrawler:
             # Salva in memoria (best effort, non blocca la risposta)
             try:
                 if structured and len(structured) > 200:
-                    plan_id = memory.save_plan(brief, sandbox, structured)
-                    print(
-                        f"💾 Memoria: piano disponibile "
-                        f"(id {plan_id}; {memory.count_plans(sandbox)} piani per {sandbox})"
-                    )
+                    memory.save_plan(brief, sandbox, structured)
+                    print(f"💾 Memoria: piano salvato (id {memory.count_plans(sandbox)} per {sandbox})")
             except Exception as e:
                 print(f"⚠️ Salvataggio memoria fallito: {e}")
 

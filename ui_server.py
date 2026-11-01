@@ -26,8 +26,9 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from icrawler_simple import ICrawler
+from knowledge_base import get_context_for_brief, get_graph_data, build_and_save_graph
 from summarization_agent import SummarizationAgent
-from cognee_memory import get_client_context
+
 from gliner_client import extract_entities, entities_to_dict, is_alive
 
 app = FastAPI(title="iCrawler UI")
@@ -45,6 +46,10 @@ class BriefRequest(BaseModel):
     mode: str = "social"
     sandbox: str = "cosper"
     usa_contesto: bool = True
+
+class ManualGraphRequest(BaseModel):
+    nodes: str
+    sandbox: str = "cosper"
 
 class SummarizeRequest(BaseModel):
     text: str
@@ -234,51 +239,48 @@ def leggi_piano(name: str, sandbox: str = "cosper"):
 @app.get("/api/contesto_cliente")
 def api_contesto_cliente(cliente: str = "cosper"):
     try:
-        ctx = get_client_context(cliente)
+        ctx = get_context_for_brief("", cliente)
         return {"status": "ok", "contesto": ctx}
     except Exception as e:
         return {"status": "error", "contesto": str(e)}
 
 
+
+@app.post("/api/genera_grafo")
+def genera_grafo(req: BriefRequest):
+    from graph_manager import build_graph_from_text, get_graph_data
+    try:
+        # Usiamo solo GLiNER per estrarre le entità
+        build_graph_from_text(req.brief, cliente=req.sandbox)
+        return get_graph_data()
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.post("/api/grafo_manuale")
+def api_grafo_manuale(req: ManualGraphRequest):
+    from graph_manager import build_manual_graph
+    node_list = [n.strip() for n in req.nodes.split(",") if n.strip()]
+    return build_manual_graph(node_list, cliente=req.sandbox)
+
 @app.get("/api/grafo_cliente")
 def api_grafo_cliente(cliente: str = "cosper"):
-    import sqlite3
-    import os
-    from pathlib import Path
-    
-    # Percorso del DB di Cognee
-    db_path = Path.home() / ".cognee" / "system" / "databases" / "cognee_db"
-    if not db_path.exists():
-        # Fallback al percorso dentro il venv (come visto nei log)
-        db_path = Path(__file__).parent / "venv" / "lib" / "python3.12" / "site-packages" / "cognee" / ".cognee_system" / "databases" / "cognee_db"
-        
-    if not db_path.exists():
-        return {"error": f"Database Cognee non trovato in {db_path}", "nodes": [], "edges": []}
 
-    try:
-        conn = sqlite3.connect(str(db_path))
-        c = conn.cursor()
-        
-        # 1. Leggiamo i nodi
-        c.execute("SELECT id, name FROM nodes")
-        raw_nodes = c.fetchall()
-        
-        # 2. Leggiamo gli archi (source, target)
-        c.execute("SELECT source_id, target_id FROM edges")
-        raw_edges = c.fetchall()
-        
-        conn.close()
+    return get_graph_data()
 
-        # Formattiamo per la UI
-        nodes = [{"id": str(n[0]), "label": str(n[1]) if n[1] else "Nodo"} for n in raw_nodes]
-        edges = [{"from": str(e[0]), "to": str(e[1])} for e in raw_edges]
+@app.post("/api/genera_grafo")
+def genera_grafo(req: BriefRequest):
 
-        return {"nodes": nodes, "edges": edges}
-        
-    except Exception as e:
-        return {"error": f"Errore lettura DB: {e}", "nodes": [], "edges": []}
+    build_and_save_graph(req.brief, req.sandbox)
 
+    return get_graph_data()
 
+@app.get("/api/contesto_cliente")
+def api_contesto_cliente(cliente: str = "cosper"):
+
+    # Passiamo un brief fittizio o recuperiamo il contesto generico
+    ctx = get_context_for_brief("", cliente)
+    return {"status": "ok", "contesto": ctx if ctx else "Nessun contesto trovato."}
 
 if __name__ == "__main__":
     import uvicorn
