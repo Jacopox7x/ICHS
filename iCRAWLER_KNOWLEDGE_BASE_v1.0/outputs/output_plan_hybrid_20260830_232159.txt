@@ -1,0 +1,112 @@
+============================================================
+🕷️ iCRAWLER V1.8.1 HYBRID — PIANO COMPLETO
+Generato: 2026-08-30 23:21:59
+============================================================
+
+
+1. STRATEGIA
+
+📍 Evento: event_name: Notte Bianca dell'Arte
+date: 15 giugno
+📅 Data: 15 giugno
+📍 Location: DA DEFINIRE
+🏢 Organizer: DA DEFINIRE
+🎯 Target: turisti e giovani
+objective:
+🎯 Obiettivo: DA DEFINIRE
+🕐 Orario: DA DEFINIRE
+🏛️ Venue: DA DEFINIRE
+🎤 Speaker: DA DEFINIRE
+
+**Obiettivo Strategico:** Costruire autorevolezza e engagement nel target.
+**Tono di Voce:** Caldo, divertente, informale
+
+---
+
+2. PIANO SOCIAL PER PIATTAFORMA
+
+**LINKEDIN** — Instagram e WhatsApp (canali principali)
+- Annuncio 2 settimane prima
+- Articoli settimanali, testimonianze
+- Pagina evento, recap post-evento
+
+**INSTAGRAM**
+- Stories countdown giornaliero
+- Reels backstage/highlights
+- Carousel educativi, Highlights
+
+**TWITTER/X**
+- Live coverage evento
+- Thread aggiornamenti 30-60min
+- Hashtag ufficiale: DA DEFINIRE
+
+---
+
+3. CONTENUTI PER PIATTAFORMA
+
+**LinkedIn:** Annuncio, Perche partecipare, Intervista speaker, Countdown, Recap
+**Instagram:** Reel teaser, Reel backstage, Reel highlights, Carousel motivi, Carousel temi
+**Twitter/X:** Thread agenda, Thread live, Thread momenti salienti
+
+---
+
+4. CTA
+
+1. 📍 Registrati ora — [LINK DA DEFINIRE]
+2. 💬 Partecipa — usa DA DEFINIRE
+3. 🔔 Segui per aggiornamenti
+4. 📧 Richiedi info — contatta organizer
+
+---
+
+5. HASHTAG
+
+**Set raccomandato:**
+DA DEFINIRE
+
+📌 Consigli: 5-7 IG, 3-5 LinkedIn, 2-3 Twitter.
+
+---
+
+6. VISUAL
+
+Atmosfera: divertente, calda, luminosa, accogliente
+Soggetti: amici, sorrisi, momenti di convivialita
+Colori: palette calda e accogliente, toni dorati e marine
+Formati: LinkedIn 1200x627, IG 1080x1080/1920, TW 1200x675
+
+---
+
+7. TIMELINE
+
+| Settimana | Azione | Piattaforma |
+|-----------|--------|-------------|
+| -4 | Annuncio | LinkedIn, IG |
+| -3 | Programma | LinkedIn |
+| -2 | Teaser | IG, TW |
+| -1 | Countdown | Tutte |
+| Evento | Live | TW, IG |
+| +1 | Recap | LinkedIn, IG |
+| +2 | Report | LinkedIn |
+
+💡 CREATIVE LAB
+Ecco tre idee creative per promuovere l'**Notte Bianca dell'Arte**, adattate al contesto di una data specifica (15 giugno) e a un evento che richiede ancora la definizione della location.
+
+### IDEA 1: Il "Time-Lapse" Artistico Interattivo
+**CONCEPT**: Creare un'app o un filtro social media dedicato alla serata dove gli utenti caricano brevi video dai luoghi dell'evento mentre si svolgono in tempo reale. Questi contenuti vengono aggregati per generare una mappa interattiva che mostra l'"energia calda" dell'area notturna: colori più caldi indicano zone affollate e attività intensa, mentre le aree blu indicate silenzio o spazio libero da esplorare prima di un concerto o apertura museale.
+**PERCHE FUNZIONA**: Sfrutta la natura virale dei contenuti user-generated (UGC) sui social media; trasforma i partecipanti in ambasciatori dell'evento condividendo l'esperienza visiva immediata, incentivando altri a visitare gli spazi "freddi" ancora vacanti prima di affollarsi.
+**RISCHIO**: La definizione della location tardiva potrebbe portare a una scarsa copertura geografica iniziale nel time-lapse se l'app viene lanciata troppo presto o non ha abbastanza dati iniziali per creare pattern visivi convincenti.
+
+---
+
+### IDEA 2: L'Invito "Scopri il Segreto" (Mappa del Tesoro)
+**CONCEPT**: Pubblicare una mappa online di un luogo segreto ("La Villa Perduta" o l'"Anfiteatro Sotterraneo") che corrisponde esattamente alla location futura. Gli utenti devono seguire indizi lasciati da influencer locali, gallerie e artisti durante i giorni precedenti 15 giugno per trovare la posizione finale dell'evento, svelando il luogo solo nell'esatta ora di inizio (es. alle 20:30).
+**PERCHE FUNZIONA**: Crea un senso di urgenza, esclusività e gioco sociale; genera discussioni massicce sui social prima della data grazie alla curiosità e all'eccitazione del "trollare" i partecipanti per farli arrivare il più presto possibile.
+**RISCHIO**: Se la location viene definita troppo tardi o cambia in modo significativo rispetto alle descrizioni dei indizi, si rischia di confondere l'utenza; inoltre, un evento mal gestito al primo arrivo può rovinare completamente questo meccanismo del "segreto".
+
+---
+
+### IDEA 3: La Collaborazione Urbana Dinamica
+**CONCEPT**: Utilizzare piattaforme come Slack o Discord per creare una community chiusa dove gli artisti partecipanti possono pubblicare in tempo reale i lavori creati durante la Notte Bianca (sculture, installazioni digitali) mentre vengono aggiunti fisicamente allo spazio. L'evento finale include un "Reveal Party" pubblico in cui la comunità online approva l'opera che sarà esposta al centro della location definita.
+**PERCHE FUNZIONA**: Valorizza il ruolo creativo degli artisti e coinvolge direttamente chi non potrà partecipare, creando una base di followers fedeli e generando contenuti visivi ricchi durante tutta la serata; trasforma gli spettatori passivi in partecipi attivi del processo artistico.
+**RISCHIO**: Richiede un team organizzativo robusto per gestire il flusso costante dei contributi digitali senza sovraccaricare i canali, oltre a rischi di moderazione se non curato bene dal punto di vista della sicurezza e delle normative locali (in particolare nel 15 giugno).

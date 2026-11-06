@@ -1,38 +1,21 @@
-# Python
-.venv*/
+# Ambiente virtuale e cache Python
 venv/
-searxng-venv/
+.venv/
 __pycache__/
 *.pyc
-*.pyo
-*.egg-info/
-.pytest_cache/
 
-# Env e segreti
+# Configurazioni locali (potrebbero contenere dati sensibili)
 .env
-.env.*
-!.env.example
+.env.cognee
 
-# Dati locali (mai su Git)
-data/
-cognee_data/
-search_index/
+# Database locale generato da Cognee (molto pesante)
+.cognee_system/
 *.sqlite
 *.db
-*.log
-models/
 
-# OS / IDE
+# Documenti di test (o PDF locali)
+test_docs/
+*.pdf
+
+# File di sistema macOS
 .DS_Store
-.idea/
-.vscode/
-
-# Node / build
-node_modules/
-dist/
-backups/
-.archive/
-iCRAWLER_KNOWLEDGE_BASE_v1.0/
-speakify-api/
-icrawler_weknora/
-ICHS copy/

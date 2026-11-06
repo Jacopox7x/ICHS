@@ -1,0 +1,8 @@
+Evento: [NOME EVENTO]
+Data: [DATA]
+Location: [LUOGO]
+Organizzatore: [ORGANIZZATORE]
+Target: [TARGET]
+Obiettivo: [OBIETTIVO]
+Orario: [ORARIO]
+Hashtag: [HASHTAG]

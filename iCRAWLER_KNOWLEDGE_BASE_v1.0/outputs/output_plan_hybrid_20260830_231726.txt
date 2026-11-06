@@ -1,0 +1,108 @@
+============================================================
+🕷️ iCRAWLER V1.8.1 HYBRID — PIANO COMPLETO
+Generato: 2026-08-30 23:17:26
+============================================================
+
+
+1. STRATEGIA
+
+📍 Evento: event_name: Conferenza sul futuro dell'AI
+date: DA
+📅 Data: DA DEFINIRE
+📍 Location: DA DEFINIRE
+🏢 Organizer: DA DEFINIRE
+🎯 Target: professionisti del settore
+objective:
+🎯 Obiettivo: DA DEFINIRE
+🕐 Orario: DA DEFINIRE
+🏛️ Venue: DA DEFINIRE
+🎤 Speaker: DA DEFINIRE
+
+**Obiettivo Strategico:** Costruire autorevolezza e engagement nel target.
+**Tono di Voce:** Professionale, autorevole, strategico
+
+---
+
+2. PIANO SOCIAL PER PIATTAFORMA
+
+**LINKEDIN** — LinkedIn (canale principale)
+- Annuncio 2 settimane prima
+- Articoli settimanali, testimonianze
+- Pagina evento, recap post-evento
+
+**INSTAGRAM**
+- Stories countdown giornaliero
+- Reels backstage/highlights
+- Carousel educativi, Highlights
+
+**TWITTER/X**
+- Live coverage evento
+- Thread aggiornamenti 30-60min
+- Hashtag ufficiale: DA DEFINIRE
+
+---
+
+3. CONTENUTI PER PIATTAFORMA
+
+**LinkedIn:** Annuncio, Perche partecipare, Intervista speaker, Countdown, Recap
+**Instagram:** Reel teaser, Reel backstage, Reel highlights, Carousel motivi, Carousel temi
+**Twitter/X:** Thread agenda, Thread live, Thread momenti salienti
+
+---
+
+4. CTA
+
+1. 📍 Registrati ora — [LINK DA DEFINIRE]
+2. 💬 Partecipa — usa DA DEFINIRE
+3. 🔔 Segui per aggiornamenti
+4. 📧 Richiedi info — contatta organizer
+
+---
+
+5. HASHTAG
+
+**Set raccomandato:**
+DA DEFINIRE
+
+📌 Consigli: 5-7 IG, 3-5 LinkedIn, 2-3 Twitter.
+
+---
+
+6. VISUAL
+
+Atmosfera: istituzionale, professionale, innovativa
+Soggetti: CEO, policy maker, leader di settore
+Colori: palette istituzionale, blu e verde
+Formati: LinkedIn 1200x627, IG 1080x1080/1920, TW 1200x675
+
+---
+
+7. TIMELINE
+
+| Settimana | Azione | Piattaforma |
+|-----------|--------|-------------|
+| -4 | Annuncio | LinkedIn, IG |
+| -3 | Programma | LinkedIn |
+| -2 | Teaser | IG, TW |
+| -1 | Countdown | Tutte |
+| Evento | Live | TW, IG |
+| +1 | Recap | LinkedIn, IG |
+| +2 | Report | LinkedIn |
+
+💡 CREATIVE LAB
+Ecco 3 idee creative per promuovere la tua conferenza sul futuro dell'IA, adattate allo stato attuale dei dati ("DA DEFINIRE"):
+
+IDEA: Il Challenge "Prompt to Profit"
+CONCEPT: Invita il pubblico a partecipare non solo come ascoltatori, ma come partecipanti attivi. Durante l'evento (o nella fase di registrazione), gli utenti saranno chiamati a inviare un prompt specifico legato al tema scelto dalla conferenza per generare un risultato concreto (es. codice, strategia aziendale, idea creativa) che verrà valutato da esperti presenti in diretta o tramite AI analitica pre-addestrata durante la sessione "Q&A". I vincitori riceveranno bonus e una menzione nell'agenda ufficiale.
+PERCHE FUNZIONA: Trasforma il pubblico passivo in partecipi attivi, aumentando l'impegno (engagement) e creando un senso di urgenza ("Devi farlo ora per essere tra i primi a ricevere la valutazione"). Coinvolge direttamente gli utenti con lo strumento centrale dell'incontro (il Prompt/IA).
+RISCHIO: Complessità tecnica o frustrazione se il sistema di valutazione non è chiaro; rischio di percezione che l'evento sia troppo "gioco" e meno educativo.
+
+IDEA: La Serie Video-Diario "Dietro le Cortine Neurali"
+CONCEPT: Invece della classica locandina statica, crea una serie breve (1 minuto a episodio) pubblicata 3 giorni prima dell'evento. Ogni video mostra un'intervista confidenziale con un leader del settore o uno sviluppatore che racconta un "errore", un segreto non detto o un momento vulnerabile durante la creazione di loro stesso strumento AI, anticipando il tema principale della conferenza ("Le ombra e le luci").
+PERCHE FUNZIONA: L'autenticità e la vulnerabilità creano connessioni umane più profonde rispetto alle presentazioni ufficiali. Le serie video generati da contenuti creativi (UGC) si condivide facilmente su LinkedIn e Twitter/X, generando un buzz organico prima ancora che l'invito ufficiale arrivi a casa.
+RISCHIO: Possibile perdita di controllo sul messaggio se i racconti diventano troppo controversi o polarizzanti; rischio di deviare dall'agenda ufficiale dell'incontro.
+
+IDEA: La Mappa Intelligente "Futuro Personalizzato" (AR/Interactive)
+CONCEPT: Crea una landing page interattiva che funziona come un motore di ricerca personalizzato dove l'utilizzatore inserisce il proprio ruolo professionale e i propri obiettivi attuali. L'IA genera in tempo reale tre percorsi differenziati per la conferenza basati su quelli input, mostrando slide preview specifiche ("Se sei sviluppatore, vedrai questo caso studio"; "Se sei CTO, qui c'è la strategia"). Il pulsante finale è un invito alla registrazione generato dinamicamente.
+PERCHE FUNZIONA: Attacca direttamente il bisogno personale e professionale dell'utilizzatore (marketing personalizzato). Fa sentire l'utente che l'evento è stato creato *per lui*, aumentando drasticamente le probabilità di click-through rispetto a una comunicazione "generica".
+RISCHIO: Sovraccarico cognitivo o frustrazione tecnica se la pagina non carica correttamente su dispositivi mobili; rischio percepito che il sito sia troppo complesso per utenti meno tecnologici.

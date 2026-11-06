@@ -1,0 +1,53 @@
+🕷️ iCRAWLER V1.7
+============================================================
+📦 Modello: qwen3.5:4b
+⚡ Modalità quick: solo Fact Extractor
+
+📋 Step 1: Estrazione fatti...
+============================================================
+SOURCE OF TRUTH
+============================================================
+
+✅ DATE
+  Value: 2026-08-22
+  Confidence: 100%
+  Status: VALIDATED
+  Source: date_pattern
+
+🟡 LOCATION
+  Value: Milano
+  Confidence: 70%
+  Status: LIKELY
+  Source: city_fallback
+
+🟡 TARGET
+  Value: professionisti tech 25-40 anni
+  Confidence: 90%
+  Status: LIKELY
+  Source: target_pattern
+
+🟡 OBJECTIVE
+  Value: promuovere l'innovazione sostenibile
+  Confidence: 80%
+  Status: LIKELY
+  Source: objective_pattern
+
+🟡 ORGANIZER
+  Value: Digital Innovation Hub
+  Confidence: 90%
+  Status: LIKELY
+  Source: organizer_pattern
+
+🟡 TIME
+  Value: 14:30
+  Confidence: 90%
+  Status: LIKELY
+  Source: time_pattern
+
+🟡 EVENT_NAME
+  Value: Tech4Good Summit 2026
+  Confidence: 70%
+  Status: LIKELY
+  Source: first_line_fallback
+
+⚡ Modalità quick completata.

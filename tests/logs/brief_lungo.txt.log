@@ -1,0 +1,53 @@
+🕷️ iCRAWLER V1.7
+============================================================
+📦 Modello: qwen3.5:4b
+⚡ Modalità quick: solo Fact Extractor
+
+📋 Step 1: Estrazione fatti...
+============================================================
+SOURCE OF TRUTH
+============================================================
+
+✅ DATE
+  Value: 2026-12-12
+  Confidence: 100%
+  Status: VALIDATED
+  Source: date_pattern
+
+🟡 LOCATION
+  Value: Teatro Donizetti
+  Confidence: 90%
+  Status: LIKELY
+  Source: location_pattern
+
+❌ TARGET
+  Value: NON TROVATO
+  Confidence: 0%
+  Status: MISSING
+  Source: none
+
+🟡 OBJECTIVE
+  Value: raccogliere 50
+  Confidence: 80%
+  Status: LIKELY
+  Source: objective_pattern
+
+❌ ORGANIZER
+  Value: NON TROVATO
+  Confidence: 0%
+  Status: MISSING
+  Source: none
+
+❌ TIME
+  Value: NON TROVATO
+  Confidence: 0%
+  Status: MISSING
+  Source: none
+
+🟡 EVENT_NAME
+  Value: Serata di beneficenza per l'ospedale pediatrico di Bergamo
+  Confidence: 75%
+  Status: LIKELY
+  Source: pattern_detection
+
+⚡ Modalità quick completata.

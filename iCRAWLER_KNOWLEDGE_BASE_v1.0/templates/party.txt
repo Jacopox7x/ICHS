@@ -1,0 +1,7 @@
+Evento: [NOME FESTA]
+Data: [DATA]
+Location: [LUOGO]
+Target: amici e familiari
+Obiettivo: divertirsi e creare ricordi
+Tipo: Festa informale
+Tono: Caldo, divertente, informale

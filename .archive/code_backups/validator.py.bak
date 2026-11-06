@@ -1,0 +1,126 @@
+"""
+Validator per iCrawler V1.5
+- Controlla che l'output rispetti il brief
+- Verifica struttura, data, luogo, hashtag, budget, link, KPI
+- Versione con controllo flessibile (riduzione falsi positivi)
+"""
+
+import re
+from typing import List, Dict, Any
+
+class Validator:
+    def __init__(self):
+        self.errors = []
+    
+    def validate(self, output: str, brief: Dict[str, Any]) -> Dict[str, Any]:
+        """Validazione completa dell'output."""
+        self.errors = []
+        
+        # Esegui tutti i controlli
+        self.check_data(output, brief)
+        self.check_luogo(output, brief)
+        self.check_target(output, brief)
+        self.check_hashtags(output, brief)
+        self.check_structure(output)
+        self.check_stories(output)
+        self.check_teaser(output)
+        self.check_budget(output, brief)
+        self.check_links(output, brief)
+        self.check_kpi(output, brief)
+        
+        return {
+            "valid": len(self.errors) == 0,
+            "errors": self.errors,
+            "output": output
+        }
+    
+    def check_data(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        data = brief.get("data")
+        if not data:
+            return self.errors
+        
+        if data.lower() not in output.lower():
+            self.errors.append(f"Data non trovata: {data}")
+        return self.errors
+    
+    def check_luogo(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        luogo = brief.get("luogo")
+        if not luogo:
+            return self.errors
+        
+        if luogo.lower() not in output.lower():
+            self.errors.append(f"Luogo non trovato: {luogo}")
+        return self.errors
+    
+    def check_target(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        target = brief.get("target")
+        if not target:
+            return self.errors
+        
+        if target.lower() not in output.lower():
+            self.errors.append(f"Target non trovato: {target}")
+        return self.errors
+    
+    def check_hashtags(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        autorizzati = brief.get("hashtag_autorizzati", [])
+        hashtags = re.findall(r'#\w+', output)
+        
+        if not autorizzati:
+            if hashtags and "Nessun hashtag autorizzato" not in output:
+                self.errors.append(f"Hashtag non autorizzati: {hashtags}")
+            return self.errors
+        
+        for h in hashtags:
+            if h not in autorizzati:
+                self.errors.append(f"Hashtag non autorizzato: {h}")
+        
+        return self.errors
+    
+    def check_structure(self, output: str) -> List[str]:
+        required = ["ANALISI", "INSTAGRAM", "LINKEDIN", "X (TWITTER)", "FACEBOOK"]
+        for section in required:
+            if section.lower() not in output.lower():
+                self.errors.append(f"Sezione mancante: {section}")
+        return self.errors
+    
+    def check_stories(self, output: str) -> List[str]:
+        if "STORIES" not in output and "STORY" not in output:
+            return self.errors
+        
+        frames = re.findall(r'(?:Frame|frame|STORIES.*?)(?:\s*)(\d+|[•\-*])', output)
+        
+        if len(frames) == 0:
+            frames = re.findall(r'(?:•|\-|\*)\s*(.*?)(?=\n|$)', output)
+        
+        if len(frames) != 5:
+            self.errors.append(f"Stories: {len(frames)} frame trovati, 5 richiesti")
+        return self.errors
+    
+    def check_teaser(self, output: str) -> List[str]:
+        if "CALENDARIO" not in output:
+            return self.errors
+        
+        teasers = re.findall(r'(?:Giorno|Day)\s*-?\s*\d+', output)
+        if len(teasers) < 2:
+            self.errors.append(f"Teaser: {len(teasers)} trovati, 2 richiesti")
+        return self.errors
+    
+    def check_budget(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        budget = brief.get("budget")
+        if not budget and "€" in output and "Non specificato" not in output:
+            self.errors.append("Budget inventato (non presente nel brief)")
+        return self.errors
+    
+    def check_links(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        link = brief.get("link")
+        if not link and "http" in output and "non specificato" not in output.lower():
+            self.errors.append("Link inventato (non presente nel brief)")
+        return self.errors
+    
+    def check_kpi(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        kpi = brief.get("kpi")
+        if not kpi:
+            if re.search(r'KPI', output, re.IGNORECASE):
+                if "Non specificato" not in output:
+                    self.errors.append("KPI inventati (non presenti nel brief)")
+        return self.errors
