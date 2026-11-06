@@ -1,0 +1,124 @@
+<!-- BRIEF_START
+→
+Search
+• Welcome
+cascading_rag.py 4
+Users > jacopogalati › Downloads
+def retrieve context(
+"percorso"
+cascading_rag.py > @ retrieve_context
+283
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+sog lla_
+_locale_superata",
+# 2. GLiNER enrichment only when local memory misses the threshold.
+enriched_query =
+_enrich_query_with_gliner (clean_query)
+# 3. SearXNG fallback.
+logger.info("Fallback web tramite SearXNG")
+web_results = _search_webl
+enriched_query, searxng_url, timeout, max_web_results
+if web_results:
+return {
+'"fonte": "web",
+"risultati": web_results,
+"percorso": "fallback_web",
+Problems
+# 4. Nothing usable on the web: return whatever the local memory had,
+#
+labelled by its real provenance.
+if local_results:
+Output
+Debug Console
+Terminal Ports
+cascading_rag.py ~/Downloads
+Unexpected token at end of expression Pylance [Ln 1, Col 9]
+"Cascading" is not defined Pylance(reportUndefinedVariable) [Ln 1, Col 12]
+Import "requests" could not be resolved from source Pylance(reportMissingModuleSource) [Ln 34, Col 8]
+Import "gliner_client" could not be resolved Pylance(reportMissingImports) [Ln 198, Col 14]
+Filter (e.g. text, **/*.ts, !**/n...
+8 1 Д З
+Add Comments
+Generate Commit Message
+Spaces: 4 UTF-8 (} Python
+Python 3.15.0 (homebrew)
+(‹•)) Go Live
+Text2Code
+BRIEF_END -->
+
+### ANALISI
+- Target: Festa Arrivante
+- Mood: Eccitazione
+- Concept: Celebrare la gioia della vita
+
+### INSTAGRAM
+**Hook:** La festa arriva! 🎉
+**Corpo:** Cerca il tuo posto nella festa
+**CTA:** Scopri di più sul nostro sito.
+**Visual:** Immagini di persone felici insieme
+**Hashtag:** Nessun hashtag autorizzato
+
+### LINKEDIN
+**Hook:** Partecipa alla festa aziendale
+**Corpo:** Ricorda i momenti felici in cui abbiamo lavorato insieme come team
+**CTA:** Scopri di più sul nostro sito.
+**Visual:** Immagine di un team unito
+**Hashtag:** Nessun hashtag autorizzato
+
+### FACEBOOK
+**Hook:** La festa arriva! 🎉
+**Corpo:** Cerca il tuo posto nella festa
+**CTA:** Scopri di più sul nostro sito.
+**Visual:** Immagine di una festa animata
+**Hashtag:** Nessun hashtag autorizzato
+
+### X (TWITTER)
+**Tweet 1:** 🎉 La festa arriva! Non mancare
+**Tweet 2:** Il nostro team ha superato 100 membri
+**Tweet 3:** Chi non vuole partecipare alla festa
+**Tweet 4:** Inizia ad organizzarti e preparati
+**Tweet 5:** Ringraziamo tutti i nostri soci per il loro supporto
+
+### TIKTOK
+**Hook:** La festa arriva! 🎉
+**Script:** Cerca il tuo posto nella festa! Incontra amici e nuovi amici
+**CTA:** Incontri amici e nuovi amici
+
+### STORIES (5 frame)
+1. Un palco illuminato al tramonto
+2. Primo piano di una bici riparata
+3. Uomini che si abbracciano
+4. Bambino che sorride
+5. Gruppi di persone che ballano
+
+### CALENDARIO
+Giorno -2: Non specificato
+Giorno -1: Non specificato
+Giorno evento: Non specificato
+Giorno +1: Non specificato
+
+### RIASSUNTO
+- Obiettivi: Promuovere l'evento, coinvolgere la comunità e ringraziare i soci
+- KPI: Numero di segnalazioni sui social media, numero di inviti ricevuti, numero di partecipanti all'evento
+- Budget: Non specificato

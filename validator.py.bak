@@ -1,0 +1,191 @@
+"""
+Validator per iCrawler V1.5 - Versione Finale
+- Controlla che l'output rispetti il brief
+- Include tutti i controlli emersi dai test 1-13
+- Gestisce: data, luogo, target, hashtag, link, budget, KPI, teaser, stories, contaminazione
+"""
+
+import re
+from typing import List, Dict, Any
+
+class Validator:
+    def __init__(self):
+        self.errors = []
+    
+    def validate(self, output: str, brief: Dict[str, Any]) -> Dict[str, Any]:
+        self.errors = []
+        
+        self.check_data(output, brief)
+        self.check_luogo(output, brief)
+        self.check_target(output, brief)
+        self.check_hashtags(output, brief)
+        self.check_structure(output)
+        self.check_stories(output)
+        self.check_teaser(output)
+        self.check_budget(output, brief)
+        self.check_links(output, brief)
+        self.check_kpi(output, brief)
+        self.check_quality(output)
+        self.check_contamination(output, brief)
+        self.check_nome_evento(output, brief)
+        
+        return {
+            "valid": len(self.errors) == 0,
+            "errors": self.errors,
+            "output": output
+        }
+    
+    def check_data(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        data = brief.get("data")
+        if not data:
+            return self.errors
+        if data.lower() not in output.lower():
+            self.errors.append(f"Data non trovata: {data}")
+        if "2926" in output and "2026" in data:
+            self.errors.append(f"Data sbagliata: trovato 2926, atteso {data}")
+        return self.errors
+    
+    def check_luogo(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        luogo = brief.get("luogo")
+        if not luogo:
+            return self.errors
+        parole = [p for p in luogo.lower().split() if len(p) > 3]
+        for p in parole:
+            if p not in output.lower():
+                self.errors.append(f"Luogo non trovato: {luogo}")
+                return self.errors
+        return self.errors
+    
+    def check_target(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        target = brief.get("target")
+        if not target:
+            return self.errors
+        parole = [p for p in target.lower().split() if len(p) > 3]
+        for p in parole:
+            if p not in output.lower():
+                self.errors.append(f"Target non trovato: {target}")
+                return self.errors
+        return self.errors
+    
+    def check_hashtags(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        autorizzati = brief.get("hashtag_autorizzati", [])
+        hashtags = re.findall(r'#\w+', output)
+        
+        if not autorizzati:
+            if hashtags and "Nessun hashtag autorizzato" not in output:
+                self.errors.append(f"Hashtag non autorizzati (nessuno nel brief): {hashtags}")
+            return self.errors
+        
+        autorizzati_presenti = [h for h in autorizzati if h in hashtags]
+        if not autorizzati_presenti:
+            self.errors.append(f"Nessun hashtag autorizzato trovato. Autorizzati: {autorizzati}. Trovati: {hashtags}")
+            return self.errors
+        
+        for h in hashtags:
+            if h not in autorizzati:
+                self.errors.append(f"Hashtag non autorizzato: {h}")
+        return self.errors
+    
+    def check_structure(self, output: str) -> List[str]:
+        required = ["ANALISI", "INSTAGRAM", "LINKEDIN", "X (TWITTER)", "FACEBOOK"]
+        for section in required:
+            if section.lower() not in output.lower():
+                self.errors.append(f"Sezione mancante: {section}")
+        return self.errors
+    
+    def check_stories(self, output: str) -> List[str]:
+        if "STORIES" not in output and "STORY" not in output:
+            self.errors.append("Sezione STORIES mancante")
+            return self.errors
+        
+        frames = re.findall(r'(?:Frame|frame|STORIES.*?)(?:\s*)(\d+|[•\-*])', output)
+        if len(frames) == 0:
+            frames = re.findall(r'^\s*(\d+)\.', output, re.MULTILINE)
+        
+        if len(frames) < 5:
+            self.errors.append(f"Stories: {len(frames)} frame trovati, 5 richiesti")
+        return self.errors
+    
+    def check_teaser(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        if "CALENDARIO" not in output:
+            self.errors.append("Sezione CALENDARIO mancante")
+            return self.errors
+        
+        teasers = re.findall(r'(?:Giorno|Day)\s*-?\s*\d+', output)
+        if len(teasers) < 2:
+            teasers = re.findall(r'Giorno\s*[-\d]+', output)
+        if len(teasers) < 2:
+            self.errors.append(f"Teaser: {len(teasers)} trovati, 2 richiesti (Giorno -2 e Giorno -1)")
+        return self.errors
+    
+    def check_budget(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        budget = brief.get("budget")
+        if budget:
+            if budget not in output and f"€{budget}" not in output:
+                self.errors.append(f"Budget non trovato: {budget}")
+        else:
+            if "€" in output and "Non specificato" not in output:
+                self.errors.append("Budget inventato (non presente nel brief)")
+        return self.errors
+    
+    def check_links(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        link = brief.get("link")
+        if link:
+            if link not in output:
+                self.errors.append(f"Link non trovato: {link}")
+        else:
+            patterns = ["http", "[Link]", "[LINK]", "link in bio", "clicca sul link", "link non fornito", "pulsanti dei link"]
+            for p in patterns:
+                if p.lower() in output.lower():
+                    self.errors.append(f"Link inventato (non presente nel brief): '{p}'")
+                    return self.errors
+        return self.errors
+    
+    def check_kpi(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        kpi = brief.get("kpi")
+        if kpi:
+            if kpi.lower() not in output.lower():
+                self.errors.append(f"KPI non trovati: {kpi}")
+        else:
+            if re.search(r'KPI', output, re.IGNORECASE) and "Non specificato" not in output:
+                self.errors.append("KPI inventati (non presenti nel brief)")
+        return self.errors
+    
+    def check_quality(self, output: str) -> List[str]:
+        parole = output.split()
+        if len(parole) < 50:
+            self.errors.append("Output troppo corto (qualità minima non raggiunta)")
+        parole_chiave = ["Istruzioni", "Instruction", "Prompt:", "Brief:", "analizza", "descrivi", "genera"]
+        for p in parole_chiave:
+            if p.lower() in output.lower():
+                self.errors.append(f"Contenuto autoreferenziale rilevato: '{p}'")
+                break
+        return self.errors
+    
+    def check_contamination(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        parole_chiave = []
+        for key in ["evento", "target", "luogo"]:
+            if brief.get(key):
+                parole_chiave.extend(brief[key].lower().split())
+        
+        parole_chiave = [p for p in parole_chiave if len(p) > 3]
+        if not parole_chiave:
+            return self.errors
+        
+        parole_output = output.lower().split()
+        if not any(p in parole_output for p in parole_chiave):
+            self.errors.append("Contaminazione: l'output non contiene elementi del brief")
+        return self.errors
+    
+    def check_nome_evento(self, output: str, brief: Dict[str, Any]) -> List[str]:
+        evento = brief.get("evento")
+        if not evento:
+            return self.errors
+        # Controlla che il nome dell'evento non sia stato modificato in modo significativo
+        parole_evento = evento.lower().split()
+        parole_importanti = [p for p in parole_evento if len(p) > 3]
+        for p in parole_importanti:
+            if p not in output.lower():
+                self.errors.append(f"Nome evento modificato: {evento} (parola '{p}' non trovata)")
+                return self.errors
+        return self.errors

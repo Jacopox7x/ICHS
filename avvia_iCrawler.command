@@ -1,26 +1,48 @@
 #!/bin/bash
-cd "$HOME/Documents/ICHS" || exit 1
+# Vai nella cartella del progetto
+cd "$(dirname "$0")"
+
+echo "======================================"
+echo "🚀 AVVIO DI iCRAWLER (ALL-IN-ONE) 🚀"
+echo "======================================"
+
+# 1. Controlla e avvia SearXNG
+echo "🌐 Controllo SearXNG (Docker)..."
+if [ ! "$(docker ps -q -f name=searxng)" ]; then
+    if [ "$(docker ps -aq -f status=exited -f name=searxng)" ]; then
+        docker start searxng > /dev/null
+    else
+        docker run -d --name searxng -p 8888:8080 searxng/searxng > /dev/null
+    fi
+    echo "   -> SearXNG avviato."
+else
+    echo "   -> SearXNG già in esecuzione."
+fi
+
+# 2. Attiva l'ambiente virtuale
+echo "🐍 Attivazione ambiente Python..."
 source venv/bin/activate
 
-if ! curl -s http://127.0.0.1:11434/api/tags > /dev/null 2>&1; then
-    ollama serve > /tmp/ollama.log 2>&1 &
+# 3. Reset e Init Cognee (solo se necessario)
+echo "🧠 Inizializzazione Cognee..."
+# Cancella il DB vecchio per evitare mismatch (opzionale, ma sicuro)
+if [ -f "venv/lib/python3.12/site-packages/cognee/.cognee_system/databases/cognee_db" ]; then
+    rm -f venv/lib/python3.12/site-packages/cognee/.cognee_system/databases/cognee_db
 fi
+python3 init_cognee.py > /dev/null 2>&1
+echo "   -> Cognee pronto."
 
-if ! curl -s http://127.0.0.1:8000/health > /dev/null 2>&1; then
-    nohup uvicorn gliner_service:app --host 127.0.0.1 --port 8000 > /tmp/gliner.log 2>&1 &
-fi
+# 4. Avvia il server UI
+echo "🖥️  Avvio del server iCrawler..."
+python3 ui_server.py &
 
-if ! curl -s http://127.0.0.1:8080/health > /dev/null 2>&1; then
-    nohup uvicorn ui_server:app --host 127.0.0.1 --port 8080 > /tmp/ui.log 2>&1 &
-fi
+# 5. Aspetta che il server sia pronto e apri il browser
+sleep 3
+open "http://localhost:8080"
 
-for i in {1..30}; do
-    if curl -s http://127.0.0.1:8080/health > /dev/null 2>&1; then
-        break
-    fi
-    sleep 1
-done
+echo "======================================"
+echo "✅ TUTTO PRONTO! Premi Ctrl+C per chiudere."
+echo "======================================"
 
-open -a iCrawler
-
-osascript -e 'tell application "Terminal" to close front window' & exit 0
+# Mantiene il terminale aperto in attesa del server
+wait

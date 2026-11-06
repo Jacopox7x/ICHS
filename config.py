@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
-OLLAMA_MODEL = "qwen2.5:3b"
+OLLAMA_MODEL = "qwen3:4b"
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
 SYSTEM_PROMPT = os.getenv("ICRAWLER_SYSTEM_PROMPT", "Sei uno strategist social media.")
 PROMPT_DIR = os.getenv("ICRAWLER_PROMPT_DIR", "prompts")

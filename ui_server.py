@@ -7,6 +7,7 @@ import sys
 import re
 import json
 import ollama
+from icrawler_simple import genera_newsletter
 from PIL import Image
 
 # Apple Vision (solo su macOS)
@@ -20,7 +21,7 @@ if sys.platform == "darwin":
     except ImportError:
         pass
 
-from fastapi import FastAPI, HTTPException, File, UploadFile
+from fastapi import FastAPI, Request, Request, HTTPException, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -78,6 +79,20 @@ def extract(req: BriefRequest):
         return {"entities": {}, "raw": [], "error": "GLiNER non raggiungibile"}
     entities = entities_to_dict(raw)
     return {"entities": entities, "raw": raw}
+
+
+@app.post("/genera_newsletter")
+async def api_genera_newsletter(request: Request):
+    data = await request.json()
+    brief = data.get("brief", "")
+    cliente = data.get("cliente", "Cosper")
+    try:
+        # Assumiamo che l'istanza dell'app sia accessibile o che la funzione sia globale
+        # Se hai un'istanza, sostituisci app_instance con il nome corretto
+        risultato = genera_newsletter(brief, cliente) 
+        return {"status": "ok", "newsletter": risultato}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 @app.post("/genera")
 def genera(req: BriefRequest):
@@ -171,44 +186,26 @@ def analyze_vision(file: UploadFile = File(...)):
     try:
         contents = file.file.read()
         
-        # 1. PRIMA PROVIAMO CON APPLE VISION (Istantaneo, zero RAM)
+        # 1. Usiamo Apple Vision per l'OCR (velocissimo e non richiede Qwen-VL)
+        testo_estratto = ""
         if HAS_APPLE_VISION:
-            print("🍎 Uso Apple Vision per l'OCR...")
-            testo_estratto = run_apple_ocr(contents)
-            print(f"🍎 OCR Apple Vision: '{testo_estratto}'")
-        else:
-            testo_estratto = ""
+            try:
+                testo_estratto = run_apple_ocr(contents)
+            except Exception as e:
+                print(f"Errore Apple Vision: {e}")
 
-        # 2. SE ABBIAMO IL TESTO, PROVIAMO A DESCRIVERE L'IMMAGINE CON QWEN-VL (Opzionale)
-        descrizione = "Descrizione visiva non disponibile."
-        try:
-            print("👁️ Chiedo a Qwen-VL una descrizione visiva...")
-            img_b64 = base64.b64encode(contents).decode("utf-8")
-            prompt = "Descrivi questa immagine in modo breve e oggettivo in italiano. Cosa si vede? Rispondi in 1 o 2 frasi."
-            
-            response = ollama.chat(
-                model="qwen2.5vl:3b",
-                messages=[{"role": "user", "content": prompt, "images": [img_b64]}],
-                options={"temperature": 0.0, "num_ctx": 2048},
-                
-            )
-            descrizione = response["message"]["content"].strip()
-        except Exception as e:
-            import traceback
-            print(f"❌ ERRORE VISION: {e}")
-            traceback.print_exc()
+        # 2. Se non abbiamo Qwen-VL, restituiamo solo il testo.
+        descrizione = "Analisi visiva avanzata non disponibile (modello Qwen-VL non scaricato)."
+        if testo_estratto:
+            descrizione = "Immagine elaborata tramite OCR."
 
-        # 3. Restituiamo un formato standard (che la UI si aspetta)
-        vision_data = {
-            "descrizione_generica": descrizione,
-            "testo_visibile": testo_estratto,
-            "oggetti": [], 
-            "colori": [],
-            "non_inferences": []
+        return {
+            "vision": {
+                "descrizione_generica": descrizione,
+                "testo_visibile": testo_estratto,
+                "oggetti": [], "colori": [], "non_inferences": []
+            }
         }
-        
-        return {"vision": vision_data}
-        
     except Exception as e:
         import traceback
         traceback.print_exc()

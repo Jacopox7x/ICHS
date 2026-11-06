@@ -1,0 +1,62 @@
+BRIEF:
+Test
+
+OUTPUT:
+### ANALISI
+- Target: Test
+- Mood: Informale
+- Concept: Test
+
+### INSTAGRAM
+**Hook:** Scopri il nostro nuovo progetto!
+**Corpo:** Un nuovo test per il nostro nuovo progetto!
+**CTA:** Sapere di più
+**Visual:** Una foto di un test
+**Hashtag:** #Test, #Progetto
+
+### LINKEDIN
+**Hook:** Nuovo progetto di test
+**Corpo:** Un nuovo test per il nostro nuovo progetto!
+**CTA:** Scopri di più
+**Visual:** Una foto di un test
+**Hashtag:** #Test, #Progetto, #Nuovo
+
+### X (TWITTER)
+**Tweet 1:** Scopri il nostro nuovo progetto!
+**Tweet 2:** Un nuovo test per il nostro nuovo progetto!
+**Tweet 3:** Sapere di più?
+**Tweet 4:** Un nuovo test!
+**Tweet 5:** Scopri di più sul nostro nuovo progetto!
+
+### FACEBOOK
+**Hook:** Scopri il nostro nuovo progetto!
+**Corpo:** Un nuovo test per il nostro nuovo progetto!
+**CTA:** Sapere di più
+**Visual:** Una foto di un test
+**Hashtag:** #Test, #Progetto
+
+### TIKTOK
+**Hook:** Scopri il nostro nuovo progetto!
+**Script:** Un nuovo test per il nostro nuovo progetto!
+**CTA:** Sapere di più
+
+### STORIES (5 frame)
+1. Una foto di un test
+2. Un nuovo test per il nostro nuovo progetto!
+3. Scopri di più!
+4. Un nuovo test!
+5. Scopri di più sul nostro nuovo progetto!
+
+### CALENDARIO
+Giorno -2: Non specificato
+Giorno -1: Non specificato
+Giorno evento: Non specificato
+Giorno +1: Non specificato
+
+### RIASSUNTO
+- Obiettivi: Scoprire il nuovo progetto
+- KPI: Non specificato
+- Budget: Non specificato
+
+CATEGORY: default
+TIMESTAMP: 2026-10-19T15:04:55.672225

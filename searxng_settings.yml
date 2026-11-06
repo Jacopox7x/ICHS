@@ -1,0 +1,41 @@
+use_default_settings: true
+
+general:
+  instance_name: "iCrawler SearXNG"
+  privacypolicy_url: false
+  donation_url: false
+  contact_url: false
+  enable_metrics: true
+
+server:
+  # Cambia questa chiave se rendi il servizio pubblico (ora è solo per uso locale)
+  secret_key: "icrawler_local_secret_key_2026"
+  limiter: false
+  public_instance: false
+  image_proxy: true
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_lang: "it"
+  # Questa è la riga magica che sblocca le API!
+  formats:
+    - html
+    - json
+
+ui:
+  static_use_hash: true
+
+# Usa i motori di ricerca di default di SearXNG, ma forziamo alcuni in italiano
+engines:
+  - name: google
+    engine: google
+    shortcut: go
+    language: it
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
+  - name: wikipedia
+    engine: wikipedia
+    shortcut: wp
+    language: it

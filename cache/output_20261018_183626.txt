@@ -1,0 +1,100 @@
+BRIEF:
+Newsletter di COSPER – Area Minori e Famiglie. È pensata per essere leggibile, utile e non troppo lunga (ideale 1-2 schermate o 3-4 sezioni principali).
+
+### Struttura consigliata
+
+**1. Intestazione**
+- Logo COSPER + nome della newsletter (es. *“Minori & Famiglie – Notizie dal territorio”*)
+- Numero e data (es. Newsletter n. 3 – Settembre 2026)
+- Eventuale sottotitolo breve
+
+**2. Editoriale / Apertura (breve)**
+- 4-6 righe di introduzione firmata da Roberta o dall’équipe
+- Tono caldo e diretto: “Cari lettori, in questo numero vi raccontiamo…”
+- Può legarsi a un tema del mese (es. aggregazione, rientro a scuola, NEET…)
+
+**3. Sezione “Cosa stiamo facendo” (cuore della newsletter)**
+Suddivisa in 2-3 box o paragrafi brevi:
+- **Centro Ragazzi e Semi-convitto** → novità, laboratori, attività aggregative
+- **Progetti sul territorio** → CAG Soncino/Castelleone, doposcuola, ciclofficina
+- **Iniziative speciali** → progetto Outsider, attività per NEET, povertà educativa
+
+Ogni box: titolo + 3-5 righe + eventuale foto o invito a approfondire.
+
+**4. Focus del mese (approfondimento)**
+- Un solo argomento trattato con un po’ più di spazio (es. “Il progetto aggregativo annuale 2026”, “Come funziona la ciclofficina”, “Accompagnamento dei NEET”)
+- Può includere una testimonianza breve o una foto di gruppo
+
+**5. Agenda / Appuntamenti**
+- Elenco di 3-5 eventi o scadenze (laboratori aperti, incontri per famiglie, aperture straordinarie…)
+- Formato semplice: data – cosa – dove – per chi
+
+**6. Spazio famiglie / Sportello Iride**
+- Informazioni pratiche, orari dello sportello di ascolto, nuovi servizi di sostegno scolastico
+- Eventuale piccolo box “Lo sapevi che…”
+
+**7. Chiusura e contatti**
+- Invito a rispondere o a contattare l’équipe
+- Contatti principali (email, telefono, sede)
+- Link ai social o al sito
+- Frase di chiusura calorosa
+
+OUTPUT:
+### ANALISI
+- Target: Newsletter di COSPER – Area Minori e Famiglie
+- Mood: caldo e diretto
+- Concept: informazione e aggregazione
+
+### INSTAGRAM
+**Hook:** Cari lettori, in questo numero vi raccontiamo...
+**Corpo:** 4-6 righe di introduzione
+**CTA:** Leggi il nostro ultimo numero
+**Visual:** foto di gruppo
+**Hashtag:** #ciclofficina, #minori, #famiglie
+
+### LINKEDIN
+**Hook:** Il progetto aggregativo annuale 2026
+**Corpo:** un po' più di spazio
+**CTA:** Scopri di più
+**Visual:** foto di un evento
+**Hashtag:** #progettoaggregativo, #annuale, #2026
+
+### X (TWITTER)
+**Tweet 1:** Il progetto aggregativo annuale 2026 è iniziato!
+**Tweet 2:** Scopri come funziona la ciclofficina
+**Tweet 3:** Accompagnamento dei NEET
+**Tweet 4:** Il progetto Outsider
+**Tweet 5:** Il progetto per la povertà educativa
+
+### FACEBOOK
+**Hook:** Cosa stiamo facendo
+**Corpo:** suddiviso in 2-3 box o paragrafi brevi
+**CTA:** Leggi il nostro ultimo numero
+**Visual:** foto di un evento
+**Hashtag:** #ciclofficina, #minori, #famiglie
+
+### TIKTOK
+**Hook:** Cosa stiamo facendo
+**Script:** un po' più di spazio
+**CTA:** Scopri di più
+
+### STORIES (5 frame)
+1. foto di gruppo
+2. foto di un evento
+3. foto di un NEET
+4. foto di un progetto
+5. foto di un ciclofficina
+
+### CALENDARIO
+Giorno -2: Non specificato
+Giorno -1: Non specificato
+Giorno evento: Non specificato
+Giorno +1: Non specificato
+
+### RIASSUNTO
+- Obiettivi: informazione e aggregazione
+- KPI: numero di iscritti
+- Budget: non specificato
+
+CATEGORY: tech
+TIMESTAMP: 2026-10-18T18:36:26.499995

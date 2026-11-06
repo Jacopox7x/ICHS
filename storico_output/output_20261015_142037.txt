@@ -1,0 +1,77 @@
+BRIEF:
+Paolo — Due borse e via
+
+Tipo: Scenario d’uso
+Bici: LA GARE City Bike — 280 €
+Uso: spesa / commissioni
+Zona: Cremona, centro storico
+
+Paolo non cercava una bici per fare sport. Cercava un modo per fare le commissioni senza dover prendere la macchina.
+
+Il sabato prende la City Bike, sistema le borse sul portapacchi e attraversa il centro per andare al mercato. Poi torna a casa con la spesa, passando per le vie che conosce da sempre.
+
+«Prima prendevo la macchina anche per comprare quattro cose. Adesso mi sembra strano farlo.»
+
+La bici non gli ha cambiato la vita. Ha cambiato qualche piccolo spostamento, che forse è proprio la cosa più utile.
+
+CTA: Scopri la LA GARE City Bike
+
+OUTPUT:
+### ANALISI
+- Target: Scenari di uso
+- Mood: utente
+- Concept: utilizzo della LA GARE City Bike
+
+### INSTAGRAM
+**Hook:** Scopri la LA GARE City Bike
+**Corpo:** La LA GARE City Bike ti aiuta a fare le commissioni senza dover prendere la macchina. Paolo ha scoperto che la bici non gli ha cambiato la vita, ma gli ha cambiato qualche piccolo spostamento.
+**CTA:** Scopri la LA GARE City Bike
+**Visual:** Una foto di Paolo che utilizza la LA GARE City Bike per fare le commissioni
+**Hashtag:** #cucina, #foodie, #food, #ristorante, #gourmet
+
+### LINKEDIN
+**Hook:** Utilizza la LA GARE City Bike per fare le commissioni
+**Corpo:** La LA GARE City Bike è una soluzione innovativa per chi vuole evitare di prendere la macchina per fare le commissioni. Scopri come può aiutarti a risparmiare tempo e denaro.
+**CTA:** Utilizza la LA GARE City Bike
+**Visual:** Una foto di una persona che utilizza la LA GARE City Bike
+**Hashtag:** #innovazione, #sostenibilità, #trasporto
+
+### X (TWITTER)
+**Tweet 1:** La LA GARE City Bike ti aiuta a fare le commissioni senza dover prendere la macchina. #cucina #foodie
+**Tweet 2:**  Paolo ha scoperto che la bici non gli ha cambiato la vita, ma gli ha cambiato qualche piccolo spostamento. #food #ristorante
+**Tweet 3:**  Utilizza la LA GARE City Bike per fare le commissioni e risparmiare tempo e denaro. #gourmet #innovazione
+**Tweet 4:**  La LA GARE City Bike è una soluzione innovativa per chi vuole evitare di prendere la macchina. #sostenibilità #trasporto
+**Tweet 5:**  Scopri come la LA GARE City Bike può aiutarti a fare le commissioni. #cucina #foodie
+
+### FACEBOOK
+**Hook:** La LA GARE City Bike ti aiuta a fare le commissioni senza dover prendere la macchina
+**Corpo:** La LA GARE City Bike è una soluzione innovativa per chi vuole evitare di prendere la macchina per fare le commissioni. Paolo ha scoperto che la bici non gli ha cambiato la vita, ma gli ha cambiato qualche piccolo spostamento.
+**CTA:** La LA GARE City Bike
+**Visual:** Una foto di Paolo che utilizza la LA GARE City Bike per fare le commissioni
+**Hashtag:** #cucina, #foodie, #food, #ristorante, #gourmet
+
+### TIKTOK
+**Hook:** La LA GARE City Bike ti aiuta a fare le commissioni senza dover prendere la macchina
+**Script:** La LA GARE City Bike è una soluzione innovativa per chi vuole evitare di prendere la macchina per fare le commissioni. Paolo ha scoperto che la bici non gli ha cambiato la vita, ma gli ha cambiato qualche piccolo spostamento.
+**CTA:** La LA GARE City Bike
+
+### STORIES (5 frame)
+1. Una foto di Paolo che utilizza la LA GARE City Bike per fare le commissioni
+2. Una foto di una persona che utilizza la LA GARE City Bike
+3. Una foto di una bici che è la LA GARE City Bike
+4. Una foto di Paolo che torna a casa con la spesa
+5. Una foto di Paolo che sorride mentre utilizza la LA GARE City Bike
+
+### CALENDARIO
+Giorno -2: Venerdì
+Giorno -1: Sabato
+Giorno evento: Sabato
+Giorno +1: Domenica
+
+### RIASSUNTO
+- Obiettivi: Promuovere l'utilizzo della LA GARE City Bike per fare le commissioni
+- KPI: Maggior consapevolezza dell'utilizzo della LA GARE City Bike
+- Budget: Non specificato
+
+CATEGORY: food
+TIMESTAMP: 2026-10-15T14:20:37.653049

@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""
+iCRAWLER V1.7 - Deterministic Validator
+"""
+
+from typing import Dict, List
+from fact_extractor import Fact, FactStatus
+
+class DeterministicValidator:
+    def __init__(self, truth: Dict[str, Fact]):
+        self.truth = truth
+        self.errors: List[str] = []
+        self.warnings: List[str] = []
+    
+    def validate(self, plan: str) -> bool:
+        self.errors = []
+        self.warnings = []
+        
+        date_fact = self.truth.get('date')
+        if date_fact and date_fact.value:
+            if date_fact.value not in plan:
+                self.errors.append(f"Data '{date_fact.value}' non trovata nel piano")
+        
+        loc_fact = self.truth.get('location')
+        if loc_fact and loc_fact.value:
+            if loc_fact.value not in plan:
+                self.errors.append(f"Location '{loc_fact.value}' non trovata nel piano")
+        
+        required = ['Strategia', 'Piano', 'CTA']
+        for section in required:
+            if section not in plan:
+                self.warnings.append(f"Sezione '{section}' mancante")
+        
+        return len(self.errors) == 0
+    
+    def get_report(self) -> str:
+        lines = []
+        if self.errors:
+            lines.append("❌ ERRORI:")
+            for e in self.errors:
+                lines.append(f"   - {e}")
+        if self.warnings:
+            lines.append("⚠️ WARNING:")
+            for w in self.warnings:
+                lines.append(f"   - {w}")
+        if not self.errors and not self.warnings:
+            lines.append("✅ Tutto ok!")
+        return "\n".join(lines)

@@ -1,0 +1,388 @@
+"""Cascading RAG for iCrawler: local memory first, GLiNER-enriched SearXNG fallback.
+
+Local-first policy:
+1. Search the existing local memory.
+2. If the best known similarity reaches the threshold, return local results
+   without invoking GLiNER or SearXNG.
+3. Otherwise, optionally enrich the query with GLiNER and query local SearXNG.
+4. If SearXNG is unavailable, fail safely without crashing the pipeline.
+
+Contract notes:
+- Tuple results are interpreted as (brief, plan_text, score), matching the
+  project's expected adapter contract. This contract is ASSUMED, not yet
+  verified: memory.py was not available at review time. When memory.py is
+  provided, confirm the tuple shape and the score scale (threshold 0.72 is
+  meaningful only relative to that scale).
+- The callable signature of memory.find_similar is inspected via
+  inspect.signature: "cliente" is passed only if the callable declares it
+  (or accepts **kwargs). Internal TypeErrors are no longer swallowed.
+- Only explicitly named similarity fields are treated as higher-is-better.
+  A generic "distance" is deliberately not treated as similarity.
+- Output shape: {"fonte": ..., "risultati": [...], "percorso": ...}.
+  Each result: {"testo": str, optional "url", optional "punteggio" (float),
+  optional "brief"}. "fonte" reflects the provenance of "risultati":
+  local results returned below threshold are labelled fonte="locale".
+"""
+
+from __future__ import annotations
+
+import inspect
+import logging
+from numbers import Real
+from typing import Any
+
+import requests
+
+logger = logging.getLogger(__name__)
+
+DEFAULT_SEARXNG_URL = "http://127.0.0.1:8888/search"
+DEFAULT_THRESHOLD = 0.72
+DEFAULT_TIMEOUT = 4.0
+DEFAULT_WEB_RESULTS = 5
+
+def _first_value(item: Any, keys: tuple[str, ...]) -> Any:
+    """Return the first matching value from a dict-like/object result."""
+    if isinstance(item, dict):
+        for key in keys:
+            if key in item:
+                return item[key]
+    else:
+        for key in keys:
+            if hasattr(item, key):
+                return getattr(item, key)
+    return None
+
+def _to_float(value: Any) -> float | None:
+    """Convert a value to float without raising. bool is rejected."""
+    if isinstance(value, bool):
+        return None
+    try:
+        if value is None:
+            return None
+        return float(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+def _is_valid_score(value: Any) -> bool:
+    """True if value is a usable similarity score (excludes bool).
+
+    Uses numbers.Real plus float() conversion so that numpy scalar types
+    (e.g. numpy.float32, not a subclass of float) are accepted.
+    """
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, Real):
+        return True
+    return _to_float(value) is not None
+
+def _normalize_local_result(item: Any) -> dict[str, Any] | None:
+    """Normalize a local memory result to the common output shape."""
+    # Expected tuple contract: (brief, plan_text, score).
+    if isinstance(item, tuple):
+        if len(item) < 3:
+            logger.warning(
+                "Tupla restituita da memory.find_similar con meno di 3 elementi"
+            )
+            return None
+
+        brief = item[0]
+        text = item[1]
+        if text is None:
+            return None
+
+        result: dict[str, Any] = {"testo": str(text)}
+        if brief is not None:
+            result["brief"] = str(brief)
+        score = _to_float(item[2])
+        if score is not None:
+            result["punteggio"] = score
+        return result
+
+    # Dict/object compatibility. "distance" is intentionally excluded:
+    # distance semantics differ from similarity semantics.
+    text = _first_value(
+        item, ("testo", "text", "content", "document", "memory", "chunk")
+    )
+    score = _first_value(
+        item, ("punteggio", "similarity", "cosine_similarity", "score")
+    )
+    url = _first_value(item, ("url", "source_url"))
+    brief = _first_value(item, ("brief", "titolo", "title"))
+
+    if text is None:
+        return None
+
+    result = {"testo": str(text)}
+    if brief is not None:
+        result["brief"] = str(brief)
+    if url:
+        result["url"] = str(url)
+
+    numeric_score = _to_float(score)
+    if numeric_score is not None:
+        result["punteggio"] = numeric_score
+
+    return result
+
+def _accepts_cliente(finder: Any) -> bool:
+    """Decide via introspection whether finder accepts a 'cliente' argument.
+
+    Returns True when the parameter list cannot be introspected, so the
+    primary call path is attempted and any real error is logged by the
+    caller instead of being silently retried with a different signature.
+    """
+    try:
+        sig = inspect.signature(finder)
+    except (TypeError, ValueError):
+        return True
+    params = sig.parameters
+    if "cliente" in params:
+        return True
+    return any(p.kind == inspect.Parameter.VAR_KEYWORD for p in params.values())
+
+def _search_local(
+    query: str,
+    cliente: str | None,
+    memory_module: Any,
+) -> list[dict[str, Any]]:
+    """Call memory.find_similar and normalize its results."""
+    finder = getattr(memory_module, "find_similar", None)
+    if not callable(finder):
+        logger.warning("memory.find_similar non disponibile")
+        return []
+
+    try:
+        if _accepts_cliente(finder):
+            raw = finder(query, cliente=cliente)
+        else:
+            raw = finder(query)
+    except Exception:
+        logger.exception("Ricerca nella memoria locale fallita")
+        return []
+
+    if raw is None:
+        return []
+
+    if isinstance(raw, dict):
+        nested = raw.get("risultati", raw.get("results"))
+        items = nested if isinstance(nested, list) else [raw]
+    elif isinstance(raw, list):
+        items = raw
+    elif isinstance(raw, tuple):
+        # A collection of records (tuple/dict/list elements) is flattened.
+        # Anything else of length >= 3 is treated as a single
+        # (brief, plan_text, score) record. This remains a shape heuristic
+        # until the memory.py contract is verified.
+        if raw and all(isinstance(x, (tuple, dict, list)) for x in raw):
+            items = list(raw)
+        elif len(raw) >= 3:
+            items = [raw]
+        else:
+            items = [raw]
+    else:
+        try:
+            items = list(raw)
+        except TypeError:
+            items = [raw]
+
+    normalized: list[dict[str, Any]] = []
+    for item in items:
+        result = _normalize_local_result(item)
+        if result is not None:
+            normalized.append(result)
+    return normalized
+
+def _enrich_query_with_gliner(query: str) -> str:
+    """Enrich a web query with deduplicated GLiNER entity values when available."""
+    try:
+        from gliner_client import entities_to_dict, extract_entities
+
+        raw_entities = extract_entities(query)
+        if not raw_entities:
+            return query
+
+        entities = entities_to_dict(raw_entities)
+        if not isinstance(entities, dict):
+            logger.warning("Formato entità GLiNER inatteso; uso query originale")
+            return query
+
+        # Preserve the original query and avoid repeating entities already present.
+        import re
+
+        seen: set[str] = set()
+        extras: list[str] = []
+        for value in entities.values():
+            values = value if isinstance(value, (list, tuple, set)) else [value]
+            for candidate in values:
+                if not isinstance(candidate, str):
+                    continue
+
+                candidate = candidate.strip()
+                key = candidate.casefold()
+
+                if not candidate or key in seen:
+                    continue
+
+                # Match the whole entity, not merely a substring.
+                pattern = rf"(?<!\\w){re.escape(candidate)}(?!\\w)"
+                if re.search(pattern, query, flags=re.IGNORECASE):
+                    seen.add(key)
+                    continue
+
+                seen.add(key)
+                extras.append(candidate)
+
+        if extras:
+            enriched = f"{query} {' '.join(extras)}"
+            logger.info("GLiNER ha arricchito la query web: %s", enriched)
+            return enriched
+
+    except Exception as exc:
+        logger.warning(
+            "GLiNER non disponibile per l'arricchimento; uso query originale: %s",
+            exc,
+        )
+
+    return query
+
+def _search_web(
+    query: str,
+    searxng_url: str,
+    timeout: float,
+    max_results: int,
+) -> list[dict[str, Any]]:
+    """Query local SearXNG and normalize its first results."""
+    try:
+        response = requests.get(
+            searxng_url,
+            params={"q": query, "format": "json", "language": "it"},
+            timeout=timeout,
+        )
+        response.raise_for_status()
+        payload = response.json()
+    except (requests.RequestException, ValueError) as exc:
+        logger.warning("Fallback SearXNG non disponibile: %s", exc)
+        return []
+
+    if not isinstance(payload, dict):
+        logger.warning("Risposta SearXNG in formato inatteso")
+        return []
+
+    raw_results = payload.get("results", [])
+    if not isinstance(raw_results, list):
+        logger.warning("Campo 'results' di SearXNG in formato inatteso")
+        return []
+
+    results: list[dict[str, Any]] = []
+    for item in raw_results[:max(0, max_results)]:
+        if not isinstance(item, dict):
+            continue
+
+        title = str(item.get("title") or "").strip()
+        content = str(item.get("content") or item.get("snippet") or "").strip()
+        url = str(item.get("url") or "").strip()
+        text = "\n".join(part for part in (title, content) if part)
+        if not text:
+            continue
+
+        result: dict[str, Any] = {"testo": text}
+        if url:
+            result["url"] = url
+        results.append(result)
+
+    return results
+
+def retrieve_context(
+    query: str,
+    cliente: str | None = None,
+    soglia_locale: float = DEFAULT_THRESHOLD,
+    *,
+    memory_module: Any | None = None,
+    searxng_url: str = DEFAULT_SEARXNG_URL,
+    timeout: float = DEFAULT_TIMEOUT,
+    max_web_results: int = DEFAULT_WEB_RESULTS,
+) -> dict[str, Any]:
+    """Retrieve local context first, using GLiNER only for web fallback.
+
+    Returns a dict with:
+        fonte: "locale" | "web" | "nessuna" — provenance of "risultati"
+        risultati: list of {"testo": ..., optional "url",
+                            optional "punteggio", optional "brief"}
+        percorso: diagnostic route label
+
+    Route labels:
+        query_vuota                  — empty or non-string query
+        soglia_locale_superata       — best local score >= soglia_locale
+        fallback_web                 — web results returned
+        soglia_locale_non_superata   — only sub-threshold local results
+        nessun_risultato             — nothing found anywhere
+    """
+    if not isinstance(query, str) or not query.strip():
+        return {
+            "fonte": "nessuna",
+            "risultati": [],
+            "percorso": "query_vuota",
+        }
+
+    clean_query = query.strip()
+
+    if memory_module is None:
+        try:
+            import memory as memory_module  # type: ignore[no-redef]
+        except ImportError:
+            logger.warning("Modulo memory non importabile")
+            memory_module = None
+
+    # 1. Local memory first.
+    local_results = (
+        _search_local(clean_query, cliente, memory_module)
+        if memory_module is not None
+        else []
+    )
+
+    scored = [
+        item for item in local_results
+        if _is_valid_score(item.get("punteggio"))
+    ]
+    best_score = max(
+        (float(item["punteggio"]) for item in scored), default=None
+    )
+
+    if best_score is not None and best_score >= soglia_locale:
+        logger.info("Trovato nella KB locale (score: %.3f)", best_score)
+        return {
+            "fonte": "locale",
+            "risultati": local_results,
+            "percorso": "soglia_locale_superata",
+        }
+
+    # 2. GLiNER enrichment only when local memory misses the threshold.
+    enriched_query = _enrich_query_with_gliner(clean_query)
+
+    # 3. SearXNG fallback.
+    logger.info("Fallback web tramite SearXNG")
+    web_results = _search_web(
+        enriched_query, searxng_url, timeout, max_web_results
+    )
+
+    if web_results:
+        return {
+            "fonte": "web",
+            "risultati": web_results,
+            "percorso": "fallback_web",
+        }
+
+    # 4. Nothing usable on the web: return whatever the local memory had,
+    #    labelled by its real provenance.
+    if local_results:
+        return {
+            "fonte": "locale",
+            "risultati": local_results,
+            "percorso": "soglia_locale_non_superata",
+        }
+
+    return {
+        "fonte": "nessuna",
+        "risultati": [],
+        "percorso": "nessun_risultato",
+    }

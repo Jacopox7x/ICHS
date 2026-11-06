@@ -1,0 +1,217 @@
+import sqlite3
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+import numpy as np
+import memory
+
+
+class TestMemory(unittest.TestCase):
+    def setUp(self):
+        self.tempdir = tempfile.TemporaryDirectory()
+        self.db_path = Path(self.tempdir.name) / "test_memory.db"
+
+        self.patcher = patch.object(memory, "DB_PATH", self.db_path)
+        self.patcher.start()
+
+        self.addCleanup(self.patcher.stop)
+        self.addCleanup(self.tempdir.cleanup)
+
+        self.embeddings = {
+            "query": np.array([1.0, 0.0, 0.0], dtype=np.float32),
+            "simile": np.array([0.9, 0.1, 0.0], dtype=np.float32),
+            "debole": np.array([0.0, 1.0, 0.0], dtype=np.float32),
+        }
+
+        self.embed_patcher = patch.object(
+            memory,
+            "_embed",
+            side_effect=lambda text: self.embeddings[text].copy(),
+        )
+        self.embed_patcher.start()
+        self.addCleanup(self.embed_patcher.stop)
+
+        with memory._conn() as con:
+            con.execute(
+                """
+                INSERT INTO plans
+                    (brief, cliente, plan_text, embedding, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    "simile",
+                    "cosper",
+                    "Piano A",
+                    self.embeddings["simile"].tobytes(),
+                    1.0,
+                ),
+            )
+            con.execute(
+                """
+                INSERT INTO plans
+                    (brief, cliente, plan_text, embedding, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    "debole",
+                    "cosper",
+                    "Piano B",
+                    self.embeddings["debole"].tobytes(),
+                    2.0,
+                ),
+            )
+            con.execute(
+                """
+                INSERT INTO plans
+                    (brief, cliente, plan_text, embedding, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    "simile",
+                    "altro_cliente",
+                    "Piano C",
+                    self.embeddings["simile"].tobytes(),
+                    3.0,
+                ),
+            )
+
+    def test_ricerca_rispetta_cliente(self):
+        risultati = memory.find_similar(
+            "query", "cosper", min_sim=0.0
+        )
+        self.assertTrue(all(len(r) == 3 for r in risultati))
+        self.assertEqual(len(risultati), 2)
+
+    def test_ricerca_ordina_per_similarita(self):
+        risultati = memory.find_similar(
+            "query", "cosper", min_sim=0.0
+        )
+        self.assertEqual(risultati[0][1], "Piano A")
+        self.assertGreaterEqual(risultati[0][2], risultati[1][2])
+
+    def test_ricerca_rispetta_soglia(self):
+        risultati = memory.find_similar(
+            "query", "cosper", min_sim=0.8
+        )
+        self.assertEqual([r[1] for r in risultati], ["Piano A"])
+
+    def test_ricerca_rispetta_top_k(self):
+        risultati = memory.find_similar(
+            "query", "cosper", top_k=1, min_sim=0.0
+        )
+        self.assertEqual(len(risultati), 1)
+
+    def test_ricerca_elimina_duplicati_esatti(self):
+        with memory._conn() as con:
+            con.execute(
+                """
+                INSERT INTO plans
+                    (brief, cliente, plan_text, embedding, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    "simile",
+                    "cosper",
+                    "Piano A",
+                    self.embeddings["simile"].tobytes(),
+                    4.0,
+                ),
+            )
+
+        risultati = memory.find_similar(
+            "query", "cosper", top_k=10, min_sim=0.0
+        )
+
+        coppie = [(brief, piano) for brief, piano, _ in risultati]
+        self.assertEqual(len(coppie), len(set(coppie)))
+
+    def test_ricerca_conserva_varianti_dello_stesso_brief(self):
+        with memory._conn() as con:
+            con.execute(
+                """
+                INSERT INTO plans
+                    (brief, cliente, plan_text, embedding, created_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    "simile",
+                    "cosper",
+                    "Piano A - variante",
+                    self.embeddings["simile"].tobytes(),
+                    4.0,
+                ),
+            )
+
+        risultati = memory.find_similar(
+            "query", "cosper", top_k=10, min_sim=0.0
+        )
+
+        piani = [piano for brief, piano, _ in risultati if brief == "simile"]
+        self.assertEqual(piani.count("Piano A"), 1)
+        self.assertEqual(piani.count("Piano A - variante"), 1)
+
+    def test_cliente_senza_piani_restituisce_lista_vuota(self):
+        risultati = memory.find_similar("query", "inesistente")
+        self.assertEqual(risultati, [])
+
+    def test_cosine_gestisce_vettore_nullo(self):
+        risultato = memory._cosine(
+            np.zeros(3, dtype=np.float32),
+            np.ones(3, dtype=np.float32),
+        )
+        self.assertEqual(risultato, 0.0)
+
+    def test_count_plans_non_modifica_il_database(self):
+        prima = memory.count_plans()
+        memory.count_plans("cosper")
+        dopo = memory.count_plans()
+        self.assertEqual(prima, dopo)
+
+
+    def test_cosine_rileva_dimensioni_incompatibili(self):
+        with self.assertRaises(ValueError):
+            memory._cosine(
+                np.ones(3, dtype=np.float32),
+                np.ones(4, dtype=np.float32),
+            )
+
+    def test_cosine_rifiuta_valori_non_finiti(self):
+        with self.assertRaises(ValueError):
+            memory._cosine(
+                np.array([np.nan, 1.0], dtype=np.float32),
+                np.array([1.0, 1.0], dtype=np.float32),
+            )
+
+    def test_cosine_rifiuta_vettori_non_monodimensionali(self):
+        with self.assertRaises(ValueError):
+            memory._cosine(
+                np.ones((2, 2), dtype=np.float32),
+                np.ones((2, 2), dtype=np.float32),
+            )
+
+    def test_soglia_fuori_intervallo_viene_rifiutata(self):
+        for soglia in (-1.1, 1.1, float("nan"), float("inf")):
+            with self.subTest(soglia=soglia):
+                with self.assertRaises(ValueError):
+                    memory.find_similar(
+                        "query", "cosper", min_sim=soglia
+                    )
+
+    def test_top_k_zero_restituisce_lista_vuota(self):
+        risultati = memory.find_similar(
+            "query", "cosper", top_k=0, min_sim=0.0
+        )
+        self.assertEqual(risultati, [])
+
+    def test_top_k_negativo_restituisce_lista_vuota(self):
+        risultati = memory.find_similar(
+            "query", "cosper", top_k=-1, min_sim=0.0
+        )
+        self.assertEqual(risultati, [])
+
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

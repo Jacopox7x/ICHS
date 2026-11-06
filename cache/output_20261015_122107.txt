@@ -1,0 +1,68 @@
+BRIEF:
+event_name: Festa di compleanno di Marco
+date: 25 agosto
+location: Bologna
+target: amici e parenti
+objective: creare un'esperienza di divertimento e condivisione
+budget: DA DEFINIRE
+hashtag: DA DEFINIRE
+
+OUTPUT:
+### ANALISI
+- Target: amici e parenti
+- Mood: divertimento e condivisione
+- Concept: Festa di compleanno di Marco
+
+### INSTAGRAM
+**Hook:** Celebra con noi il compleanno di Marco!
+**Corpo:** Un'esperienza di divertimento e condivisione per amici e parenti.
+**CTA:** Condividi le tue foto e storie!
+**Visual:** Una foto di Marco con un sorriso felice.
+**Hashtag:** #Bologna, #amici, #parenti
+
+### LINKEDIN
+**Hook:** Un'occasione per condividere il successo di Marco!
+**Corpo:** Un evento di networking e opportunità di business.
+**CTA:** Partecipa e scopri nuove opportunità!
+**Visual:** Una foto di Marco con un background di successo.
+**Hashtag:** #networking, #opportunita, #business
+
+### X (TWITTER)
+**Tweet 1:** Celebra con noi il compleanno di Marco! #Bologna #amici #parenti
+**Tweet 2:** Un'esperienza di divertimento e condivisione per amici e parenti. #evento #viral
+**Tweet 3:** Partecipa e scopri nuove opportunità! #networking #opportunita
+**Tweet 4:** Condividi le tue foto e storie! #condivisione #divertimento
+**Tweet 5:** Un'occasione per condividere il successo di Marco! #successo #compleanno
+
+### FACEBOOK
+**Hook:** Celebra con noi il compleanno di Marco!
+**Corpo:** Un'esperienza di divertimento e condivisione per amici e parenti.
+**CTA:** Condividi le tue foto e storie!
+**Visual:** Una foto di Marco con un sorriso felice.
+**Hashtag:** #Bologna, #amici, #parenti
+
+### TIKTOK
+**Hook:** Celebra con noi il compleanno di Marco!
+**Script:** Una breve storia di Marco con un messaggio di gratitudine.
+**CTA:** Condividi le tue foto e storie!
+
+### STORIES (5 frame)
+1. Una foto di Marco con un sorriso felice.
+2. Un messaggio di gratitudine di Marco.
+3. Una foto di amici e parenti che celebrano con Marco.
+4. Un'esperienza di divertimento e condivisione per amici e parenti.
+5. Un'occasione per condividere il successo di Marco!
+
+### CALENDARIO
+Giorno -2: 23 agosto
+Giorno -1: 24 agosto
+Giorno evento: 25 agosto
+Giorno +1: 26 agosto
+
+### RIASSUNTO
+- Obiettivi: Creare un'esperienza di divertimento e condivisione
+- KPI: Condivisi foto e storie, partecipanti
+- Budget: DA DEFINIRE
+
+CATEGORY: default
+TIMESTAMP: 2026-10-15T12:21:07.001579

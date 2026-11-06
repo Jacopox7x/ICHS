@@ -1,0 +1,292 @@
+{
+  "facts": {
+    "event_name": "Laboratorio di cucito creativo per bambini",
+    "date": "15 Novembre",
+    "location": "Cremona",
+    "organizer": "DA DEFINIRE",
+    "target": "bambini",
+    "objective": "far conoscere la sartoria sociale e coinvolgere nuove famiglie",
+    "time": "DA DEFINIRE",
+    "venue": "DA DEFINIRE",
+    "speaker": "DA DEFINIRE",
+    "budget": "DA DEFINIRE",
+    "link": "DA DEFINIRE",
+    "hashtag": "DA DEFINIRE"
+  },
+  "piano_social": {
+    "hashtags": [
+      "#sartoriasociale",
+      "#cucito",
+      "#riparare",
+      "#creazioni",
+      "#wax",
+      "#economiacircolare"
+    ],
+    "posting_times": {
+      "Instagram": "18:00-20:00 (dopo il lavoro)",
+      "Facebook": "12:00-14:00 e 19:00-21:00",
+      "LinkedIn": "08:30-10:00 (martedì-giovedì)"
+    },
+    "visual": {
+      "atmosfera": "calda, concreta, artigianale, accogliente",
+      "soggetti": "mani che lavorano, tessuti wax, volti, macchine da cucire",
+      "colori": "toni caldi e terrosi, blu notte, giallo ocra, rosso wax"
+    },
+    "cta": [
+      "🧵 Vieni a trovarci in laboratorio",
+      "✂️ Impara a cucire con noi",
+      "🎁 Regala un oggetto che ha una storia",
+      "🤝 Sostieni il progetto"
+    ],
+    "reach_factor": 0.02,
+    "platform_priority": [
+      "Instagram",
+      "Facebook"
+    ],
+    "sector": "sociale_artigianale",
+    "advice": "Posiziona CreAzioni Migranti come il punto di riferimento per la comunità di Cremona. Tono caldo e accogliente, ma concreto.",
+    "sandbox": "cooperativa_cremona",
+    "organizzazione": "CreAzioni Migranti",
+    "canali_prioritari": [
+      "Instagram",
+      "Facebook"
+    ],
+    "valori": [
+      "sociale",
+      "inclusiva",
+      "sostenibile",
+      "circolare"
+    ],
+    "parole_chiave": [
+      "laboratorio",
+      "mani",
+      "mestiere",
+      "comunità",
+      "seconda vita",
+      "riparare",
+      "imparare",
+      "stare insieme",
+      "creare",
+      "condividere",
+      "intrecciare",
+      "competenze",
+      "opportunità",
+      "percorsi",
+      "artigianale",
+      "creazioni",
+      "tessuto",
+      "economia circolare",
+      "punto cucito",
+      "pezzo unico"
+    ]
+  },
+  "positioning": "============================================================\n📊 POSIZIONAMENTO STRATEGICO — CreAzioni Migranti\n============================================================\n\n🎯 TARGET PRIMARIO\n  bambini\n\n🎯 TARGET SECONDARI\n  - Famiglie cremonesi\n  - Appassionati di artigianato e cucito\n  - Sostenitori dell'economia circolare\n\n📱 PIATTAFORME PRIORITARIE\n  - Instagram\n  - Facebook\n\n🏷️ HASHTAG RACCOMANDATI\n  1. #sartoriasociale\n  2. #cucito\n  3. #riparare\n  4. #creazioni\n  5. #wax\n  6. #economiacircolare\n\n📍 LOCATION\n  Via Bonomelli 11, 26100 Cremona\n\n⏰ ORARI CONSIGLIATI\n  Instagram: 18:00-20:00 (dopo il lavoro)\n  Facebook: 12:00-14:00 e 19:00-21:00\n\n💡 CONSIGLIO DI POSIZIONAMENTO\n  Posiziona CreAzioni Migranti come il punto di riferimento per la comunità\n  di Cremona che cerca un luogo dove imparare, creare e stare insieme.\n  Usa un tono caldo e accogliente, ma concreto: racconta le mani che\n  lavorano, non solo i risultati.\n\n🎨 VALORI DA COMUNICARE\n  sociale, inclusiva, sostenibile, circolare\n\n📞 CONTATTI\n  WhatsApp: +39 388 822 6958\n  Email: creazioni.migranti@cosper.coop\n  Instagram: @creazionimigranti\n\n============================================================",
+  "web_insights": {
+    "news": [
+      {
+        "title": "L'atelier dei bambini: cucito creativo per bambini 6-13 anni",
+        "snippet": "Di:  Centro Remida\n\n### Dettagli Evento\n\n 16 Febbraio 2025 14:00     -   16:00\n\n##### Posti totali: 7\n\nNuova edizione!Un’occasione unica per avvicinarsi ad una vera e propria arte, quella del cucito. ",
+        "url": "https://www.centroremida.it/evento/atelier-bambini-cucito",
+        "source": "www.centroremida.it",
+        "date": ""
+      },
+      {
+        "title": "Workshop di cucito creativo mamma – figliə – Arricrèa",
+        "snippet": "Un laboratorio speciale pensato per i bambini che sono ancora troppo piccoli per utilizzare la macchina da cucire da soli, ma che, con l’aiuto di mamma, papà o nonna, potranno creare un oggetto unico ",
+        "url": "https://arricrea.org/events/workshop-di-cucito-creativo-mamma-figli%C9%99",
+        "source": "arricrea.org",
+        "date": ""
+      },
+      {
+        "title": "Laboratori creativi per bambini a Milano",
+        "snippet": "Rubriche\n Eventi\n Campus\n In città\n Corsi\n Salute\n Famiglia\n Scuola\n Vacanze\n\n Tutti gli eventi\n Teatro\n Al Museo con i bambini\n Laboratori creativi\n Pasqua\n Eventi gratis\n Fuori porta\n Con mamma e pa",
+        "url": "https://www.milanoperibambini.it/agenda/laboratori-creativi-bambini.html",
+        "source": "www.milanoperibambini.it",
+        "date": ""
+      },
+      {
+        "title": "Guida Al Cucito Per Bambini | Produzionimproprie",
+        "snippet": "## Le mie esperienze nei laboratori di cucito per bambini\n\nMi è capitato un paio di volte di partecipare a delle iniziative di alcune associazioni della zona e di tenere dei laboratori di cucito per b",
+        "url": "https://produzionimproprie.com/cucito-per-bambini",
+        "source": "produzionimproprie.com",
+        "date": ""
+      },
+      {
+        "title": "L'atelier dei bambini: cucito creativo per bambini 6-13 anni - Centro Remida",
+        "snippet": "Di:  Centro Remida\n\n### Dettagli Evento\n\n 16 Febbraio 2025 14:00     -   16:00\n\n##### Posti totali: 7\n\nNuova edizione!Un’occasione unica per avvicinarsi ad una vera e propria arte, quella del cucito. ",
+        "url": "https://www.centroremida.it/evento/atelier-bambini-cucito",
+        "source": "www.centroremida.it",
+        "date": ""
+      }
+    ],
+    "trending_hashtags": [
+      "#Evento",
+      "#Alle",
+      "#Cucito",
+      "#Bambini",
+      "#Dalle"
+    ],
+    "keywords": [
+      "bambini",
+      "evento",
+      "dalle",
+      "alle",
+      "cucito",
+      "che",
+      "laboratori",
+      "eventi",
+      "dell",
+      "creativo"
+    ],
+    "competitors": [],
+    "related_events": [],
+    "images": [
+      "https://www.centroremida.it/wp-content/uploads/2022/02/latelier-dei-bambini-1-1.png",
+      "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3871524584118686424",
+      "https://i.pinimg.com/736x/21/30/83/21308302ceceff9993622c0eb716a9d2.jpg",
+      "https://mosaicidibarbara.com/wp-content/uploads/2024/09/Dettaglio_corso_720x720_laboratorio_cucito.png",
+      "https://percorsiconibambini.it/hero/wp-content/uploads/sites/257/2021/02/lab-cucito-hero-3-768x1024.jpg"
+    ],
+    "raw_results": {
+      "eventi simili a Laboratorio di cucito creativo per bambini": {
+        "results": [
+          {
+            "title": "L'atelier dei bambini: cucito creativo per bambini 6-13 anni",
+            "url": "https://www.centroremida.it/evento/atelier-bambini-cucito",
+            "content": "Di:  Centro Remida\n\n### Dettagli Evento\n\n 16 Febbraio 2025 14:00     -   16:00\n\n##### Posti totali: 7\n\nNuova edizione!Un’occasione unica per avvicinarsi ad una vera e propria arte, quella del cucito. In questo laboratorio i bambini potranno sperimentarsi in questa nuova esperienza in modo divertente, iniziando a realizzare una loro piccola creazione.\n\nCon l’obiettivo di creare un vero e proprio percorso di apprendimento, abbiamo progettato 5 divertentissime giornate da passare insieme. [...] Salta al contenuto\n\n0.00€  0 \n\nNo products in the cart.\n\nFacebook   YouTube\n\nFacebook   YouTube\n\nlogo Associazione Remida\n\n0.00€  0 \n\nNo products in the cart.\n\nContattaci\n\nlogo Associazione Remida\n\nlaboratorio cucito\n\n## L’atelier dei bambini: cucito creativo per bambini 6-13 anni\n\n### Data dell'evento:\n\n16 Febbraio 2025\n\n### Orario dell'evento:\n\n14:00\n\n### Luogo dell'evento:\n\nCentro Remida Via Brambilla 2 Inzago LOMBARDIA Italia\n\n### Calcola il percorso per arrivare:\n\nAGGIUNGI AL CALENDARIO [...] 🪆 domenica 19 gennaio 2025 dalle 14.00 alle 16.00: Conosciamo gli strumenti e creiamo un cuscino  \n 🐻 domenica 26 gennaio 2025 dalle 14.00 alle 16.00: Vestiamo una bambola  \n 💚 domenica 02 febbraio 2025 dalle 14.00 alle 16.00: Creiamo un pupazzo  \n 💚 domenica 09 febbraio 2025 dalle 14.00 alle 16.00: Un dolce pensiero per San Valentino  \n 🐶 domenica 16 febbraio 2025 dalle 14.00 alle 16.00: Creiamo una borsetta\n\nE infine…MOSTRA DI TUTTE LE FANTASTICHE CREAZIONI 🤩",
+            "pubdate": "",
+            "score": 0.82895297
+          },
+          {
+            "title": "I laboratori di cucito creativo per bambini e ragazzi da 5 a 16 anni",
+            "url": "https://www.romadeibambini.it/eventi-bambini-roma/i-laboratori-di-cucito-creativo-per-bambini-e-ragazzi-da-5-a-16-anni",
+            "content": "Workshop sempre diversi!  \n Gli appuntamenti del fine settimana sono studiati per stimolare i piccoli creativi a realizzare cose e capi sempre diverse, non porre limite alla fantasia e applicando diverse tecniche di ricamo e cucito.  \n Qualsiasi cosa che viene realizzata può essere portata a casa, indossata o regalata! [...] I laboratori di cucito creativo sono semplici ma efficaci, divertenti e costruttivi.  \n Qualsiasi piccolo creativo può partecipare ed esprimersi attraverso l’arte del cucito o del ricamo sfruttando a pieno le proprie potenzialità manuali e la propria fantasia. [...] Verranno usate stoffe, aghi, carta modelli e idee bizzarre, insegnate le basi di qualsiasi antica tecnica sartoriale e impresse le prime basi di ciò che vuol dire “fashion”. Saranno sviluppate stimolate le particolari doti tattili visive di ogni bambino, e per finire, per chi vorrà, verrà accompagnato nella creazione del primo abito da favola! Tutto questo è creatività, amore per la moda, e tanto tanto divertimento.",
+            "pubdate": "",
+            "score": 0.72629017
+          },
+          {
+            "title": "Workshop di cucito creativo mamma – figliə – Arricrèa",
+            "url": "https://arricrea.org/events/workshop-di-cucito-creativo-mamma-figli%C9%99",
+            "content": "Un laboratorio speciale pensato per i bambini che sono ancora troppo piccoli per utilizzare la macchina da cucire da soli, ma che, con l’aiuto di mamma, papà o nonna, potranno creare un oggetto unico da portare a casa. Insieme impareranno a tagliare il tessuto e, utilizzando la macchina da cucire, realizzeranno un accessorio pratico e personalizzato. [...] Vai al contenuto\n\nArricrèa\n\n# Arricrèa\n\n## Workshop di cucito creativo mamma – figliə\n\nWorkshop di cucito creativo mamma - figliə\n\n### Quando\n\nMaggio 11, 2025\n\n16:00 pm – 18:00 pm\n\nDownload ICS Google Calendar iCalendar Office 365 Outlook Live\n\n### Prenotazioni\n\nPrenotazioni chiuse\n\n### Dove\n\nArricrea  \n Via Luca Valerio, 13, Roma, Lazio, 00146, Roma\n\n### Tipologia evento\n\n Eventi per Bambini\n\nWorkshop di Cucito Creativo Mamma – Figliə [...] Un’esperienza che unisce creatività, manualità e affetto, regalando un ricordo prezioso da portare con sé per sempre.\n\nUn’opportunità ideale per imparare, divertirsi e costruire insieme qualcosa di speciale!\n\nPrenotati! Posti limitati!\n\nDOVE: nei locali di Arricrèa in via Luca Valerio 13, 00146 – Roma\n\nQUANDO: Domenica 11 Maggio 2025, dalle ore 16:00 alle ore 18:00\n\nCONTRIBUTO ASSOCIATIVO: 50€ coppia genitore-bambino, riservato ai soci (bambino).",
+            "pubdate": "",
+            "score": 0.685971
+          },
+          {
+            "title": "Laboratori creativi per bambini a Milano",
+            "url": "https://www.milanoperibambini.it/agenda/laboratori-creativi-bambini.html",
+            "content": "Rubriche\n Eventi\n Campus\n In città\n Corsi\n Salute\n Famiglia\n Scuola\n Vacanze\n\n Tutti gli eventi\n Teatro\n Al Museo con i bambini\n Laboratori creativi\n Pasqua\n Eventi gratis\n Fuori porta\n Con mamma e papà\n Open day e inizio corsi\n Carnevale\n Al ristorante\n Musica\n 0-3 anni\n 3-6 anni\n 6-10 anni\n 10 in su\n Genitori ed educatori\n Familydays events\n Online\n Halloween\n Natale\n Mostre\n\n# Laboratori creativi bambini [...] Resta sempre aggiornato sui laboratori per bambini a Milano: in questa sezione dell’agenda eventi vi segnaleremo tutti gli appuntamenti in città e tutte le attività per bambini organizzati durante i weekend. Si tratta di laboratori  proposti da associazioni culturali, associazioni sportive, librerie per bambini, musei e teatri. Alcuni laboratori sono a pagamento, altri laboratori sono a ingresso gratuito. Segnaleremo per ogni evento il costo del laboratorio e i contatti per avere maggiori [...] 20\n\nSet\n\n2026\n\n## Un’ottima idea GRATIS per una gita da Milano: torna PiG – Passa il Gioco! al Parco di Monza\n\n20-09-2026 10:00 -22:00\n\nCascina Costa Alta\n\nEvento gratuito a monza\n\n Dettagli\n\n20\n\nSet\n\n2026\n\n## La Fondazione Feltrinelli per i bambini e le famiglie - torna l'isolachenonc'è\n\n20-09-2026 11:00 -19:00\n\nMilano\n\nvedi info\n\nisolachenonce  per i bambini e le famiglie \n\n Dettagli\n\n20\n\nSet\n\n2026\n\n## STEP FuturAbility District: Sunday@STEP - i laboratori a ingresso gratuito per le famiglie",
+            "pubdate": "",
+            "score": 0.5786631
+          },
+          {
+            "title": "Guida Al Cucito Per Bambini | Produzionimproprie",
+            "url": "https://produzionimproprie.com/cucito-per-bambini",
+            "content": "## Le mie esperienze nei laboratori di cucito per bambini\n\nMi è capitato un paio di volte di partecipare a delle iniziative di alcune associazioni della zona e di tenere dei laboratori di cucito per bambini: abbiamo fatto una borsa riciclando delle vecchie magliette e abbiamo cucito dei pupazzetti di pezza a forma di balena. [...] Il successo di pubblico di questi laboratori è stato tale che abbiamo fatto fatica a far partecipare tutti. La macchina da cucire ha esercitato su di loro un fascino che non immaginavo e tutti hanno mostrato con orgoglio i loro manufatti sbilenchi dimostrando che un approccio pratico e ludico stimola i bambini a esplorare le proprie capacità creative, rendendo l’apprendimento un’esperienza coinvolgente e positiva.\n\n## Come Insegnare ai Bambini a Cucire in Modo Sicuro",
+            "pubdate": "",
+            "score": 0.56719416
+          }
+        ],
+        "images": [
+          "https://www.centroremida.it/wp-content/uploads/2022/02/latelier-dei-bambini-1-1.png",
+          "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3871524584118686424",
+          "https://i.pinimg.com/736x/21/30/83/21308302ceceff9993622c0eb716a9d2.jpg",
+          "https://mosaicidibarbara.com/wp-content/uploads/2024/09/Dettaglio_corso_720x720_laboratorio_cucito.png",
+          "https://percorsiconibambini.it/hero/wp-content/uploads/sites/257/2021/02/lab-cucito-hero-3-768x1024.jpg"
+        ]
+      },
+      "Laboratorio di cucito creativo per bambini Cremona 15 Novembre": {
+        "results": [
+          {
+            "title": "L'atelier dei bambini: cucito creativo per bambini 6-13 anni - Centro Remida",
+            "url": "https://www.centroremida.it/evento/atelier-bambini-cucito",
+            "content": "Di:  Centro Remida\n\n### Dettagli Evento\n\n 16 Febbraio 2025 14:00     -   16:00\n\n##### Posti totali: 7\n\nNuova edizione!Un’occasione unica per avvicinarsi ad una vera e propria arte, quella del cucito. In questo laboratorio i bambini potranno sperimentarsi in questa nuova esperienza in modo divertente, iniziando a realizzare una loro piccola creazione.\n\nCon l’obiettivo di creare un vero e proprio percorso di apprendimento, abbiamo progettato 5 divertentissime giornate da passare insieme. [...] 🪆 domenica 19 gennaio 2025 dalle 14.00 alle 16.00: Conosciamo gli strumenti e creiamo un cuscino  \n 🐻 domenica 26 gennaio 2025 dalle 14.00 alle 16.00: Vestiamo una bambola  \n 💚 domenica 02 febbraio 2025 dalle 14.00 alle 16.00: Creiamo un pupazzo  \n 💚 domenica 09 febbraio 2025 dalle 14.00 alle 16.00: Un dolce pensiero per San Valentino  \n 🐶 domenica 16 febbraio 2025 dalle 14.00 alle 16.00: Creiamo una borsetta\n\nE infine…MOSTRA DI TUTTE LE FANTASTICHE CREAZIONI 🤩 [...] Salta al contenuto\n\n0.00€  0 \n\nNo products in the cart.\n\nFacebook   YouTube\n\nFacebook   YouTube\n\nlogo Associazione Remida\n\n0.00€  0 \n\nNo products in the cart.\n\nContattaci\n\nlogo Associazione Remida\n\nlaboratorio cucito\n\n## L’atelier dei bambini: cucito creativo per bambini 6-13 anni\n\n### Data dell'evento:\n\n16 Febbraio 2025\n\n### Orario dell'evento:\n\n14:00\n\n### Luogo dell'evento:\n\nCentro Remida Via Brambilla 2 Inzago LOMBARDIA Italia\n\n### Calcola il percorso per arrivare:\n\nAGGIUNGI AL CALENDARIO",
+            "pubdate": "",
+            "score": 0.61140573
+          },
+          {
+            "title": "Laboratori d'Arte - ArteInPara",
+            "url": "https://www.arteinpara.it/laboratoricreativi",
+            "content": "Novembre 2026  \n– Ceramic Lab crea il tuo Vasetto invernale e vieni a ritirarlo cotto e pronto da usare per le  tue composizioni, sabato 14 novembre dalle 10.30 alle 12.30  \n– Cooking Lab, domenica 15 novembre vieni a creare una tavolozza d’artista golosa a cura di Monelli in Cucina dalle 10.30 alle 12.30  \n– Family  Lab, sabato 21 novembre  Acquerello autunnale dalle 10.30 alle 12.30  \n– Wood Lab Decorazioni per il tuo albero di natale artistiche sabato 28 novembre dalle 10.30 alle 12.30 [...] Febbraio 2027  \n– Baby Arte Carnevale 6 Febbraio dalle 9 alle 10\n\nMarzo 2027  \n– Baby Arte Pasqua 20 Marzo dalle 9 alle 10\n\n## Laboratori Creativi per Bambini\n\n€20\n\n Laboratori solo per bambini\n Materiale Incluso\n\n## Family Lab Genitore e un figlio\n\n€40\n\n Laboratori a 4 mani genitore e figlio\n Materiale Incluso\n\n## Family Lab Genitore e due figli\n\n€45\n\n Laboratori a 4 mani genitore e due figli\n Materiale Incluso\n\n## Wood e Ceramic Lab per bambini\n\n€30 [...] ArteInPara\n\nSeleziona una pagina\n\n# Laboratori\n\nOrganizziamo Laboratori   \nAperti a Tutti il Sabato e Domenica\n\n#### I nostri laboratori creativi sono l’occasione per imparare qualcosa di nuovo e stimolare la creatività. Organizziamo laboratori per bambini, ragazzi e adulti.\n\n#### In due ore potrai imparare, guidato da esperti, a modellare la ceramica, creare una decorazione per la tua cameretta, potrai divertirti con lo slime o a trattare e trasformare la carta come non pensavi fosse possibile.",
+            "pubdate": "",
+            "score": 0.4295017
+          },
+          {
+            "title": "Corso di cucito creativo per bambini e ...",
+            "url": "https://www.instagram.com/p/DPic1jVDAS-",
+            "content": "Durante gli incontri scopriremo tante tecniche e attività diverse: Uncinetto – creare con fili, colori e attenzione. Cucito – tagliare,",
+            "pubdate": "",
+            "score": 0.40839532
+          },
+          {
+            "title": "Cremona: Corso di taglio e cucito base - Informagiovani",
+            "url": "https://informagiovani.comune.cremona.it/content/cremona-corso-di-taglio-e-cucito-base",
+            "content": "che per motivi di lavoro, studio o hobby vogliono apprendere le più comuni tecniche del taglio e cucito ed esprimere la propria creatività per avere articoli sempre nuovi e unici tutto l’anno. [...] ## Sede\n\nPresso Palazzo Cattaneo\n\nVia Oscasali 3 O, a scelta dell’allievo all’iscrizione, in video conferenza\n\n26100 Cremona CR\n\nTel. 0372 1871133/ 329 5853231\n\ninfo@universitapopolaredicremona.it\n\n## Ufficio di riferimento\n\nCremona: Università Popolare di Cremona\n\n## Destinatari dell'attività\n\ntutti i cittadini\n\n## Programma / Calendario dell'attività [...] Accedi al calendario eventi del comune di cremona  \nAccedi al calendario eventi di cremona university  \nAccedi al calendario eventi di cremona turismo  \nAccedi al calendario eventi del sistema museale  \nAccedi al calendario eventi del museo del violino\n\nAccedi al calendario eventi del teatro ponchielli\n\nAccedi al calendario eventi di Cremona Fiere\n\n#### SPORTELLI SPECIALISTICI\n\nInformalavoro\n\nInformascuola\n\nServizi per Universitari\n\nServizio Civile\n\nMobilità Internazionale\n\n#### RETE",
+            "pubdate": "",
+            "score": 0.3775871
+          },
+          {
+            "title": "Laboratori pomeridiani per bambini e ragazzi - La Vita al Centro",
+            "url": "https://www.lavitaalcentro.org/laboratori-pomeridiani-2026-27",
+            "content": "MODELLAGGIO CON LA CRETA. Laboratorio di creazione con la creta  \n Fascia di età: per i bambini di tutte le classi elementari  \n Quando: venerdì dalle 14,30 alle 16,30 ( possibilità di uscita alle 15,30 per chi lo desidera)\n\n#### Per la scuola media\n\nFUMETTO E ILLUSTRAZIONE. Laboratorio di narrazione per immagini  \n con maestra Amanda e maestro Tommaso  \n Quando: martedì dalle 15,00 alle 16,30 [...] TEATRO (R)EVOLUTION. Laboratorio esperienziale di teatro  \n Fascia di età: per i bambini di tutte le classi elementari  \n Quando: mercoledì dalle 17,00 alle 18,15\n\nLAVORO MANUALE. Laboratorio di tecniche manuali e creative  \n Fascia di età: per i bambini di tutte le classi elementari  \n Quando: giovedì dalle 14,00 alle 16,30 [...] ManiminiGESTORE2026-07-09T06:06:11+01:00\n\nEVOLUTIONGESTORE2026-07-09T06:47:36+01:00\n\n  \n Quando: martedì dalle 17,00 alle 18,30\n\n#### Per la scuola elementare\n\nMANI IN CRESCITA. Laboratorio per lo sviluppo della manualità fine  \n Fascia di età: per i bambini di prima e seconda elementare  \n Quando: lunedì dalle 14,30 alle 16,30\n\nENGLISH TALES. Laboratorio linguistico creativo in inglese  \n Fascia di età: per i bambini di tutte le classi elementari  \n Quando: martedì dalle 14,30 alle 16,30",
+            "pubdate": "",
+            "score": 0.35662642
+          }
+        ],
+        "images": [
+          "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3738677460184350641",
+          "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3977392042082580078",
+          "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3954835920749263748",
+          "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3738677460092070444",
+          "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3961418307229339074"
+        ]
+      },
+      "strategie per far conoscere sartoria evento": {
+        "results": [
+          {
+            "title": "Come promuovere un evento in modo efficace",
+            "url": "https://congressiconvegni.it/2019/03/promuovere-un-evento-modo-efficace",
+            "content": "Per far conoscere un evento al maggior numero di persone possibili ci sono diversi strumenti, ma per capire su quali puntare è necessario passare per una fase di analisi, per poter elaborare una strategia di comunicazione efficace.\n\nPrima di tutto bisogna individuare e definire tre elementi:\n\n obiettivo dell’evento\n caratteristiche e proposta differenziante rispetto altri eventi analoghi\n pubblico a cui si rivolge [...] Il consiglio è quello di fare un’analisi dei punti “strategici”, tenendo ben presente quelli che potrebbero essere gli interessi delle persone che frequentano determinati luoghi, e quali di questi interessi potrebbero incontrarsi con il tema dell’evento.\n\nEssere presenti sui social network prima, dopo e durante l’evento è fondamentale per garantirne il successo.\n\nAnche in questo caso, l’analisi del target e degli obiettivi è fondamentale per stabilire quali social media utilizzare. [...] Anche se abbiamo già detto che bisogna elaborare la strategia in base alla tipologia di evento, ci sono alcuni strumenti di cui l’addetto stampa non può fare a meno in nessun caso.\n\n### 3. La mailing list\n\nSi tratta molto semplicemente di una lista di indirizzi. La mailing list è lo strumento principale di un buon ufficio stampa, e per essere efficace deve essere aggiornata e completa.",
+            "pubdate": "",
+            "score": 0.48996773
+          },
+          {
+            "title": "Come gestire la comunicazione per i tuoi eventi di moda",
+            "url": "https://www.launchmetrics.com/it/risorse/blog/comunicatostampa2-0",
+            "content": "Le azioni di comunicazione sono fondamentali affinché il messaggio che vuoi comunicare arrivi chiaramente al tuo target. Cura ogni aspetto e sfrutta le opportunità che le soluzioni tecnologiche possono offrirti. Ricorda: il segreto sta sempre nel combinare le tue comunicazioni digitale con le azioni ‘offline’ per una strategia che funzioni a tutto tondo! Ogni buon piano di comunicazione inizia con la progettazione delle strategie ‘on’e ‘off’ e finisce con il monitoraggio dei risultati. [...] degli Influencer). Assicurati di collaborare con qualcuno che impersoni i valori del prodotto che vuoi promuovere e che si rivolga al tuo target di interesse. La comunicazione con il tuo target finale passa attraverso la comunicazione con il tuo/i tuoi influencer. Per far invaghire il beniamino digitale del tuo progetto, sorprendilo, coccolalo e offrigli un’esperienza personalizzata. Fagli provare il tuo prodotto: che sia un regalo o un campione di prodotto inviato, l’esperienza concreta è [...] Chi lavora all’interno del mondo della moda, conosce bene l’importanza di queste giornate, dove i brand presentano la loro ultima collezione. In occasione di un evento così importante, il tipo di comunicazione deve essere adeguato: si tratta dell’invito formale per i media e i giornalisti. È un documento che viene inviato con anticipo affinché i giornalisti possano incorporarlo senza problema nel loro piano editoriale. Possiamo inviarlo dalle due settimane prima, fino a un mese prima, per",
+            "pubdate": "",
+            "score": 0.47548413
+          },
+          {
+            "title": "20 strategie chiave di marketing per eventi",
+            "url": "https://www.naboo.app/it-it/blog/strategie-marketing-eventi",
+            "content": "Il passaparola è amplificato quando incentivato. Offrite ai partecipanti attuali o ai clienti fedeli un piccolo premio (ad esempio, uno sconto, accesso esclusivo) per la segnalazione di nuove iscrizioni. I brand ambassador agiscono come voci fidate all'interno delle loro reti professionali, spesso convincendo i potenziali clienti più efficacemente di un contatto diretto aziendale, un modello che funziona bene anche nella cultura del network professionale italiano. [...] Le strategie di marketing per eventi di successo partono da una profonda conoscenza del pubblico. Invece di mirare a grandi gruppi industriali, identificate i ruoli lavorativi precisi, le problematiche e lo stadio del ciclo di vita del cliente del vostro partecipante ideale. Utilizzate i dati del vostro CRM per segmentare i potenziali partecipanti in gruppi distinti (ad esempio, potenziali clienti, clienti attuali, partner) e adattate di conseguenza la comunicazione e i canali. Questo approccio [...] La strategia più efficace per aumentare rapidamente la partecipazione agli eventi prevede il lancio di campagne pubblicitarie a pagamento altamente mirate, combinate con forti tattiche di urgenza, come livelli di prezzo a tempo limitato e promemoria sulle scadenze imminenti per l'iscrizione, pratiche che ottengono ottimi risultati anche per eventi locali, dalle sagre di paese ai piccoli workshop professionali.",
+            "pubdate": "",
+            "score": 0.4126491
+          },
+          {
+            "title": "Marketing degli eventi: dall'idea all'esecuzione",
+            "url": "https://mailchimp.com/it/resources/event-marketing",
+            "content": "Email marketing: questa strategia sarà la tua linea diretta con i potenziali partecipanti. Sviluppa una serie di email che guidino i destinatari dalla consapevolezza all'iscrizione. Personalizza i contenuti in base ai segmenti dei destinatari (ad esempio, i partecipanti passati, i nuovi potenziali clienti). Scrivi email per offrire contenuti esclusivi oppure offerte in anteprima, creando un senso di esclusività. [...] Perché una strategia di marketing degli eventi abbia successo, deve essere come una macchina ben oliata, in cui ogni componente lavora in modo efficiente per raggiungere il successo del tuo evento.\n\nIl concept del tuo evento è il fondamento di tutta la tua strategia. Dovrebbe essere in linea con gli obiettivi della tua azienda e suscitare interesse presso il tuo pubblico target. Una volta consolidata la tua idea, questo diventa la forza trainante per tutte le altre decisioni. [...] Un altro aspetto fondamentale della strategia di marketing del tuo evento è la collaborazione con fornitori, sponsor e partner. Puoi migliorare il concetto del tuo evento, ampliare la tua portata promozionale e, persino, aiutarti con la definizione del budget attraverso sponsorizzazioni o contributi che non coinvolgono denaro.\n\nQuando cerchi delle collaborazioni:",
+            "pubdate": "",
+            "score": 0.35033303
+          },
+          {
+            "title": "Roadshow Marketing: Strategie, Vantaggi e Come organizzare un Evento di Successo - Alca Marketing",
+            "url": "https://alcamarketing.it/roadshow",
+            "content": "Promozione dell’evento. L’utilizzo di canali come social media, email marketing e PR consente di raggiungere un pubblico molto ampio. È importante promuovere l’evento, facendo sapere al pubblico dove e quando si svolgerà per aumentarne la portata;\n Valutazione dei risultati. Durante e dopo l’evento, occorre raccogliere dati sulle performance e feedback. Le informazioni da monitorare includono il numero dei partecipanti, i contatti acquisiti e il sentiment del pubblico. [...] Mondo Convenienza Street Tour. Con l’obiettivo di migliorare la brand awareness e coinvolgere il pubblico, il marchio ha trasformato le strade cittadine in showroom mobili. Utilizzando truck personalizzati per esporre prodotti e interagire con i consumatori, il roadshow ha attirato migliaia di visitatori, incrementato i lead e portato l’esperienza d’acquisto direttamente al target, abbattendo le barriere logistiche. [...] +39 345 3921896   info@alcamarketing.it\n\n Store\n Street\n Horeca\n Casi di successo\n Blog\n Contattaci\n\n# Roadshow Marketing: Strategie, Vantaggi e Come organizzare un Evento di Successo\n\n \n\nIl marketing tour, o roadshow marketing, consente di creare esperienze immersive e coinvolgenti, influenzando in modo diretto le decisioni d’acquisto dei clienti. Trattasi di una delle strategie più efficaci per portare il brand direttamente a contatto con il pubblico.",
+            "pubdate": "",
+            "score": 0.25819314
+          }
+        ],
+        "images": [
+          "https://www.bsness.com/wp-content/uploads/2026/03/investimenti-costi-sartoria-featured-1080x630.jpg",
+          "https://www.softwarebusinessplan.it/wp-content/uploads/2025/09/featured-sbp-245-1080x598.jpg",
+          "https://lookaside.instagram.com/seo/google_widget/crawler/?media_id=3779492816154556389",
+          "https://www.bsness.com/wp-content/uploads/2026/01/sartoria-cap4.jpg",
+          "https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=1475505507909828"
+        ]
+      }
+    }
+  },
+  "sandbox": "cooperativa_cremona"
+}

@@ -1,0 +1,62 @@
+BRIEF:
+Evento: presentazione libro. Data: 15 novembre 2026. Luogo: Milano.
+
+OUTPUT:
+### ANALISI
+- Target: presentazione libro
+- Mood: entusiasmo
+- Concept: Milano
+
+### INSTAGRAM
+**Hook:** Scopri il nuovo libro che cambierà la tua vita!
+**Corpo:** Un'esperienza unica e emozionante che ti porterà in un mondo di scoperta e crescita.
+**CTA:** Acquista ora!
+**Visual:** Una foto di un libro con un'immagine di Milano nel background.
+**Hashtag:** #presentazione, #libro, #Milano
+
+### LINKEDIN
+**Hook:** Unisciti alla nostra comunità di lettori e scopri il nuovo libro!
+**Corpo:** Un'opportunità unica per connettersi con altri appassionati di lettura e scoprire nuove idee.
+**CTA:** Iscriviti ora!
+**Visual:** Un'immagine di una persona leggendo un libro con un'immagine di Milano nel background.
+**Hashtag:** #presentazione, #libro, #comunita
+
+### X (TWITTER)
+**Tweet 1:** Scopri il nuovo libro che cambierà la tua vita! #presentazione #libro #Milano
+**Tweet 2:** Unisciti alla nostra comunità di lettori e scopri il nuovo libro! #presentazione #libro #comunita
+**Tweet 3:** Acquista ora e scopri il mondo di scoperta e crescita! #presentazione #libro #Milano
+**Tweet 4:** Non perdere l'opportunità di connettersi con altri appassionati di lettura! #presentazione #libro #comunita
+**Tweet 5:** Il nuovo libro è arrivato! Scopri cosa c'è dentro! #presentazione #libro #Milano
+
+### FACEBOOK
+**Hook:** Scopri il nuovo libro che cambierà la tua vita!
+**Corpo:** Un'esperienza unica e emozionante che ti porterà in un mondo di scoperta e crescita.
+**CTA:** Acquista ora!
+**Visual:** Una foto di un libro con un'immagine di Milano nel background.
+**Hashtag:** #presentazione, #libro, #Milano
+
+### TIKTOK
+**Hook:** Scopri il nuovo libro che cambierà la tua vita!
+**Script:** Un'esperienza unica e emozionante che ti porterà in un mondo di scoperta e crescita.
+**CTA:** Acquista ora!
+
+### STORIES (5 frame)
+1. Una foto di un libro con un'immagine di Milano nel background.
+2. Un'immagine di una persona leggendo un libro.
+3. Un'esperienza unica e emozionante che ti porterà in un mondo di scoperta e crescita.
+4. Acquista ora!
+5. Un'opportunità unica per connettersi con altri appassionati di lettura.
+
+### CALENDARIO
+Giorno -2: 13 novembre 2026
+Giorno -1: 14 novembre 2026
+Giorno evento: 15 novembre 2026
+Giorno +1: 16 novembre 2026
+
+### RIASSUNTO
+- Obiettivi: Promuovere il nuovo libro e connettere con la comunità di lettori.
+- KPI: Il numero di persone che hanno acquistato il libro e la quantità di engagement sui social media.
+- Budget: non specificato
+
+CATEGORY: default
+TIMESTAMP: 2026-10-18T14:15:10.552539

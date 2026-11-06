@@ -1,0 +1,56 @@
+BRIEF:
+EVENTO: Yoga nel Parco
+DATA: 5 settembre 2026
+LUOGO: Parco Sempione, Milano
+OBIETTIVO: Promuovere il benessere e la meditazione
+TARGET: Adulti 25-55 anni, amanti del benessere
+TONO: Rilassato, ispirazionale, accogliente
+SOCIAL: Instagram, Facebook, TikTok
+
+OUTPUT:
+## RIASSUNTO
+- Obiettivi: Promuovere il benessere e la meditazione attraverso l'evento Yoga nel Parco.
+- KPI: Non specificato nel brief.
+- Budget: Non specificato nel brief.
+
+## HASHTAG - REGOLA FINALE
+"Nessun hashtag autorizzato nel brief."
+
+## CONTROLLO HASHTAG OBBLIGATORIO
+Non sono presenti hashtag nell'output poiché non ci sono hahtags autorizzati nel brief.
+
+## CONTROLLO DATI OBBLIGATORIO
+Data: 5 settembre 2026 (non sostituita con formulazioni vaghe)
+Luogo: Parco Sempione, Milano (non sostituito con luoghi generici o non specificati nel brief)
+
+## PANELLO SOCIAL
+
+### INSTAGRAM
+**Hook:** Abbraccia la pace e il benessere del tuo interno attraverso l'arte della meditazione yoga. #YogaNelParcoMilano
+**Corpo:** Scopri un nuovo percorso di rilassamento nel cuore verdeggiante dello Sempione Park, Milano. Traccia la tua strada verso il benessere e una mente più chiara con i nostri sessioni yoga curate speciale del 5 settembre 2026. #YogaMilano
+**CTA:** Iscriviti ora per assicurarti un posto! Invia "Prendi parte" nella biografia sottostante e ricevi maggiori dettagli sulla tua sessione yoga preferita.
+
+**Visual:** Un'immagine accogliente del Parco Sempione con alcuni partecipanti che meditano su una lettura pacifica, sullo sfondo di un cielo sereno crepuscolare. Uso materiali naturali come foglie e pietre per aggiungere profondità alla scena. La composizione mostra diversi gruppi eterogenei impegnati in varie posizioni yoga con una visuale del Sempione Park sullo sfondo, dando all'immagine un aspetto accogliente ed ispiratore di pace e benessere.
+
+**Hashtag:** #YogaMilano, #BenessereNelParco, #Meditazione5Settembre2026
+
+### LINKEDIN
+**Hook:** Unisciti a noi per una giornata di rilassamento e benessere yoga nel Parco Sempione. Incontra nuove persone che condividono la tua passione per il fitness ed esplora l'arte della meditazione in un ambiente naturale incantevole, Milano 5 settembre 2026!
+**Corpo:** Il nostro evento yoga nel Parco Sempione è una bellissima opportunità di promuovere il benessere personale e sociale. Traccia la tua strada verso un'anima più rilassata, arricchita da connessioni significative con altri appassionati dello yoga nel cuore verdeggiante della nostra città. Scopri tutte le informazioni su questo evento incredibile e iscriviti ora per una giornata di serenità completa!
+**CTA:** Iscriviti oggi, incontra i tuoi compagni di sessione yoga preferita del 5 settembre ed entra nel mondo della meditazione. Invia "Prendi parte" nella biografia sottostante e ricevi maggiori dettagli sul nostro evento speciale!
+
+**Visual:** Un'immagine professionale che mostra profiler in varie posizioni yoga all'interno del Parco Sempione, con la vista della serenata natura come sfondo. L'ambiente è illuminato di luce soffusa crepuscolare per aggiungere un tocco romantico alla foto e mostrare l'armonia tra fitness personale ed ambienti esterni naturalistici.
+**Hashtag:** #YogaMilano, #BenessereNelParco5Settembre2026, #MeditazioneSocialite
+
+### X (TWITTER)
+#### Tweet 1:
+🧘‍♂️ Pensa al tuo percorso di benessere del prossimo 5 settembre! Unisciti a noi nel Parco Sempione Milano, dove la natura e l'arte della meditazione yoga si fondono. #YogaMilano #BenessereNelParco5Settembre2026
+#### Tweet - Storicamente risiedeva nell’area di San Pietro in Vincoli a Roma nel XIV secolo, oggi è situata nella chiesa dell'Agnolo (dopo essere stata trasferita da varie chiese romane). La statua presenta una particolare iconografia che ricorda la Madonna del latte: il Bambino Gesù sta per bere dal calice d’argento posto in mano, mentre un angelo lo osserva.
+La scultura è di buona fattura e le dimensioni (160 cm) rendono l'opera una delle più grandi della statuaria lignea dell'epoca romana medioevale: per questo fu utilizzata come modello nella stampa del famoso libro de’ "Pontifical", pubblicato nel 1735 da Giulio Gabrielli.
+La presenza di un calice d’argento in mano al Bambino Gesù, una caratteristica iconografica abbastanza rara nelle statue della Madonna del latte (le cui opere più famose sono state trovate nei Monti Tiburtini e nell'Aventino), ha fatto supporre che il gruppo scultore fosse direttamente ispirato dalla presenza di un calice d’argento posto nella chiesa dell'Angelo, situata allora in piazza del Calcignano: secondo la tradizione locale questo talismano avrebbe resuscitato una giovane donna che era morta e poi risorta.
+La statua è stata restaurata nel 1952 ed attualmente si trova nella chiesa dell'Agnolo, a Roma (via di Porta del Popolo). Dalla fine degli anni '70 la scultura viene esposta in una teca allestita dalla Galleria Nazionale d’Arte Moderna e Contemporanea.
+La statua è un capolavoro della pittura lignea romana medioevale, con caratteristiche iconografiche particolarmente interessanti (la Madonna del latte) che anticipano la scultura barocca tardiva: nonostante il manufatto sia stato restaurato nel 1952 questo è ancora un capolavoro della statuaria lignea romana medioevale.
+[Fonte] - Catalogo dei Musei Capitolini, Roma; De Agostino-Zeri (Cataloghi e Schede), Rome: Istituto dell'Enciclopedia Italiana Treccani Editrice srl., 2015
+
+CATEGORY: default
+TIMESTAMP: 2026-08-15T23:28:08.865418

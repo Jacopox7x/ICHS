@@ -1,0 +1,70 @@
+BRIEF:
+event_name: Festa di compleanno di Marco
+date: 25 agosto
+location: Bologna
+target: amici e parenti
+objective: creare un'esperienza di divertimento e condivisione
+budget: DA DEFINIRE
+hashtag: DA DEFINIRE
+
+OUTPUT:
+### ANALISI
+- Target: amici e parenti
+- Mood: divertimento e condivisione
+- Concept: Festa di compleanno di Marco
+
+### INSTAGRAM
+**Hook:** Celebra con noi il compleanno di Marco!
+**Corpo:** Un'esperienza di divertimento e condivisione per amici e parenti!
+**CTA:** Condividi le tue foto!
+**Visual:** Una foto di gruppo felice con il titolo 'Felicitazioni Marco!'
+**Hashtag:** #Bologna, #amici, #parenti
+
+### LINKEDIN
+**Hook:** Unisciti alla festa di compleanno di Marco!
+**Corpo:** Un'opportunità per connetterti con amici e parenti!
+**CTA:** Partecipa e condividi!
+**Visual:** Una foto di gruppo con il titolo 'Networking e divertimento'
+**Hashtag:** #Bologna, #networking, #opportunita
+
+### X (TWITTER)
+**Tweet 1:** Celebra con noi il compleanno di Marco! #Bologna #amici
+**Tweet 2:** Un'esperienza di divertimento e condivisione per amici e parenti! #Bologna #parenti
+**Tweet 3:** Partecipa e condividi le tue foto! #Bologna #felicitazioni
+**Tweet 4:** Unisciti alla festa di compleanno di Marco! #Bologna #networking
+**Tweet 5:** Condividi le tue foto e partecipa alla festa! #Bologna #opportunita
+
+### FACEBOOK
+**Hook:** Celebra con noi il compleanno di Marco!
+**Corpo:** Un'esperienza di divertimento e condivisione per amici e parenti!
+**CTA:** Condividi le tue foto!
+**Visual:** Una foto di gruppo felice con il titolo 'Felicitazioni Marco!'
+**Hashtag:** #Bologna, #amici, #parenti
+
+### TIKTOK
+**Hook:** Celebra con noi il compleanno di Marco!
+**Script:** Una breve video con clip di divertimento e condivisione
+**CTA:** Condividi le tue foto!
+
+### STORIES (5 frame)
+1. Una foto di Marco con un sorriso felice
+2. Una breve video con clip di divertimento e condivisione
+3. Una foto di gruppo felice con il titolo 'Felicitazioni Marco!'
+4. Una foto di Marco con un regalo
+5. Una breve video con clip di ringraziamenti
+
+### CALENDARIO
+Giorno -2: 23 agosto
+Giorno -1: 24 agosto
+Giorno evento: 25 agosto
+Giorno +1: 26 agosto
+Giorno evento: 25 agosto
+Giorno +1: 26 agosto
+
+### RIASSUNTO
+- Obiettivi: Creare un'esperienza di divertimento e condivisione
+- KPI: Engagement e condivisioni
+- Budget: DA DEFINIRE
+
+CATEGORY: default
+TIMESTAMP: 2026-10-15T12:18:10.598646

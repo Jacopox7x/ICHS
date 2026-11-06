@@ -1,0 +1,62 @@
+BRIEF:
+Fiera del mattone il 10 Settembre a Rovigo. Obiettivo attirare lavoratori del ferro da tutta Europa -rivolto a operai e manager. Registro misto, tra il formale e l’amichevole
+
+OUTPUT:
+### ANALISI
+- Target: lavoratori del ferro da tutta Europa
+- Mood: amichevole e professionale
+- Concept: Fiera del mattone
+
+### INSTAGRAM
+**Hook:** Non perdere la Fiera del Mattone!
+**Corpo:** Un evento unico per lavoratori del ferro da tutta Europa!
+**CTA:** Iscriviti ora!
+**Visual:** Una foto di una persona in azione nel sito della fiera
+**Hashtag:** #FieraDelMattone, #Rovigo, #FerroDaTuttaEuropa
+
+### LINKEDIN
+**Hook:** Networking per lavoratori del ferro
+**Corpo:** Un'opportunità per incontrare colleghi e fare business
+**CTA:** Partecipa ora!
+**Visual:** Una foto di una persona in un ambiente di lavoro
+**Hashtag:** #FieraDelMattone, #LavoratoriDelFerro, #Networking
+
+### X (TWITTER)
+**Tweet 1:** Non perdere la Fiera del Mattone! #FieraDelMattone #Rovigo
+**Tweet 2:** Un evento unico per lavoratori del ferro da tutta Europa! #FieraDelMattone #FerroDaTuttaEuropa
+**Tweet 3:** Partecipa ora e fai business! #FieraDelMattone #Networking
+**Tweet 4:** Non perdere l'opportunità di incontrare colleghi! #FieraDelMattone #LavoratoriDelFerro
+**Tweet 5:** La Fiera del Mattone è il posto giusto per te! #FieraDelMattone #FerroDaTuttaEuropa
+
+### FACEBOOK
+**Hook:** Non perdere la Fiera del Mattone!
+**Corpo:** Un evento unico per lavoratori del ferro da tutta Europa!
+**CTA:** Iscriviti ora!
+**Visual:** Una foto di una persona in azione nel sito della fiera
+**Hashtag:** #FieraDelMattone, #Rovigo, #FerroDaTuttaEuropa
+
+### TIKTOK
+**Hook:** Non perdere la Fiera del Mattone!
+**Script:** Un evento unico per lavoratori del ferro da tutta Europa!
+**CTA:** Iscriviti ora!
+
+### STORIES (5 frame)
+1. Una foto di una persona in azione nel sito della fiera
+2. Un'immagine del mattone
+3. Un video di una persona che parla dell'evento
+4. Una foto di una persona che lavora nel sito della fiera
+5. Un'immagine del logo della fiera
+
+### CALENDARIO
+Giorno -2: 8 Settembre
+Giorno -1: 9 Settembre
+Giorno evento: 10 Settembre
+Giorno +1: 11 Settembre
+
+### RIASSUNTO
+- Obiettivi: Attractare lavoratori del ferro da tutta Europa
+- KPI: Number di iscritti e partecipanti
+- Budget: Non specificato
+
+CATEGORY: default
+TIMESTAMP: 2026-10-15T21:24:13.582251

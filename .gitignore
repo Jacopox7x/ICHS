@@ -1,92 +1,32 @@
 # Python
+.venv*/
 venv/
+searxng-venv/
 __pycache__/
 *.pyc
 *.pyo
+*.egg-info/
 .pytest_cache/
-.mypy_cache/
-.ipynb_checkpoints/
 
-# Node
-node_modules/
-npm-debug.log*
-yarn-error.log*
-
-# Env e segreti — MAI in git
+# Env e segreti
 .env
 .env.*
-*.key
-*.pem
-credentials.json
-secrets.json
+!.env.example
 
-# Backup e archivio (singolare E plurale, con wildcard)
-backups/
-backup_*/
-logs_backup/
-.archive/
-*.tar.gz
-*.zip
-*.dmg
-*.bak
-*.bak2
-*.bak3
-*.save
-*.backup
-*.backup2
-*.backup_sera
-*.old
-*~
-
-# Output e cache
-outputs/
-cache/
-dist/
-build/
-*.log
-output_plan_*.txt
-*.duckdb
+# Dati locali (mai su Git)
+data/
+cognee_data/
+search_index/
+*.sqlite
 *.db
+*.log
+models/
 
-# Copie annidate del progetto dentro KB
-iCRAWLER_KNOWLEDGE_BASE_v1.0/backups/
-iCRAWLER_KNOWLEDGE_BASE_v1.0/backups_cleanup/
-
-# Output di test nel SANDBOX
-SANDBOX/**/output_test_*.json
-SANDBOX/**/output_test_*.md
-SANDBOX/**/mio_output.json
-
-# macOS
+# OS / IDE
 .DS_Store
-._*
-
-# IDE
-.vscode/
 .idea/
+.vscode/
 
-# Submodule
-icrawler_weknora/WeKnora/
-
-# Aggiunte post v3.8 (27 ottobre 2026)
-storico_output/
-.bak*
-*.pre_qwen
-*.backup_*
-.venv/
-.coverage
-htmlcov/
-
-# Aggiunte post v3.8 (27 ottobre 2026)
-storico_output/
-*.bak_*
-*.bak_semantic
-*.bak_rules
-*.bak4
-*.pre_qwen
-
-# Backup locali
-*.backup-*
-*.backup_*
-*.stabile_*
-*.bak*
+# Node / build
+node_modules/
+dist/

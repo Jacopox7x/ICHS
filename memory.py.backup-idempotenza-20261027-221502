@@ -1,0 +1,142 @@
+"""Memoria dei piani generati: SQLite + Nomic embedding. Zero dipendenze extra."""
+import sqlite3
+import json
+import time
+from pathlib import Path
+import numpy as np
+import ollama
+
+DB_PATH = Path(__file__).parent / "memory.db"
+MODEL = "nomic-embed-text"
+
+
+def _conn():
+    c = sqlite3.connect(DB_PATH)
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS plans (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            brief TEXT NOT NULL,
+            cliente TEXT NOT NULL,
+            plan_text TEXT NOT NULL,
+            embedding BLOB NOT NULL,
+            created_at REAL NOT NULL
+        )
+    """)
+    c.execute("CREATE INDEX IF NOT EXISTS idx_cliente ON plans(cliente)")
+    return c
+
+
+def _embed(text: str) -> np.ndarray:
+    r = ollama.embeddings(model=MODEL, prompt=text)
+    return np.array(r["embedding"], dtype=np.float32)
+
+
+def _cosine(a: np.ndarray, b: np.ndarray) -> float:
+    """Calcola la similarità coseno, rifiutando vettori non validi."""
+    a = np.asarray(a, dtype=np.float32)
+    b = np.asarray(b, dtype=np.float32)
+
+    if a.ndim != 1 or b.ndim != 1:
+        raise ValueError("Gli embedding devono essere vettori monodimensionali.")
+
+    if a.shape != b.shape:
+        raise ValueError("Gli embedding devono avere dimensioni compatibili.")
+
+    if not np.all(np.isfinite(a)) or not np.all(np.isfinite(b)):
+        raise ValueError("Gli embedding contengono valori non finiti.")
+
+    denom = np.linalg.norm(a) * np.linalg.norm(b)
+    if denom == 0.0:
+        return 0.0
+
+    score = float(np.dot(a, b) / denom)
+
+    if not np.isfinite(score):
+        raise ValueError("La similarità coseno non è un valore finito.")
+
+    return max(-1.0, min(1.0, score))
+
+
+def save_plan(brief: str, cliente: str, plan_text: str) -> int:
+    """Salva brief e piano come nuova versione. Ritorna il nuovo ID."""
+    emb = _embed(brief)
+    c = _conn()
+    cur = c.execute(
+        "INSERT INTO plans (brief, cliente, plan_text, embedding, created_at) VALUES (?,?,?,?,?)",
+        (brief, cliente, plan_text, emb.tobytes(), time.time())
+    )
+    c.commit()
+    c.close()
+    return cur.lastrowid
+
+
+def find_similar(brief: str, cliente: str, top_k: int = 2, min_sim: float = 0.65):
+    """Ritorna i piani più simili sopra soglia, per lo stesso cliente."""
+    if not isinstance(top_k, int) or isinstance(top_k, bool) or top_k <= 0:
+        return []
+
+    if not isinstance(min_sim, (int, float)) or isinstance(min_sim, bool):
+        raise ValueError("min_sim deve essere un numero compreso tra -1 e 1.")
+
+    if not np.isfinite(min_sim) or not -1.0 <= min_sim <= 1.0:
+        raise ValueError("min_sim deve essere un numero finito compreso tra -1 e 1.")
+
+    c = _conn()
+    rows = c.execute(
+        "SELECT brief, plan_text, embedding FROM plans WHERE cliente = ?",
+        (cliente,)
+    ).fetchall()
+    c.close()
+    if not rows:
+        return []
+    q = _embed(brief)
+    scored = []
+    seen = set()
+
+    for b, p, e in rows:
+        # Deduplica soltanto coppie brief/piano esattamente identiche.
+        # Le varianti creative dello stesso brief restano disponibili.
+        key = (b, p)
+        if key in seen:
+            continue
+
+        v = np.frombuffer(e, dtype=np.float32)
+        s = _cosine(q, v)
+
+        if s >= min_sim:
+            seen.add(key)
+            scored.append((b, p, s))
+
+    scored.sort(key=lambda x: -x[2])
+    return scored[:top_k]
+
+
+def count_plans(cliente: str = None):
+    c = _conn()
+    if cliente:
+        n = c.execute("SELECT COUNT(*) FROM plans WHERE cliente = ?", (cliente,)).fetchone()[0]
+    else:
+        n = c.execute("SELECT COUNT(*) FROM plans").fetchone()[0]
+    c.close()
+    return n
+
+
+def clear(cliente: str = None):
+    c = _conn()
+    if cliente:
+        c.execute("DELETE FROM plans WHERE cliente = ?", (cliente,))
+    else:
+        c.execute("DELETE FROM plans")
+    c.commit()
+    c.close()
+
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "count":
+        print(f"Piani totali: {count_plans()}")
+        print(f"  cosper: {count_plans('cosper')}")
+        print(f"  creazioni_migranti: {count_plans('creazioni_migranti')}")
+    elif len(sys.argv) > 1 and sys.argv[1] == "clear":
+        clear()
+        print("DB svuotato")

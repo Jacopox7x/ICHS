@@ -1,0 +1,71 @@
+<!-- BRIEF_START
+[BRIEF IBRIDO: TESTO E IMMAGINE]
+
+COSA SI VEDE NELL'IMMAGINE:
+L'immagine mostra una persona che tiene una pizza con una decorazione di ananas e formaggio. Sullo sfondo, si vede un'immagine di una pizza con verdure e formaggio.
+
+TESTO ESTRATTO DALL'IMMAGINE:
+"PIZZA?
+YES
+ESKUI
+ema al C"
+
+[ISTRUZIONI PER IL MODELLO]
+Il brief è una locandina o un'immagine. Adatta il tono in base al contenuto: se è un meme o un contenuto leggero, gioca sull'ironia; se è un evento istituzionale o formale, mantieni un tono professionale, caldo e adatto al contesto.
+BRIEF_END -->
+
+### ANALISI
+- Target: Famiglie e giovani (pubblico generico)
+- Mood: Ironico e coinvolgente
+- Concept: Contenuto per i social media
+
+### INSTAGRAM
+**Hook:** Sorpresa! La tua pizza preferita è qui
+**Corpo:** Non aspettarti più le solite! Sperimenta qualcosa di nuovo con questa meravigliosa combinazione di ananas e formaggio
+**CTA:** Iscriviti ora per la nuova offerta
+**Visual:** Immagine della pizza con ananas e formaggio sullo sfondo di una pizza diversa
+**Hashtag:** #memes, #ironia
+
+### LINKEDIN
+**Hook:** È arrivato il momento di sorprendere i tuoi clienti
+**Corpo:** Abbiamo appena lanciato una nuova offerta speciale per i nostri clienti. Non perdere l'opportunità di sperimentare qualcosa di nuovo
+**CTA:** Invita i tuoi clienti a scoprire la nostra nuova pizza
+**Visual:** Immagini di piatti variati e diverse offerte
+**Hashtag:** #memes, #ironia
+
+### FACEBOOK
+**Hook:** Il nostro nuovo prodotto ti farà sorridere
+**Corpo:** Ci stai? Proponiamo una nuova pizza con ananas e formaggio per divertire tutti i palchi
+**CTA:** Partecipa alla festa e scopri la nostra nuova pizza
+**Visual:** Immagine della pizza con ananas e formaggio sullo sfondo di una festa
+**Hashtag:** #memes, #ironia
+
+### X (TWITTER)
+**Tweet 1:** Arriva la nuova pizza con ananas e formaggio
+**Tweet 2:** La nuova pizza ha venduto già oltre il 50% dei nostri punti di vendita
+**Tweet 3:** Chi non prova non può dire
+**Tweet 4:** Inserisci il tuo nome nella lista degli esclusivi e scopri la nostra nuova pizza
+**Tweet 5:** Grazie ai nostri partner per il loro supporto in questo nuovo capitolo
+
+### TIKTOK
+**Hook:** Ti sei preparato per questa sorpresa
+**Script:** Lasciami mostrarti come si fa... (immagini di preparazione della pizza)
+**CTA:** Inserisci il tuo nome nella lista degli esclusivi e scopri la nostra nuova pizza
+
+### STORIES (5 frame)
+1. Pizza con ananas e formaggio pronta
+2. Prima vista della pizza con ananas e formaggio
+3. Pizzaiolo che sta preparando la pizza con ananas e formaggio
+4. Festa con la pizza con ananas e formaggio
+5. Cliente soddisfatto dopo aver mangiato la pizza con ananas e formaggio
+
+### CALENDARIO
+Giorno -2: Non specificato
+Giorno -1: Non specificato
+Giorno evento: Non specificato
+Giorno +1: Non specificato
+
+### RIASSUNTO
+- Obiettivi: Promuovere la nuova pizza con ananas e formaggio, aumentare le vendite e creare un buzz negli account social
+- KPI: Numero di like, commenti, partecipazioni e conversioni
+- Budget: Non specificato

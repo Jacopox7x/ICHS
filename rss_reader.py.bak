@@ -1,0 +1,80 @@
+"""
+rss_reader.py - Lettore di feed RSS per arricchire i brief di iCrawler.
+
+Fornisce una funzione per leggere un feed RSS e restituire una lista
+di articoli (titolo, sommario, link, data). Usato come fonte esterna
+per il prompt builder.
+
+Se il feed non risponde o non e valido, ritorna una lista vuota.
+"""
+
+import feedparser
+
+
+def read_feed(url: str, limit: int = 5) -> list:
+    """
+    Legge un feed RSS e ritorna i primi N articoli.
+
+    Args:
+        url: URL del feed RSS
+        limit: numero massimo di articoli da restituire
+
+    Returns:
+        list di dict con chiavi: title, summary, link, published
+        lista vuota se il feed non e raggiungibile o non e valido.
+    """
+    try:
+        feed = feedparser.parse(url)
+    except Exception as e:
+        print(f"[rss_reader] errore su {url}: {e}")
+        return []
+
+    if not feed.entries:
+        return []
+
+    articles = []
+    for entry in feed.entries[:limit]:
+        articles.append({
+            "title": entry.get("title", "").strip(),
+            "summary": entry.get("summary", "").strip()[:300],
+            "link": entry.get("link", "").strip(),
+            "published": entry.get("published", "").strip(),
+        })
+    return articles
+
+
+def read_multiple(urls: list, limit_per_feed: int = 3) -> list:
+    """
+    Legge piu feed e restituisce una lista unificata di articoli.
+
+    Args:
+        urls: lista di URL di feed RSS
+        limit_per_feed: quanti articoli per ogni feed
+
+    Returns:
+        list di dict, ogni dict ha in piu la chiave 'source' con l'URL
+        del feed di origine.
+    """
+    all_articles = []
+    for url in urls:
+        articles = read_feed(url, limit=limit_per_feed)
+        for a in articles:
+            a["source"] = url
+        all_articles.extend(articles)
+    return all_articles
+
+
+def format_for_prompt(articles: list, max_articles: int = 10) -> str:
+    """
+    Formatta una lista di articoli come blocco testuale per il prompt.
+    """
+    if not articles:
+        return ""
+
+    lines = ["--- CONTESTO ESTERNO (titoli recenti da fonti esterne) ---"]
+    for a in articles[:max_articles]:
+        title = a.get("title", "").strip()
+        if title:
+            lines.append(f"- {title}")
+    lines.append("--- FINE CONTESTO ---")
+    return "\n".join(lines)

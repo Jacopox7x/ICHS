@@ -1,0 +1,131 @@
+============================================================
+🕷️ iCRAWLER V1.8.1 HYBRID — PIANO COMPLETO
+Generato: 2026-08-30 23:14:43
+============================================================
+
+
+1. STRATEGIA
+
+📍 Evento: event_name: Maratona di Roma
+date: 20 settembre
+lo
+📅 Data: 20 settembre
+📍 Location: sport
+🏢 Organizer: DA DEFINIRE
+🎯 Target: DA DEFINIRE
+🎯 Obiettivo: event_name: Maratona di Roma
+date: 20 settembre
+location: Roma
+target: Runner da tutta Italia
+objective: promuovere lo sport
+🕐 Orario: DA DEFINIRE
+🏛️ Venue: DA DEFINIRE
+🎤 Speaker: DA DEFINIRE
+
+**Obiettivo Strategico:** Costruire autorevolezza e engagement nel target.
+**Tono di Voce:** Caldo, divertente, informale
+
+---
+
+2. PIANO SOCIAL PER PIATTAFORMA
+
+**LINKEDIN** — Instagram e WhatsApp (canali principali)
+- Annuncio 2 settimane prima
+- Articoli settimanali, testimonianze
+- Pagina evento, recap post-evento
+
+**INSTAGRAM**
+- Stories countdown giornaliero
+- Reels backstage/highlights
+- Carousel educativi, Highlights
+
+**TWITTER/X**
+- Live coverage evento
+- Thread aggiornamenti 30-60min
+- Hashtag ufficiale: DA DEFINIRE
+
+---
+
+3. CONTENUTI PER PIATTAFORMA
+
+**LinkedIn:** Annuncio, Perche partecipare, Intervista speaker, Countdown, Recap
+**Instagram:** Reel teaser, Reel backstage, Reel highlights, Carousel motivi, Carousel temi
+**Twitter/X:** Thread agenda, Thread live, Thread momenti salienti
+
+---
+
+4. CTA
+
+1. 📍 Registrati ora — [LINK DA DEFINIRE]
+2. 💬 Partecipa — usa DA DEFINIRE
+3. 🔔 Segui per aggiornamenti
+4. 📧 Richiedi info — contatta organizer
+
+---
+
+5. HASHTAG
+
+**Set raccomandato:**
+DA DEFINIRE
+
+📌 Consigli: 5-7 IG, 3-5 LinkedIn, 2-3 Twitter.
+
+---
+
+6. VISUAL
+
+Atmosfera: divertente, calda, luminosa, accogliente
+Soggetti: amici, sorrisi, momenti di convivialita
+Colori: palette calda e accogliente, toni dorati e marine
+Formati: LinkedIn 1200x627, IG 1080x1080/1920, TW 1200x675
+
+---
+
+7. TIMELINE
+
+| Settimana | Azione | Piattaforma |
+|-----------|--------|-------------|
+| -4 | Annuncio | LinkedIn, IG |
+| -3 | Programma | LinkedIn |
+| -2 | Teaser | IG, TW |
+| -1 | Countdown | Tutte |
+| Evento | Live | TW, IG |
+| +1 | Recap | LinkedIn, IG |
+| +2 | Report | LinkedIn |
+
+💡 CREATIVE LAB
+Ecco tre idee creative per promuovere la **Maratona di Roma**, pensate per catturare l'attenzione del pubblico locale e attirare i partecipanti con un approccio moderno ed emozionale.
+
+### IDEA 1: La Sfida "Roma in 20 Chiusi" (Gamification)
+**CONCEPT:** 
+Creazione di una campagna digitale che trasforma la maratona in un gioco sociale basato su livelli. Ogni corridore riceve uno smartphone appositamente programmato con il nome e lo stemma della sua squadra ("Tribe"). Prima dell'evento, l'app simula le prime 5 km sotto forma di mini-giochi (es.: risolvere indizi storici romani per sbloccare la mappa). Durante la gara vera e propria, i partecipanti possono "aggiornare" il loro profilo in tempo reale su un feed dedicato sui social media: pubblicando foto con hashtag #Roma20Chiusi guadagnano punti che si traducono in ricompense concrete (es. badge virtuali esclusivi, accesso a una festa post-evento o sconti nei negozi di Roma). Il torneo finale include anche le squadre non presenti fisicamente nella maratona, creando un legame comunitario globale sull'evento locale.
+
+**PERCHE FUNZIONA:**
+Sfrutta il meccanismo dei *gamification* (giochi), che è altamente coinvolgente per i giovani e la Gen Z. Trasforma lo sforzo fisico in una narrativa interattiva e dà agli spettatori online uno stake diretto nel successo del corridore, aumentando così l'engagement sui social media prima, durante e dopo l'evento.
+
+**RISCHIO:**
+Possibili difficoltà tecniche se il numero di utenti che accede all'app supera le capacità server durante i picchi dell'evento; inoltre, potrebbe esserci una percezione negativa da parte dei puristi del running che vedono la gara come troppo commerciale o meno seria a causa degli elementi gamificati.
+
+---
+
+### IDEA 2: La "Festa di Piazza" (Event Experience)
+**CONCEPT:** 
+Non promuovere solo l'evento sportivo, ma il festival culturale che ne segue immediatamente dopo. Organizzare uno spazio dedicato lungo la linea d'arrivo o in una piazza simbolo (es. Campo de Fiori o Panteon), chiamato **"La Festa delle 20"**. Questo include un mercato degli artisti romani locali (street art, cibo tradizionale romano fuso con street food moderno, musica live jazz/elettronica). La promozione si concentra sull'atmosfera post-corridora: inviti visivi che mostrano corridori felici mentre mangiano gelati, ballano o interagiscono con i volontari al contrario della narrazione solitaria e dolorosa tipica delle maratone. Il focus è sul concetto di "commemorazione collettiva".
+
+**PERCHE FUNZIONA:**
+La maggior parte dei partecipanti alla maratona cerca non solo la performance sportiva ma anche l'emozione sociale post-sforzo. Offrire un ambiente festoso, inclusivo e autentico (radicizzato a Roma) crea un desiderio forte di partecipare per vivere quell'esclusiva esperienza condivisa che pochi altri eventi sportivi offrono in Italia.
+
+**RISCHIO:**
+Logistica complessa: gestire folla, sicurezza alimentare, rumore e flusso delle persone richiede risorse enormi; se l'organizzazione fallisce nel primo giorno, il danno alla reputazione dell'evento potrebbe essere irreparabile. Inoltre, i costi energetici per illuminare la piazza in caso di pioggia potrebbero diventare proibitivi senza un piano B perfetto.
+
+---
+
+### IDEA 3: La Retrospektiva Storica (Storytelling Emozionale)
+**CONCEPT:** 
+Uno spot video e una serie di articoli che raccontano come, nella storia della Roma moderna o antica, le persone abbiano sempre corso per vincere qualcosa oltre la medaglia d'oro. Esempi: i corrieri delle poste romane, gli atleti dell'Olimpiade 1960 (che si tenne proprio a Roma), runner locali leggendarie del '700/800 che correvano con carriata di vino o farina per arrivare prima alle case dei nobili. Ogni capitolo termina con la domanda: "E ora il tuo turno? Unisci le tue corse alla storia." La narrazione punta sull'identità romana e sul fatto che Roma ha sempre accolto runner, non solo come sportivi ma come eroi popolari.
+
+**PERCHE FUNZIONA:**
+Crea un senso di appartenenza e orgoglio locale ("Roma è mia") trasformando il corridore da semplice atleta a custode della storia urbana. Questo tipo di storytelling emotivo genera condivisioni virali basate sull'identità culturale, spingendo le persone ad accettare la sfida non per forza ma perché vogliono fare parte del grande racconto romano.
+
+**RISCHIO:**
+Il rischio che i storici o gli esperti possano considerare alcune narrazioni come aneddotiche eccessive o poco rigorose; inoltre, se il tono diventa troppo "poetico" e distaccato dalle reali difficoltà della maratona (pioggia, fatica), potrebbe alienare chi cerca una competizione seria e dura.

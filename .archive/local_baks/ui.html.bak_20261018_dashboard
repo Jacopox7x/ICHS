@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iCrawler</title>
+  <style>
+    :root {
+      --bg-base: #050B14;
+      --bg-panel: rgba(255, 255, 255, 0.03);
+      --border-glow: rgba(0, 229, 255, 0.2);
+      --text-main: #E2E8F0;
+      --text-muted: #8B949E;
+      --cyan: #00E5FF;
+      --orange: #FF4B2B;
+      --orange-hover: #FF416C;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0, 229, 255, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(255, 75, 43, 0.08), transparent 25%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      line-height: 1.5;
+    }
+
+    h1 { 
+      color: var(--cyan); 
+      margin-bottom: 0.2rem; 
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+    
+    h2 { 
+      color: var(--text-main); 
+      font-size: 1.1rem; 
+      margin-top: 2rem; 
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    h2::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: var(--cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    .sub { 
+      color: var(--text-muted); 
+      font-size: 0.9rem; 
+      margin-bottom: 2rem; 
+    }
+
+    textarea {
+      width: 100%;
+      background: var(--bg-panel);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1rem;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 13px;
+      resize: vertical;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 15px var(--border-glow), inset 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--orange), var(--orange-hover));
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      margin-top: 0.5rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(255, 75, 43, 0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    button:hover:not(:disabled) { 
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255, 75, 43, 0.4);
+    }
+    
+    button.secondary { 
+      background: var(--bg-panel);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      box-shadow: none;
+      backdrop-filter: blur(10px);
+    }
+    
+    button.secondary:hover:not(:disabled) { 
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--cyan);
+      box-shadow: 0 0 15px var(--border-glow);
+    }
+    
+    button:disabled { 
+      opacity: 0.6; 
+      cursor: wait; 
+      transform: none;
+      box-shadow: none;
+    }
+
+    .row { margin: 1rem 0; }
+
+    pre {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 1rem;
+      max-height: 600px;
+      overflow-y: auto;
+      backdrop-filter: blur(5px);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .entities {
+      background: rgba(0, 229, 255, 0.05);
+      border: 1px solid var(--border-glow);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 12.5px;
+      display: none;
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    .entities.visible { display: block; }
+    .entities .label { color: var(--cyan); font-weight: 600; }
+    
+    .status {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 1rem 0;
+      min-height: 1.5em;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .status.error { color: #FF416C; }
+    .status.ok { color: #00FF88; }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    details { margin-top: 2rem; }
+    summary { 
+      cursor: pointer; 
+      color: var(--text-muted); 
+      font-size: 14px; 
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    summary:hover { color: var(--cyan); }
+    
+    .plan-list { margin-top: 1rem; }
+    
+    .plan-item {
+      display: block;
+      padding: 0.8rem 1rem;
+      background: var(--bg-panel);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 12px;
+      color: var(--text-main);
+      text-align: left;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+    
+    .plan-item:hover { 
+      background: rgba(255, 255, 255, 0.08); 
+      border-color: var(--border-glow);
+      transform: translateX(4px);
+    }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-base); }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <h1>iCrawler</h1>
+  <div class="sub">Content strategy generator · v3.5 (Eidolopoios Engine)</div>
+
+  <h2>Brief</h2>
+  <textarea id="brief" rows="7" placeholder="Incolla il brief qui..."></textarea>
+
+  <div class="row">
+    <button class="secondary" onclick="caricaEsempio()">Carica esempio</button>
+    <button class="secondary" onclick="svuota()">Svuota</button>
+    <button class="secondary" onclick="anteprimaEntita()" id="btnExtract">Anteprima entità</button>
+  </div>
+
+  <div class="entities" id="entities"></div>
+
+  <div class="row">
+    <button onclick="genera()" id="btnGenera">Genera piano</button>
+    <button class="secondary" onclick="genera()" id="btnRigenera" style="display:none">Rigenera</button>
+    <button class="secondary" onclick="copiaPiano()" id="btnCopia" style="display:none">Copia</button>
+    <button class="secondary" onclick="scaricaPiano()" id="btnScarica" style="display:none">Scarica .md</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <pre id="out" style="display:none"></pre>
+
+  <details>
+    <summary>Storico piani generati</summary>
+    <div class="plan-list" id="planList">Nessun piano caricato.</div>
+  </details>
+
+  <script>
+    const STATUS = document.getElementById('status');
+    const OUT = document.getElementById('out');
+    const ENT = document.getElementById('entities');
+    const BTN_GENERA = document.getElementById('btnGenera');
+    const BTN_RIGENERA = document.getElementById('btnRigenera');
+    const BTN_COPIA = document.getElementById('btnCopia');
+    const BTN_SCARICA = document.getElementById('btnScarica');
+    const BTN_EXTRACT = document.getElementById('btnExtract');
+
+    let ultimoPiano = '';
+
+    const ESEMPIO = `event_name: Tech Summit 2026
+date: 15 marzo
+location: Milano
+target: startup e investitori del settore fintech
+objective: promuovere l'evento e registrare partecipanti
+budget: 50000 euro
+hashtag: #TechSummit26`;
+
+    function setStatus(msg, cls = '') {
+      STATUS.innerHTML = msg;
+      STATUS.className = 'status ' + cls;
+    }
+
+    function caricaEsempio() {
+      document.getElementById('brief').value = ESEMPIO;
+    }
+
+    function svuota() {
+      document.getElementById('brief').value = '';
+      ENT.classList.remove('visible');
+      OUT.style.display = 'none';
+      setStatus('');
+    }
+
+    async function anteprimaEntita() {
+      const brief = document.getElementById('brief').value.trim();
+      if (!brief) { setStatus('Incolla un brief prima.', 'error'); return; }
+      BTN_EXTRACT.disabled = true;
+      setStatus('Estrazione entità... <span class="spinner"></span>');
+      try {
+        const r = await fetch('/extract', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({brief})
+        });
+        const data = await r.json();
+        if (data.error) {
+          setStatus(data.error, 'error');
+          ENT.classList.remove('visible');
+        } else {
+          const ent = data.entities || {};
+          const keys = Object.keys(ent);
+          if (keys.length === 0) {
+            ENT.textContent = 'Nessuna entità riconosciuta.';
+          } else {
+            ENT.innerHTML = '<strong>Entità estratte:</strong><br>' +
+              keys.map(k => `<span class="label">${k}</span>: ${ent[k]}`).join('<br>');
+          }
+          ENT.classList.add('visible');
+          setStatus('');
+        }
+      } catch (e) {
+        setStatus('Errore: ' + e.message, 'error');
+      } finally {
+        BTN_EXTRACT.disabled = false;
+      }
+    }
+
+    async function genera() {
+      const brief = document.getElementById('brief').value.trim();
+      if (!brief) { setStatus('Incolla un brief prima.', 'error'); return; }
+      
+      BTN_GENERA.disabled = true;
+      BTN_RIGENERA.disabled = true;
+      BTN_GENERA.innerHTML = 'Generazione in corso... <span class="spinner"></span>';
+      
+      setStatus('Il motore sta elaborando (30-60 secondi)...');
+      OUT.style.display = 'none';
+      BTN_COPIA.style.display = 'none';
+      BTN_SCARICA.style.display = 'none';
+      
+      try {
+        const r = await fetch('/genera', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({brief})
+        });
+        const data = await r.json();
+        ultimoPiano = data.piano || '';
+        OUT.textContent = ultimoPiano;
+        OUT.style.display = 'block';
+        BTN_COPIA.style.display = 'inline-block';
+        BTN_SCARICA.style.display = 'inline-block';
+        BTN_RIGENERA.style.display = 'inline-block';
+        setStatus('Piano generato con successo.', 'ok');
+        caricaStorico();
+      } catch (e) {
+        setStatus('Errore: ' + e.message, 'error');
+      } finally {
+        BTN_GENERA.disabled = false;
+        BTN_RIGENERA.disabled = false;
+        BTN_GENERA.innerHTML = 'Genera piano';
+      }
+    }
+
+    async function copiaPiano() {
+      if (!ultimoPiano) return;
+      try {
+        await navigator.clipboard.writeText(ultimoPiano);
+        setStatus('Piano copiato negli appunti.', 'ok');
+      } catch (e) {
+        setStatus('Copia fallita: ' + e.message, 'error');
+      }
+    }
+
+    function scaricaPiano() {
+      if (!ultimoPiano) return;
+      const blob = new Blob([ultimoPiano], {type: 'text/markdown'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,'');
+      a.download = `icrawler_plan_${stamp}.md`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    async function caricaStorico() {
+      try {
+        const r = await fetch('/storico');
+        const data = await r.json();
+        const list = document.getElementById('planList');
+        if (!data.plans || data.plans.length === 0) {
+          list.textContent = 'Nessun piano salvato.';
+          return;
+        }
+        list.innerHTML = '';
+        data.plans.forEach(p => {
+          const btn = document.createElement('button');
+          btn.className = 'plan-item';
+          const d = new Date(p.mtime * 1000);
+          btn.textContent = `${p.name} · ${d.toLocaleString('it-IT')} · ${p.size} byte`;
+          btn.onclick = () => apriPiano(p.name);
+          list.appendChild(btn);
+        });
+      } catch (e) {
+        document.getElementById('planList').textContent = 'Errore storico: ' + e.message;
+      }
+    }
+
+    async function apriPiano(name) {
+      try {
+        const r = await fetch('/storico/' + encodeURIComponent(name));
+        const data = await r.json();
+        ultimoPiano = data.content || '';
+        OUT.textContent = ultimoPiano;
+        OUT.style.display = 'block';
+        BTN_COPIA.style.display = 'inline-block';
+        BTN_SCARICA.style.display = 'inline-block';
+        setStatus('Piano caricato: ' + name, 'ok');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (e) {
+        setStatus('Errore: ' + e.message, 'error');
+      }
+    }
+
+    caricaStorico();
+  </script>
+</body>
+</html>
