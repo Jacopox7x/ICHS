@@ -30,3 +30,9 @@ models/
 # Node / build
 node_modules/
 dist/
+backups/
+.archive/
+iCRAWLER_KNOWLEDGE_BASE_v1.0/
+speakify-api/
+icrawler_weknora/
+ICHS copy/
