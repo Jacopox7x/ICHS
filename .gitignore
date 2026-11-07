@@ -19,3 +19,7 @@ test_docs/
 
 # File di sistema macOS
 .DS_Store
+*.bak
+test_*.py
+test_fashion.jpg
+*.log
