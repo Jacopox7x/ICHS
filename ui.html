@@ -87,8 +87,9 @@
         <div class="sidebar">
             <div class="nav-item active" id="nav-gen" onclick="switchView('gen')">Generatore</div>
             <div class="nav-item" id="nav-kb" onclick="switchView('kb')">Knowledge Base</div>
-                <div class="nav-item" id="nav-newsletter" onclick="showNewsletter()">📰 Newsletter</div>
+                <div class="nav-item" id="nav-newsletter" onclick="switchView('newsletter')">📰 Newsletter</div>
             <div class="nav-item" id="nav-pattern" onclick="switchView('pattern')">Pattern</div>
+                <div class="nav-item" id="nav-art" onclick="switchView('art')">🎨 Art Direction</div>
         </div>
 
         <div class="main">
@@ -157,6 +158,128 @@
                     <p>Qui vedrai i pattern ricorrenti e gli stili estratti dalla memoria.</p>
                 </div>
             </div>
+
+            <div id="view-art" style="display: none; padding: 20px;">
+                <h1 style="color: var(--purple); margin-bottom: 6px;">🎨 Art Director Digitale</h1>
+                <p style="color: var(--muted); margin-bottom: 20px;">Valida un contenuto visivo e testuale prima della pubblicazione. L'Art Director analizza l'immagine, il testo, il meteo attuale e le linee guida del brand.</p>
+
+                <label style="display:block; color:var(--text); margin-bottom:8px; font-weight:bold;">Testo del post</label>
+                <textarea id="art-caption" rows="4" placeholder="Scrivi qui il testo che vuoi pubblicare sui social..." style="width:100%; background:#1A1A1C; color:#fff; border:1px solid rgba(0,242,254,0.3); border-radius:8px; padding:15px; margin-bottom:15px; font-family:monospace; font-size:14px; resize:vertical;"></textarea>
+
+                <div style="display:flex; gap:12px; align-items:center; margin-bottom:15px;">
+                    <button class="btn-secondary" style="font-size:13px;" onclick="document.getElementById('art-file-input').click()">📸 Carica Immagine</button>
+                    <span id="art-file-name" style="color:var(--muted); font-size:12px;"></span>
+                    <button id="art-validate-btn" class="btn-secondary" style="font-size:13px; margin-left:auto; background: rgba(0,242,254,0.1); color: #00F2FE; border-color: #00F2FE; font-weight: bold;">🔍 Valida Contenuto</button>
+                </div>
+                <input type="file" id="art-file-input" accept="image/*" style="display:none;">
+
+                <div id="art-preview" style="display:none; margin-bottom:15px;">
+                    <img id="art-preview-img" style="max-width:300px; max-height:300px; border-radius:8px; border:1px solid rgba(0,242,254,0.3);">
+                </div>
+
+                <div id="art-verdict" style="display:none; padding:16px; border-radius:8px; font-family:'Courier New', monospace; font-size:13px; line-height:1.6;"></div>
+
+                <script>
+                (function() {
+                    const input  = document.getElementById('art-file-input');
+                    const btn    = document.getElementById('art-validate-btn');
+                    const pv     = document.getElementById('art-preview');
+                    const pvImg  = document.getElementById('art-preview-img');
+                    const fname  = document.getElementById('art-file-name');
+                    const vbox   = document.getElementById('art-verdict');
+                    let selectedFile = null;
+
+                    if (!input || !btn) return;
+
+                    // Carica l'immagine e mostra l'anteprima (senza validare subito)
+                    input.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        selectedFile = file;
+                        fname.textContent = '📎 ' + file.name;
+                        pvImg.src = URL.createObjectURL(file);
+                        pv.style.display = 'block';
+                        e.target.value = ''; // Resetta per permettere ricaricamento
+                    });
+
+                    // Valida solo quando clicchi il bottone
+                    btn.addEventListener('click', async () => {
+                        if (!selectedFile) {
+                            vbox.style.display = 'block';
+                            vbox.style.border = '1px solid #ff4c4c';
+                            vbox.style.background = 'rgba(255,76,76,0.05)';
+                            vbox.style.color = '#ff4c4c';
+                            vbox.innerHTML = '⚠️ Carica prima un\'immagine.';
+                            return;
+                        }
+
+                        const caption = (document.getElementById('art-caption').value || '').trim();
+                        if (!caption) {
+                            vbox.style.display = 'block';
+                            vbox.style.border = '1px solid #ff4c4c';
+                            vbox.style.background = 'rgba(255,76,76,0.05)';
+                            vbox.style.color = '#ff4c4c';
+                            vbox.innerHTML = '⚠️ Scrivi il testo del post prima di validare.';
+                            return;
+                        }
+
+                        btn.disabled = true;
+                        btn.textContent = '⏳ Analisi...';
+                        
+                        vbox.style.display = 'block';
+                        vbox.style.border = '1px solid rgba(0,242,254,0.4)';
+                        vbox.style.background = 'rgba(0,242,254,0.03)';
+                        vbox.style.color = '#00F2FE';
+                        vbox.innerHTML = '👁️ SCANNING... l\'Art Director sta valutando (5-15s)...';
+
+                        const fd = new FormData();
+                        fd.append('file', selectedFile);
+                        fd.append('proposed_caption', caption);
+
+                        try {
+                            const res = await fetch('/vision/validate-content', { method: 'POST', body: fd });
+                            if (!res.ok) throw new Error('HTTP ' + res.status);
+                            const data = await res.json();
+                            const v = data.verdetto || {};
+                            const ok = !!v.approvato;
+
+                            vbox.style.border = ok ? '1px solid #00ff9d' : '1px solid #ff4c4c';
+                            vbox.style.background = ok ? 'rgba(0,255,157,0.05)' : 'rgba(255,76,76,0.05)';
+                            vbox.style.color = ok ? '#00ff9d' : '#ff4c4c';
+                            vbox.innerHTML =
+                                '<div style="font-weight:bold; font-size:15px; margin-bottom:8px;">' +
+                                (ok ? '✓ APPROVATO' : '✗ BLOCCATO') + '</div>' +
+                                '<div style="color:#cdd6f4; margin-bottom:6px;"><strong>Motivazione:</strong> ' + (v.motivazione || '—') + '</div>' +
+                                '<div style="color:#cdd6f4;"><strong>Suggerimento:</strong> ' + (v.suggerimento || '—') + '</div>';
+                        } catch (err) {
+                            vbox.style.border = '1px solid #ff4c4c';
+                            vbox.style.background = 'rgba(255,76,76,0.05)';
+                            vbox.style.color = '#ff4c4c';
+                            vbox.innerHTML = '❌ Errore di validazione: ' + err.message;
+                        } finally {
+                            btn.disabled = false;
+                            btn.textContent = '🔍 Valida Contenuto';
+                        }
+                    });
+                })();
+                </script>
+            </div>
+
+            <div id="view-newsletter" style="display: none; padding: 20px;">
+        <h2 style="color: #00F2FE; margin-bottom: 20px;">📰 Generatore di Newsletter</h2>
+        <p style="color: #ccc; margin-bottom: 15px;">Inserisci il brief del cliente per generare una newsletter completa.</p>
+        
+        <textarea id="newsletter-brief" rows="5" style="width: 100%; background: #1A1A1C; color: #fff; border: 1px solid rgba(0,242,254,0.3); border-radius: 8px; padding: 15px; margin-bottom: 15px; font-family: monospace;" placeholder="Es: Lancio del nuovo servizio di upcycling di Cosper a Cremona..."></textarea>
+        
+        <button onclick="generaNewsletter()" style="background: #00F2FE; color: #000; font-weight: bold; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px;">
+            Genera Newsletter ✨
+        </button>
+        
+        <div id="newsletter-output" style="background: #0E1117; border: 1px solid rgba(0,242,254,0.2); border-radius: 8px; padding: 20px; min-height: 200px; color: #E2E8F0;">
+            <!-- L'output apparirà qui -->
+        </div>
+    </div>
+
         </div>
 
         <div class="right-panel">
@@ -183,23 +306,13 @@
 
     <script>
         window.switchView = function(view) {
-            document.getElementById('nav-gen').classList.remove('active');
-            document.getElementById('nav-kb').classList.remove('active');
-            document.getElementById('nav-pattern').classList.remove('active');
-            document.getElementById('view-gen').style.display = 'none';
-            document.getElementById('view-kb').style.display = 'none';
-            document.getElementById('view-pattern').style.display = 'none';
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const nav = document.getElementById('nav-' + view);
+            if (nav) nav.classList.add('active');
 
-            if (view === 'gen') {
-                document.getElementById('nav-gen').classList.add('active');
-                document.getElementById('view-gen').style.display = 'block';
-            } else if (view === 'kb') {
-                document.getElementById('nav-kb').classList.add('active');
-                document.getElementById('view-kb').style.display = 'block';
-            } else if (view === 'pattern') {
-                document.getElementById('nav-pattern').classList.add('active');
-                document.getElementById('view-pattern').style.display = 'block';
-            }
+            document.querySelectorAll('.main > div').forEach(el => el.style.display = 'none');
+            const target = document.getElementById('view-' + view);
+            if (target) target.style.display = 'block';
         };
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -386,12 +499,7 @@
             }
         });
     
-        function showNewsletter() {
-            // Nasconde le altre sezioni
-            document.querySelectorAll('.main-panel, .generator-panel').forEach(el => el.style.display = 'none');
-            const nlPanel = document.getElementById('newsletter-panel');
-            if(nlPanel) nlPanel.style.display = 'block';
-        }
+        
 
         async function generaNewsletter() {
             const brief = document.getElementById('newsletter-brief').value;
@@ -437,20 +545,7 @@
     
     </script>
 
-    <div id="newsletter-panel" style="display: none; padding: 20px;">
-        <h2 style="color: #00F2FE; margin-bottom: 20px;">📰 Generatore di Newsletter</h2>
-        <p style="color: #ccc; margin-bottom: 15px;">Inserisci il brief del cliente per generare una newsletter completa.</p>
-        
-        <textarea id="newsletter-brief" rows="5" style="width: 100%; background: #1A1A1C; color: #fff; border: 1px solid rgba(0,242,254,0.3); border-radius: 8px; padding: 15px; margin-bottom: 15px; font-family: monospace;" placeholder="Es: Lancio del nuovo servizio di upcycling di Cosper a Cremona..."></textarea>
-        
-        <button onclick="generaNewsletter()" style="background: #00F2FE; color: #000; font-weight: bold; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px;">
-            Genera Newsletter ✨
-        </button>
-        
-        <div id="newsletter-output" style="background: #0E1117; border: 1px solid rgba(0,242,254,0.2); border-radius: 8px; padding: 20px; min-height: 200px; color: #E2E8F0;">
-            <!-- L'output apparirà qui -->
-        </div>
-    </div>
+    
     
 </body>
 </html>

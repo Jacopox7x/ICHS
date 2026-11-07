@@ -33,6 +33,10 @@ from summarization_agent import SummarizationAgent
 from gliner_client import extract_entities, entities_to_dict, is_alive
 
 app = FastAPI(title="iCrawler UI")
+
+# === Vision Validator (auto-injected) ===
+from vision_router import vision_router
+app.include_router(vision_router)
 app.mount("/static", StaticFiles(directory=Path(__file__).parent), name="static")
 
 crawler = ICrawler()

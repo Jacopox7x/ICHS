@@ -900,3 +900,4 @@ def genera_newsletter(brief_cliente, contesto_rag=""):
         return output
     except Exception as e:
         return f"Errore durante la generazione della newsletter: {e}"
+
