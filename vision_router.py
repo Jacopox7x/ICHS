@@ -2,6 +2,8 @@ from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from pydantic import BaseModel
 import ollama
 import json
+import cognee
+import asyncio
 from cascading_rag import _search_searxng
 from cognee_manager import get_cognee_context
 
@@ -26,34 +28,23 @@ def extract_visual_description(image_bytes: bytes) -> str:
     return response["message"]["content"]
 
 
-def validate_with_art_director(
-    visual_description: str,
-    proposed_caption: str,
-    weather_context: str,
-    brand_guidelines: str,
-) -> ArtDirectorVerdict:
-    prompt = f"""Sei un Art Director digitale per un brand fashion. 
-Decidi se approvare la pubblicazione di un contenuto sui social.
+    prompt = f"""Sei un Art Director digitale spietato e rigoroso. Devi valutare un post per un brand fashion.
 
-## DESCRIZIONE VISIVA
-{visual_description}
+## DATI IN INGRESSO
+- Descrizione Visiva: {visual_description}
+- Testo Proposto: {proposed_caption}
+- Meteo: {weather_context}
+- Linee Guida Brand: {brand_guidelines}
+- Conoscenza Storica (Accademia): {accademia_context}
 
-## TESTO PROPOSTO
-{proposed_caption}
+## ISTRUZIONI
+Valuta il post secondo questi 4 criteri. Se UNO SOLO fallisce, il post è BLOCCATO.
+Devi menzionare esplicitamente quale criterio ha fallito nella motivazione.
 
-## CONTESTO METEO
-{weather_context}
-
-## LINEE GUIDA BRAND
-{brand_guidelines}
-
-## CRITERI DI VALUTAZIONE (Verificali TUTTI)
-1. Coerenza stagionale: il capo è adatto al meteo e al periodo?
-2. Coerenza brand: il testo rispetta il tono e le linee guida?
-3. Coerenza contestuale: ha senso pubblicare questo contenuto ORA?
-
-Se il contenuto viola anche UNO SOLO di questi criteri, DEVI bloccarlo (approvato: false).
-Nella motivazione, indica esplicitamente quale criterio è stato violato.
+1. COERENZA STAGIONALE: Il capo visivo è adatto al meteo indicato?
+2. COERENZA BRAND: Il testo rispetta il tono e le linee guida?
+3. COERENZA CONTESTUALE: Ha senso pubblicare questo ORA?
+4. ACCURATEZZA STORICA: Il testo contiene errori storici? (Usa la Conoscenza Storica per verificare. Es. Se dice che Poiret è degli anni '50, è un errore).
 
 Rispondi ESCLUSIVAMENTE con un JSON valido con questa struttura:
 {{"approvato": true/false, "motivazione": "...", "suggerimento": "..."}}"""
@@ -64,19 +55,40 @@ Rispondi ESCLUSIVAMENTE con un JSON valido con questa struttura:
         format="json",
         options={"temperature": 0.2},
     )
-    try:
-        data = json.loads(response["message"]["content"])
-        return ArtDirectorVerdict(**data)
-    except Exception as e:
-        return ArtDirectorVerdict(
-            approvato=False,
-            motivazione=f"Errore di parsing: {e}",
-            suggerimento="Revisione manuale richiesta.",
-        )
 
 
 vision_router = APIRouter(prefix="/vision", tags=["vision"])
 
+
+
+def get_accademia_context(query: str) -> str:
+    """Cerca nel database dell'Accademia i testi più rilevanti."""
+    try:
+        # Eseguiamo la ricerca asincrona in modo sincrono
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        results = loop.run_until_complete(
+            cognee.search(
+                query_text=query,
+                datasets=["test_storia_moda"],
+                query_type=cognee.SearchType.CHUNKS
+            )
+        )
+        
+        if not results:
+            return "Nessun riferimento storico trovato."
+        
+        # Prendiamo i primi 3 chunk e uniamoli
+        context = "
+
+".join([str(res.get('text', res))[:800] for res in results[:3]])
+        return context
+        
+    except Exception as e:
+        print(f"⚠️ Errore ricerca Accademia: {e}")
+        return "Contesto storico non disponibile."
+
+# --- INIZIO PATCH ENDPOINT ---
 
 @vision_router.post("/validate-content")
 async def validate_content(
@@ -109,7 +121,13 @@ async def validate_content(
         weather_context = "Meteo non disponibile."
 
     # 4. Reasoning
-    verdict = validate_with_art_director(visual_desc, proposed_caption, weather_context, brand_context)
+    
+    # 3. Recupero Contesto Accademia
+    accademia_context = get_accademia_context(proposed_caption)
+    
+    # 4. Reasoning (con il nuovo contesto)
+    verdict = validate_with_art_director(visual_desc, proposed_caption, weather_context, brand_context, accademia_context)
+
 
     return {
         "descrizione_visiva": visual_desc,
