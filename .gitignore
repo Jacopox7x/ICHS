@@ -23,3 +23,5 @@ test_docs/
 test_*.py
 test_fashion.jpg
 *.log
+__pycache__/
+*.pyc

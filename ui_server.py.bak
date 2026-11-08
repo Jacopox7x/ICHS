@@ -21,7 +21,7 @@ if sys.platform == "darwin":
     except ImportError:
         pass
 
-from fastapi import FastAPI, Request, HTTPException, File, UploadFile
+from fastapi import FastAPI, Request, Request, HTTPException, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel

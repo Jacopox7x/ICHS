@@ -686,7 +686,7 @@ class ICrawler:
             response = ollama.chat(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
-            format="json",
+            # format="json",
                 options={
                     "temperature": config["TEMPERATURE"],
                     "num_predict": config["MAX_TOKENS"],
@@ -696,15 +696,22 @@ class ICrawler:
             )
             record_model_call(ctx)
             output = response["message"]["content"]
+            
+            # Pulisce i backtick di markdown se presenti
+            if output.strip().startswith("```"):
+                output = output.replace("```json", "").replace("```", "").strip()
+                
             print(f"🔍 DEBUG: Output ricevuto ({len(output)} caratteri)")
             
             output_check = check_output_size(ctx, output)
             if not output_check['allowed']:
                 return f"❌ Errore: {output_check['reason']}"
+                
+            return output
 
-            output_check = check_output_size(ctx, output)
-            if not output_check['allowed']:
-                return f"❌ Errore: {output_check['reason']}"
+        except Exception as e:
+            print(f"❌ Errore critico durante la generazione: {e}")
+            return f"❌ Errore: {e}"
             
             if len(output) == 0:
                 print("⚠️ WARNING: Output vuoto!")
@@ -855,3 +862,46 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+def genera_newsletter(brief_cliente, contesto_rag=""):
+    """
+    Genera una newsletter completa basata sul brief e sul contesto.
+    """
+    prompt = f"""
+    Sei un esperto Email Marketing Manager.
+    Il tuo compito è scrivere una newsletter basata RIGOROSAMENTE su questo brief:
+    
+    BRIEF: {brief_cliente}
+    
+    REGOLE FONDAMENTALI:
+    1. Devi parlare ESCLUSIVAMENTE dell'argomento menzionato nel BRIEF.
+    2. Non inventare prodotti, servizi o argomenti (es. niente caffè o tè se il brief parla di e-bike).
+    3. Usa un tono adatto al brief.
+    
+    Rispondi SOLO con un oggetto JSON valido con questa struttura:
+    {{
+        "subject": "Un oggetto accattivante (max 50 caratteri)",
+        "preheader": "Un sottotitolo (max 90 caratteri)",
+        "saluto": "Un saluto iniziale",
+        "corpo": "Il testo della newsletter (2-3 paragrafi)",
+        "cta": "La call to action finale"
+    }}
+    """
+    
+    try:
+        response = ollama.chat(
+            model='phi3.5',
+            messages=[{"role": "user", "content": prompt}]
+        )
+        output = response["message"]["content"]
+        if output.strip().startswith("```"):
+            output = output.replace("```json", "").replace("```", "").strip()
+        return output
+    except Exception as e:
+        return f"Errore durante la generazione della newsletter: {e}"
+
+
+# === Vision Validator (auto-injected) ===
+from vision_router import vision_router
+app.include_router(vision_router)
