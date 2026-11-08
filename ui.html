@@ -235,6 +235,7 @@
                         const fd = new FormData();
                         fd.append('file', selectedFile);
                         fd.append('proposed_caption', caption);
+                        fd.append('brand_id', document.getElementById('cliente-select').value);
 
                         try {
                             const res = await fetch('/vision/validate-content', { method: 'POST', body: fd });
@@ -246,11 +247,18 @@
                             vbox.style.border = ok ? '1px solid #00ff9d' : '1px solid #ff4c4c';
                             vbox.style.background = ok ? 'rgba(0,255,157,0.05)' : 'rgba(255,76,76,0.05)';
                             vbox.style.color = ok ? '#00ff9d' : '#ff4c4c';
+                            const ctx = data.contesto_usato || {};
                             vbox.innerHTML =
                                 '<div style="font-weight:bold; font-size:15px; margin-bottom:8px;">' +
                                 (ok ? '✓ APPROVATO' : '✗ BLOCCATO') + '</div>' +
                                 '<div style="color:#cdd6f4; margin-bottom:6px;"><strong>Motivazione:</strong> ' + (v.motivazione || '—') + '</div>' +
-                                '<div style="color:#cdd6f4;"><strong>Suggerimento:</strong> ' + (v.suggerimento || '—') + '</div>';
+                                '<div style="color:#cdd6f4; margin-bottom:10px;"><strong>Suggerimento:</strong> ' + (v.suggerimento || '—') + '</div>' +
+                                '<details style="border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; font-size:11px; color:#888;">' +
+                                '<summary style="cursor:pointer;">🔍 Dettagli Pipeline (Debug)</summary>' +
+                                '<div style="margin-top:8px; background:#000; padding:8px; border-radius:4px; overflow-x:auto;">' +
+                                '<strong>Meteo:</strong> ' + (ctx.meteo || 'N/D') + '<br><br>' +
+                                '<strong>Brand:</strong> ' + (ctx.brand || 'N/D') +
+                                '</div></details>';
                         } catch (err) {
                             vbox.style.border = '1px solid #ff4c4c';
                             vbox.style.background = 'rgba(255,76,76,0.05)';

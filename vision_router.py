@@ -2,6 +2,8 @@ from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from pydantic import BaseModel
 import ollama
 import json
+from cascading_rag import _search_searxng
+from cognee_manager import get_cognee_context
 
 
 class ArtDirectorVerdict(BaseModel):
@@ -80,20 +82,41 @@ vision_router = APIRouter(prefix="/vision", tags=["vision"])
 async def validate_content(
     file: UploadFile = File(...),
     proposed_caption: str = Form(...),
+    brand_id: str = Form("cosper")
 ):
     content = await file.read()
     if not content:
         raise HTTPException(status_code=400, detail="File vuoto.")
 
+    # 1. Vision
     visual_desc = extract_visual_description(content)
 
-    # PLACEHOLDER: da collegare a SearXNG + Cognee
-    weather = "Roma, 7 Novembre: temperatura attuale 28°C, cielo sereno, caldo anomalo."
-    guidelines = "Tono elegante, minimalista. No emoji eccessive."
+    # 2. Contesto Brand (Cognee)
+    try:
+        brand_context = get_cognee_context(proposed_caption, brand_id)
+        if not brand_context:
+            brand_context = "Linee guida del brand non disponibili in memoria."
+    except Exception as e:
+        brand_context = f"Errore recupero brand: {str(e)}"
 
-    verdict = validate_with_art_director(visual_desc, proposed_caption, weather, guidelines)
+    # 3. Contesto Meteo (SearXNG)
+    # Cerchiamo il meteo. Se il brand è cosper (Cremona), cerchiamo lì.
+    citta = "Cremona" if brand_id == "cosper" else "Milano" 
+    try:
+        weather_search = _search_searxng(f"meteo {citta} oggi")
+        weather_context = weather_search if weather_search else "Meteo non disponibile."
+    except Exception:
+        weather_context = "Meteo non disponibile."
+
+    # 4. Reasoning
+    verdict = validate_with_art_director(visual_desc, proposed_caption, weather_context, brand_context)
 
     return {
         "descrizione_visiva": visual_desc,
+        "contesto_usato": {
+            "meteo": weather_context,
+            "brand": brand_context
+        },
         "verdetto": verdict.model_dump(),
     }
+
