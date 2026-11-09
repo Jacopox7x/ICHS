@@ -56,4 +56,10 @@ UI su `http://127.0.0.1:8080`.
 
 ## Versioning
 
-Git tag su ogni release. Vedi `git tag -l`.
+- `v3.9.3` (novembre 2026): packaging completo, clean install verde
+- `v3.9.2-intelligence`: ultima release pre-refactoring
+- `v3.8` (26 ottobre 2026): stabile per uso personale
+- `v4.0` (obiettivo dicembre 2026): app desktop Tauri
+
+Milestone tecniche intermedie del packaging (non sono versioni prodotto):
+- `v0.5.1-packaging`, `v0.5.2-requirements`, `v0.5.3-clean-install`
