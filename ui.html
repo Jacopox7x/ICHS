@@ -248,16 +248,35 @@
                             vbox.style.background = ok ? 'rgba(0,255,157,0.05)' : 'rgba(255,76,76,0.05)';
                             vbox.style.color = ok ? '#00ff9d' : '#ff4c4c';
                             const ctx = data.contesto_usato || {};
+                            
+                            // Funzione per creare i badge della pagella
+                            const makeBadge = (title, val) => {
+                                if (!val) return '';
+                                const color = val.ok ? '#00ff9d' : '#ff4c4c';
+                                const icon = val.ok ? '✓' : '✗';
+                                return `<div style="margin-bottom:4px;"><span style="color:${color}; font-weight:bold;">${icon} ${title}:</span> <span style="color:#ccc;">${val.motivo}</span></div>`;
+                            };
+
+                            const pagella = (v.valutazione_stagionale || v.valutazione_brand || v.valutazione_storica) ? 
+                                `<div style="background:#0a0a0f; padding:10px; border-radius:6px; margin-bottom:10px; font-size:11px; border: 1px solid #333;">
+                                    ${makeBadge('Stagionale', v.valutazione_stagionale)}
+                                    ${makeBadge('Brand', v.valutazione_brand)}
+                                    ${makeBadge('Storica', v.valutazione_storica)}
+                                    ${makeBadge('Contestuale', v.valutazione_contestuale)}
+                                </div>` : '';
+
                             vbox.innerHTML =
                                 '<div style="font-weight:bold; font-size:15px; margin-bottom:8px;">' +
                                 (ok ? '✓ APPROVATO' : '✗ BLOCCATO') + '</div>' +
-                                '<div style="color:#cdd6f4; margin-bottom:6px;"><strong>Motivazione:</strong> ' + (v.motivazione || '—') + '</div>' +
+                                pagella +
+                                '<div style="color:#cdd6f4; margin-bottom:6px;"><strong>Motivazione Finale:</strong> ' + (v.motivazione || '—') + '</div>' +
                                 '<div style="color:#cdd6f4; margin-bottom:10px;"><strong>Suggerimento:</strong> ' + (v.suggerimento || '—') + '</div>' +
                                 '<details style="border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; font-size:11px; color:#888;">' +
                                 '<summary style="cursor:pointer;">🔍 Dettagli Pipeline (Debug)</summary>' +
                                 '<div style="margin-top:8px; background:#000; padding:8px; border-radius:4px; overflow-x:auto;">' +
                                 '<strong>Meteo:</strong> ' + (ctx.meteo || 'N/D') + '<br><br>' +
-                                '<strong>Brand:</strong> ' + (ctx.brand || 'N/D') +
+                                '<strong>Brand:</strong> ' + (ctx.brand || 'N/D') + '<br><br>' +
+                                '<strong>Hashtag:</strong> ' + (ctx.hashtags || 'N/D') +
                                 '</div></details>';
                         } catch (err) {
                             vbox.style.border = '1px solid #ff4c4c';
