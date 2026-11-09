@@ -36,6 +36,9 @@ app = FastAPI(title="iCrawler UI")
 
 # === Vision Validator (auto-injected) ===
 from vision_router import vision_router
+
+from settings import validate_config
+validate_config()
 app.include_router(vision_router)
 app.mount("/static", StaticFiles(directory=Path(__file__).parent), name="static")
 
