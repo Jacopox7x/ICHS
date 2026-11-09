@@ -46,7 +46,7 @@ REGOLE:
 3. Rispondi solo con il testo del riassunto, senza introduzioni."""
 
         response = ollama.chat(
-            model="qwen2.5:3b",
+            model="phi3.5-fixed",
             messages=[{"role": "user", "content": prompt}],
             options={"temperature": 0.2, "num_ctx": 8192},
             keep_alive=0

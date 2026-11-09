@@ -40,7 +40,7 @@ async def ingest_clients():
 if __name__ == "__main__":
     # Carica le variabili d'ambiente per Cognee
     os.environ["LLM_PROVIDER"] = "ollama"
-    os.environ["LLM_MODEL"] = "qwen2.5:3b"
+    os.environ["LLM_MODEL"] = "phi3.5-fixed"
     os.environ["LLM_ENDPOINT"] = "http://localhost:11434"
     
     os.environ["EMBEDDING_PROVIDER"] = "ollama"

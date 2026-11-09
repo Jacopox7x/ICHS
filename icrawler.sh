@@ -41,10 +41,22 @@ cmd_start() {
         wait_for_port $PORT_OLLAMA "Ollama" 15
     else echo "  ⏭️  Ollama già attivo"; fi
     if ! check_port $PORT_SEARXNG; then
-        echo "  -> Avvio SearXNG..."
-        uvx simplexng > "$LOG_DIR/searxng.log" 2>&1 &
-        echo $! > "$PID_DIR/searxng.pid"
-        wait_for_port $PORT_SEARXNG "SearXNG" 15
+        if command -v docker &>/dev/null && docker info >/dev/null 2>&1; then
+            echo "  -> Avvio SearXNG (Docker)..."
+            if docker ps -a --format '{{.Names}}' | grep -q '^icrawler-searxng$'; then
+                docker start icrawler-searxng > "$LOG_DIR/searxng.log" 2>&1
+            else
+                docker run -d --rm --name icrawler-searxng \
+                    -p $PORT_SEARXNG:8080 \
+                    -v "$PROJECT_DIR/searxng_settings.yml:/etc/searxng/settings.yml:ro" \
+                    searxng/searxng > "$LOG_DIR/searxng.log" 2>&1
+            fi
+            if ! wait_for_port $PORT_SEARXNG "SearXNG" 20; then
+                echo "  ⚠️  SearXNG non risponde. Hashtag offline."
+            fi
+        else
+            echo "  ⚠️  Docker assente. SearXNG saltato (hashtag offline)."
+        fi
     else echo "  ⏭️  SearXNG già attivo"; fi
     if ! check_port $PORT_GLINER; then
         echo "  -> Avvio GLiNER..."
@@ -79,7 +91,7 @@ cmd_stop() {
     done
     pkill -f "uvicorn gliner_service:app" 2>/dev/null || true
     pkill -f "uvicorn ui_server:app" 2>/dev/null || true
-    pkill -f "simplexng" 2>/dev/null || true
+    docker stop icrawler-searxng 2>/dev/null || true
     echo "✅ Tutti i servizi fermati."
 }
 

@@ -11,7 +11,7 @@ class CogneeSettings(BaseSettings):
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
     llm_provider: str = Field(default="ollama")
-    llm_model: str = Field(default="qwen2.5:3b")
+    llm_model: str = Field(default="phi3.5-fixed")
     llm_endpoint: str = Field(default="http://localhost:11434")
     embedding_provider: str = Field(default="ollama")
     embedding_model: str = Field(default="nomic-embed-text:latest")

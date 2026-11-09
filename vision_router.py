@@ -189,7 +189,7 @@ Rispondi SOLO con questo JSON:
 
     try:
         res = ollama.chat(
-            model="phi3.5",
+            model="phi3.5-fixed",
             messages=[{"role": "user", "content": prompt}],
             format="json",
             options={"temperature": 0.1}

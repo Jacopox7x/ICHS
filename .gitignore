@@ -51,3 +51,20 @@ dist/
 build/
 *.app
 *.dmg
+
+# Packaging artifacts
+*.bak
+*.bak.*
+*.bak_*
+.pids/
+backups/
+tmp/
+
+# Dead code / feature future
+/image_analyzer.py
+/image_to_prompt.py
+/mcp_server.py
+/rss_reader.py
+/validator_ordomimesi.py
+/hashtags.py
+/test_moondream*

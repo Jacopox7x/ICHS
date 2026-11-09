@@ -51,6 +51,16 @@ for model in moondream phi3.5 nomic-embed-text; do
     else echo "  📥 Scarico $model..."; ollama pull "$model" || { echo "  ❌ Fallito"; exit 1; }; fi
 done
 
+# Build phi3.5-fixed se assente
+if ! ollama list 2>/dev/null | grep -q "^phi3.5-fixed"; then
+    if [ -f "Modelfile.phi3.dockerfile" ]; then
+        echo "  🔧 Creo phi3.5-fixed da Modelfile..."
+        ollama create phi3.5-fixed -f Modelfile.phi3.dockerfile || {
+            echo "  ❌ Fallito"; exit 1; }
+        echo "  ✅ phi3.5-fixed creato"
+    fi
+fi
+
 echo ""
 echo "🐍 Setup venv..."
 if [ ! -d "venv" ]; then python3 -m venv venv; echo "  ✅ venv creato"
@@ -81,6 +91,17 @@ else
     echo "  ❌ Import fallito:"; tail -10 /tmp/import_error.log; exit 1
 fi
 
+
+echo ""
+echo "🔎 Verifica SearXNG (Docker, opzionale)..."
+if ! command -v docker &>/dev/null; then
+    echo "  ⚠️  Docker assente. Hashtag di tendenza offline."
+elif ! docker info >/dev/null 2>&1; then
+    echo "  ⚠️  Docker non in esecuzione. Avvia Docker Desktop."
+else
+    echo "  ✅ Docker disponibile"
+    docker pull searxng/searxng 2>&1 | tail -1
+fi
 echo ""
 echo "🎉 Installazione completata!"
 echo "  ./icrawler.sh start"

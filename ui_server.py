@@ -36,9 +36,6 @@ app = FastAPI(title="iCrawler UI")
 
 # === Vision Validator (auto-injected) ===
 from vision_router import vision_router
-
-from settings import validate_config
-validate_config()
 app.include_router(vision_router)
 app.mount("/static", StaticFiles(directory=Path(__file__).parent), name="static")
 
@@ -287,5 +284,7 @@ def api_contesto_cliente(cliente: str = "cosper"):
     return {"status": "ok", "contesto": ctx if ctx else "Nessun contesto trovato."}
 
 if __name__ == "__main__":
+    from settings import validate_config
+    validate_config()
     import uvicorn
     uvicorn.run("ui_server:app", host="127.0.0.1", port=8080, reload=False)
