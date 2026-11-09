@@ -25,11 +25,16 @@ echo "🔧 iCrawler — Installazione"
 echo ""
 echo "📋 Verifica prerequisiti..."
 
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python 3 non trovato."; exit 1
+# Python 3.12 richiesto (cognee: Requires-Python >=3.10,<3.15; il progetto
+# è testato su 3.12. Pin esplicito per riproducibilità.)
+if ! command -v python3.12 &> /dev/null; then
+    echo "❌ Python 3.12 richiesto ma non trovato."
+    echo "   Su macOS: brew install python@3.12"
+    echo "   Poi rilancia ./install.sh"
+    exit 1
 fi
-PY_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
-echo "  ✅ Python $PY_VERSION"
+PY_VERSION=$(python3.12 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+echo "  ✅ Python $PY_VERSION (python3.12)"
 
 if command -v brew &> /dev/null; then echo "  ✅ Homebrew"
 else echo "  ⚠️  Homebrew non trovato."; fi
@@ -63,7 +68,7 @@ fi
 
 echo ""
 echo "🐍 Setup venv..."
-if [ ! -d "venv" ]; then python3 -m venv venv; echo "  ✅ venv creato"
+if [ ! -d "venv" ]; then python3.12 -m venv venv; echo "  ✅ venv creato"
 else echo "  ⏭️  venv esistente"; fi
 source venv/bin/activate
 pip install --upgrade pip --quiet
