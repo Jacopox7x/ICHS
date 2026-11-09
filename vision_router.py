@@ -183,7 +183,8 @@ Istruzioni:
 Rispondi SOLO con questo JSON:
 {{
   "motivazione": "Spiegazione in italiano",
-  "suggerimento": "Cosa correggere o hashtag da aggiungere"
+  "suggerimento": "Cosa correggere",
+  "hashtags_suggeriti": "#tag1, #tag2, #tag3, #tag4, #tag5"
 }}"""
 
     try:
@@ -196,9 +197,25 @@ Rispondi SOLO con questo JSON:
         data = json.loads(res["message"]["content"])
         motivazione_finale = data.get("motivazione", stagionale_motivo)
         suggerimento_finale = data.get("suggerimento", "")
+        hashtags_suggeriti = data.get("hashtags_suggeriti", "")
+        
+        # FIX: Se l'AI ha messo gli hashtag dentro il suggerimento, estraiamoli
+        hashtags_nel_sugg = re.findall(r'#\w+', suggerimento_finale)
+        if hashtags_nel_sugg and not hashtags_suggeriti:
+            hashtags_suggeriti = ", ".join(hashtags_nel_sugg)
+            # Rimuoviamo gli hashtag dal suggerimento per non duplicarli
+            suggerimento_finale = re.sub(r'#\w+', '', suggerimento_finale).strip()
+            # Pulizia di virgole/punti rimasti orfani
+            suggerimento_finale = re.sub(r'[,;]\s*[,;]', ',', suggerimento_finale)
+            suggerimento_finale = re.sub(r'[,\s]+$', '', suggerimento_finale)
+        
+        # FALLBACK finale: se ancora vuoto, usiamo default
+        if not hashtags_suggeriti:
+            hashtags_suggeriti = "#FashionStyle, #OutfitOfTheDay, #BrandAwareness"
     except Exception:
         motivazione_finale = stagionale_motivo
         suggerimento_finale = "Nessun suggerimento."
+        hashtags_suggeriti = ""
 
     return {
         "descrizione_visiva": visual_desc,
@@ -216,6 +233,7 @@ Rispondi SOLO con questo JSON:
             "brand_ok": True,
             "brand_motivo": "",
             "storico_ok": True,
-            "storico_motivo": ""
+            "storico_motivo": "",
+            "hashtags_suggeriti": hashtags_suggeriti
         }
     }

@@ -79,3 +79,31 @@ def retrieve_context(brief: str, cliente: str = "cosper", usa_contesto: bool = T
         "risultati": [],
         "percorso": "nessun_risultato"
     }
+
+
+def get_trending_hashtags(query: str) -> str:
+    """Estrae e filtra gli hashtag di tendenza tramite SearXNG."""
+    import re
+    try:
+        search_query = f"hashtag trending {query} site:instagram.com OR site:tiktok.com"
+        results = _search_searxng(search_query, max_results=5)
+        
+        if not results or "Nessun risultato" in results:
+            return "Nessun hashtag specifico trovato."
+            
+        hashtags = re.findall(r'#\w+', results)
+        
+        if hashtags:
+            unique_hashtags = list(dict.fromkeys(hashtags))
+            
+            # Lista nera degli hashtag spazzatura più comuni
+            blacklist = ['#follow', '#like', '#instagood', '#f4f', '#l4l', '#follow4follow', '#like4like', '#viral', '#trending', '#explore', '#love', '#photooftheday']
+            
+            valid_hashtags = [h for h in unique_hashtags if h.lower() not in blacklist and len(h) > 4]
+            
+            if valid_hashtags:
+                return ", ".join(valid_hashtags[:8])
+            
+        return "Nessun hashtag pertinente trovato."
+    except Exception as e:
+        return f"Errore ricerca hashtag: {str(e)}"

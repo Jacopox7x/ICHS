@@ -265,12 +265,39 @@
                                     ${makeBadge('Contestuale', v.valutazione_contestuale)}
                                 </div>` : '';
 
+                            
+                            // ESTRAZIONE HASHTAG DAL SUGGERIMENTO (fix robusto)
+                            let suggerimentoPulito = v.suggerimento || '';
+                            let hashtagArray = [];
+                            
+                            // Se c'è il campo dedicato, usiamo quello
+                            if (v.hashtags_suggeriti) {
+                                hashtagArray = v.hashtags_suggeriti.split(',').map(t => t.trim()).filter(t => t);
+                            } else {
+                                // Altrimenti estraiamo dal suggerimento
+                                const matches = suggerimentoPulito.match(/#\w+/g);
+                                if (matches) {
+                                    hashtagArray = matches;
+                                    // Rimuoviamo gli hashtag dal suggerimento
+                                    suggerimentoPulito = suggerimentoPulito.replace(/#\w+/g, '').replace(/\s+/g, ' ').trim();
+                                    // Pulizia virgole orfane
+                                    suggerimentoPulito = suggerimentoPulito.replace(/[,\s]+$/, '').trim();
+                                }
+                            }
+                            
+                            const hashtagHtml = hashtagArray.length > 0 ?
+                                '<div style="margin-top:15px; padding:10px; background:rgba(203,166,247,0.05); border-radius:6px; border:1px solid rgba(203,166,247,0.2);">' +
+                                '<strong style="color:#cba6f7; display:block; margin-bottom:8px; font-size:12px;"># Hashtag Suggeriti</strong>' +
+                                hashtagArray.map(t => '<span style="display:inline-block; background:rgba(203,166,247,0.15); color:#cba6f7; padding:4px 10px; border-radius:12px; margin:2px; font-size:11px; border:1px solid rgba(203,166,247,0.4);">' + t + '</span>').join('') +
+                                '</div>' : '';
+                            
                             vbox.innerHTML =
                                 '<div style="font-weight:bold; font-size:15px; margin-bottom:8px;">' +
                                 (ok ? '✓ APPROVATO' : '✗ BLOCCATO') + '</div>' +
                                 pagella +
                                 '<div style="color:#cdd6f4; margin-bottom:6px;"><strong>Motivazione Finale:</strong> ' + (v.motivazione || '—') + '</div>' +
-                                '<div style="color:#cdd6f4; margin-bottom:10px;"><strong>Suggerimento:</strong> ' + (v.suggerimento || '—') + '</div>' +
+                                '<div style="color:#cdd6f4; margin-bottom:10px;"><strong>Suggerimento:</strong> ' + (suggerimentoPulito || '—') + '</div>' + hashtagHtml +
+                                (v.hashtags_suggeriti ? '<div style="margin-bottom:10px; padding:10px; background:rgba(203,166,247,0.05); border-radius:6px; border:1px solid rgba(203,166,247,0.2);"><strong style="color:#cba6f7; display:block; margin-bottom:8px;"># Hashtag suggeriti</strong>' + v.hashtags_suggeriti.split(',').map(t => '<span style="display:inline-block; background:rgba(203,166,247,0.15); color:#cba6f7; padding:5px 12px; border-radius:14px; margin:3px 4px 3px 0; font-size:12px; border:1px solid rgba(203,166,247,0.4);">' + t.trim() + '</span>').join('') + '</div>' : '') +
                                 '<details style="border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; font-size:11px; color:#888;">' +
                                 '<summary style="cursor:pointer;">🔍 Dettagli Pipeline (Debug)</summary>' +
                                 '<div style="margin-top:8px; background:#000; padding:8px; border-radius:4px; overflow-x:auto;">' +
