@@ -1,7 +1,0 @@
-Evento: 50° compleanno di Marco
-Tipo: Festa informale tra amici
-Data: 15 settembre 2026
-Location: Reykjavik
-Target: amici e familiari
-Obiettivo: Divertirsi e creare ricordi indimenticabili
-Tono: Caldo, divertente, informale

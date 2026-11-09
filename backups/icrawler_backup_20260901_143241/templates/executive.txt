@@ -1,9 +1,0 @@
-Evento: [NOME EVENTO]
-Data: [DATA]
-Location: [LUOGO]
-Organizzatore: [ORGANIZZATORE]
-Target: [TARGET]
-Obiettivo: [OBIETTIVO]
-Tipo: Conferenza istituzionale di alto livello
-Tono: Professionale, autorevole, strategico
-Piattaforme: LinkedIn, Twitter, Instagram

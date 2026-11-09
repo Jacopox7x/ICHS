@@ -1,27 +1,53 @@
-# Ambiente virtuale e cache Python
+# === Ambiente virtuale e cache Python ===
 venv/
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Configurazioni locali (potrebbero contenere dati sensibili)
+# === Configurazioni locali (potenzialmente sensibili) ===
 .env
-.env.cognee
+.env.*
+!.env.example
 
-# Database locale generato da Cognee (molto pesante)
+# === Database locali pesanti ===
 .cognee_system/
 *.sqlite
 *.db
+*.db-journal
 
-# Documenti di test (o PDF locali)
-test_docs/
+# === File di backup e temporanei ===
+*.bak
+*.bak_*
+*.log
+*.tmp
+
+# === Cartella archivio (fuori dal progetto attivo) ===
+legacy/
+
+# === Dati utente e output generati (NON sono codice) ===
+storico_output/
+workspaces/
+data/*/output*
+!data/demo/
+!data/maison_aurel/
+
+# === Documenti PDF (potenzialmente protetti) ===
 *.pdf
 
-# File di sistema macOS
-.DS_Store
-*.bak
-test_*.py
+# === File di test personali (NON i test Python!) ===
 test_fashion.jpg
-*.log
-__pycache__/
-*.pyc
+test_*.jpg
+test_*.png
+
+# === File di sistema macOS ===
+.DS_Store
+._*
+Icon\r
+
+# === Build e distribuzione ===
+dist/
+build/
+*.app
+*.dmg

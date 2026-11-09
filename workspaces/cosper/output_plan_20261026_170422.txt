@@ -1,4 +1,0 @@
-<!-- BRIEF_START
-Un test di almeno dieci parole per far partire la generazione del piano.
-BRIEF_END -->
-
