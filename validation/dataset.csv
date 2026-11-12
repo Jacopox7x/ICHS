@@ -1,0 +1,6 @@
+id,immagine,caption,brand_id,expected_approvato,motivazione_umana
+001,caso_001.jpg,Pronti per la spiaggia con il costume estivo!,cosper,false,"Costume a Novembre a Milano: fa troppo freddo. Il meteo dovrebbe bloccarlo."
+002,caso_001.jpg,Elegante completo in lana per l'inverno.,cosper,true,"Cappotto in lana a Novembre: coerente con il meteo freddo."
+003,caso_001.jpg,Scarpe da trekking per la montagna.,cosper,false,"Il brand Cosper fa abbigliamento elegante/urban, non trekking. Violazione brand guidelines."
+004,caso_001.jpg,Maglione di lana per le serate fresche.,cosper,true,"Maglione perfetto per la stagione."
+005,caso_001.jpg,Costume da bagno a pois per Natale.,cosper,false,"Stagionalità completamente sbagliata. Il meteo invernale lo bloccherà."

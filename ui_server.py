@@ -2,7 +2,6 @@ from pathlib import Path
 import base64
 import tempfile
 import os
-import io
 import sys
 import re
 import json
@@ -10,7 +9,6 @@ import ollama
 from icrawler_simple import genera_newsletter
 from PIL import Image
 
-# Apple Vision (solo su macOS)
 HAS_APPLE_VISION = False
 if sys.platform == "darwin":
     try:
@@ -21,7 +19,7 @@ if sys.platform == "darwin":
     except ImportError:
         pass
 
-from fastapi import FastAPI, Request, Request, HTTPException, File, UploadFile
+from fastapi import FastAPI, Request, HTTPException, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -29,12 +27,10 @@ from pydantic import BaseModel
 from icrawler_simple import ICrawler
 from knowledge_base import get_context_for_brief, get_graph_data, build_and_save_graph
 from summarization_agent import SummarizationAgent
-
 from gliner_client import extract_entities, entities_to_dict, is_alive
 
 app = FastAPI(title="iCrawler UI")
 
-# === Vision Validator (auto-injected) ===
 from vision_router import vision_router
 app.include_router(vision_router)
 app.mount("/static", StaticFiles(directory=Path(__file__).parent), name="static")
@@ -84,16 +80,13 @@ def extract(req: BriefRequest):
     entities = entities_to_dict(raw)
     return {"entities": entities, "raw": raw}
 
-
 @app.post("/genera_newsletter")
 async def api_genera_newsletter(request: Request):
     data = await request.json()
     brief = data.get("brief", "")
     cliente = data.get("cliente", "Cosper")
     try:
-        # Assumiamo che l'istanza dell'app sia accessibile o che la funzione sia globale
-        # Se hai un'istanza, sostituisci app_instance con il nome corretto
-        risultato = genera_newsletter(brief, cliente) 
+        risultato = genera_newsletter(brief, cliente)
         return {"status": "ok", "newsletter": risultato}
     except Exception as e:
         return {"status": "error", "message": str(e)}
@@ -103,10 +96,8 @@ def genera(req: BriefRequest):
     brief = req.brief.strip()
     if not brief:
         return {"piano": "Brief vuoto. Incolla un testo prima di generare."}
-
     if len(brief.split()) < 10:
         return {"piano": "❌ Il brief è troppo corto (meno di 10 parole). Se hai caricato un'immagine, clicca su 'Analisi Visiva' o spunta 'Forza Generazione'."}
-
     piano = crawler.generate_strategy(brief, mode=req.mode, sandbox=req.sandbox, usa_contesto=req.usa_contesto)
     return {"piano": piano}
 
@@ -115,7 +106,6 @@ def summarize_text(req: SummarizeRequest):
     text = req.text.strip()
     if not text or len(text) < 100:
         return {"summary": "Testo troppo corto per essere riassunto."}
-    
     try:
         summary = summarizer.summarize(text)
         return {"summary": summary}
@@ -144,14 +134,13 @@ def run_apple_ocr(image_bytes: bytes) -> str:
 
 def run_qwen_ocr(image_bytes: bytes) -> str:
     img_b64 = base64.b64encode(image_bytes).decode("utf-8")
-    prompt = """Sei un OCR. Estrai TUTTO il testo visibile in questa immagine. 
-Se ci sono date, orari, luoghi o nomi, trascrivili ESATTAMENTE come appaiono. 
+    prompt = """Sei un OCR. Estrai TUTTO il testo visibile in questa immagine.
+Se ci sono date, orari, luoghi o nomi, trascrivili ESATTAMENTE come appaiono.
 Non aggiungere commenti, restituisci solo il testo estratto."""
     response = ollama.chat(
         model="qwen2.5vl:3b",
         messages=[{"role": "user", "content": prompt, "images": [img_b64]}],
         options={"temperature": 0.0, "num_ctx": 8192},
-        
     )
     return response["message"]["content"]
 
@@ -171,14 +160,12 @@ def ocr(file: UploadFile = File(...)):
                 raise HTTPException(status_code=413, detail=f"Immagine troppo grande (max {MAX_UPLOAD_MB} MB)")
             chunks.append(chunk)
         contents = b"".join(chunks)
-        
         if HAS_APPLE_VISION:
             testo_estratto = run_apple_ocr(contents)
             print(f"🍎 OCR Apple Vision: '{testo_estratto}'")
         else:
             print("⚠️ Apple Vision non disponibile. Uso Qwen VL per l'OCR...")
             testo_estratto = run_qwen_ocr(contents)
-            
         return {"testo": testo_estratto}
     except HTTPException:
         raise
@@ -189,20 +176,15 @@ def ocr(file: UploadFile = File(...)):
 def analyze_vision(file: UploadFile = File(...)):
     try:
         contents = file.file.read()
-        
-        # 1. Usiamo Apple Vision per l'OCR (velocissimo e non richiede Qwen-VL)
         testo_estratto = ""
         if HAS_APPLE_VISION:
             try:
                 testo_estratto = run_apple_ocr(contents)
             except Exception as e:
                 print(f"Errore Apple Vision: {e}")
-
-        # 2. Se non abbiamo Qwen-VL, restituiamo solo il testo.
         descrizione = "Analisi visiva avanzata non disponibile (modello Qwen-VL non scaricato)."
         if testo_estratto:
             descrizione = "Immagine elaborata tramite OCR."
-
         return {
             "vision": {
                 "descrizione_generica": descrizione,
@@ -236,27 +218,22 @@ def leggi_piano(name: str, sandbox: str = "cosper"):
         raise HTTPException(status_code=404, detail="Piano non trovato")
     return {"content": path.read_text(encoding="utf-8")}
 
-
 @app.get("/api/contesto_cliente")
 def api_contesto_cliente(cliente: str = "cosper"):
     try:
         ctx = get_context_for_brief("", cliente)
-        return {"status": "ok", "contesto": ctx}
+        return {"status": "ok", "contesto": ctx if ctx else "Nessun contesto trovato."}
     except Exception as e:
         return {"status": "error", "contesto": str(e)}
-
-
 
 @app.post("/api/genera_grafo")
 def genera_grafo(req: BriefRequest):
     from graph_manager import build_graph_from_text, get_graph_data
     try:
-        # Usiamo solo GLiNER per estrarre le entità
         build_graph_from_text(req.brief, cliente=req.sandbox)
         return get_graph_data()
     except Exception as e:
         return {"error": str(e)}
-
 
 @app.post("/api/grafo_manuale")
 def api_grafo_manuale(req: ManualGraphRequest):
@@ -266,22 +243,7 @@ def api_grafo_manuale(req: ManualGraphRequest):
 
 @app.get("/api/grafo_cliente")
 def api_grafo_cliente(cliente: str = "cosper"):
-
     return get_graph_data()
-
-@app.post("/api/genera_grafo")
-def genera_grafo(req: BriefRequest):
-
-    build_and_save_graph(req.brief, req.sandbox)
-
-    return get_graph_data()
-
-@app.get("/api/contesto_cliente")
-def api_contesto_cliente(cliente: str = "cosper"):
-
-    # Passiamo un brief fittizio o recuperiamo il contesto generico
-    ctx = get_context_for_brief("", cliente)
-    return {"status": "ok", "contesto": ctx if ctx else "Nessun contesto trovato."}
 
 if __name__ == "__main__":
     from settings import validate_config

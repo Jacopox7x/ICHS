@@ -41,21 +41,38 @@ cmd_start() {
         wait_for_port $PORT_OLLAMA "Ollama" 15
     else echo "  ⏭️  Ollama già attivo"; fi
     if ! check_port $PORT_SEARXNG; then
-        if command -v docker &>/dev/null && docker info >/dev/null 2>&1; then
-            echo "  -> Avvio SearXNG (Docker)..."
-            if docker ps -a --format '{{.Names}}' | grep -q '^icrawler-searxng$'; then
-                docker start icrawler-searxng > "$LOG_DIR/searxng.log" 2>&1
-            else
-                docker run -d --rm --name icrawler-searxng \
-                    -p $PORT_SEARXNG:8080 \
-                    -v "$PROJECT_DIR/searxng_settings.yml:/etc/searxng/settings.yml:ro" \
-                    searxng/searxng > "$LOG_DIR/searxng.log" 2>&1
+        if command -v docker &>/dev/null; then
+            # Se docker esiste ma il daemon è spento, prova ad avviare OrbStack
+            if ! docker info >/dev/null 2>&1; then
+                echo "  -> Docker daemon non attivo. Provo ad avviare OrbStack..."
+                if [ -d "/Applications/OrbStack.app" ]; then
+                    open -a OrbStack >/dev/null 2>&1
+                    local i=0
+                    while ! docker info >/dev/null 2>&1 && [ $i -lt 15 ]; do
+                        sleep 1
+                        i=$((i+1))
+                    done
+                fi
             fi
-            if ! wait_for_port $PORT_SEARXNG "SearXNG" 20; then
-                echo "  ⚠️  SearXNG non risponde. Hashtag offline."
+
+            if docker info >/dev/null 2>&1; then
+                echo "  -> Avvio SearXNG (Docker)..."
+                if docker ps -a --format '{{.Names}}' | grep -q '^icrawler-searxng$'; then
+                    docker start icrawler-searxng > "$LOG_DIR/searxng.log" 2>&1
+                else
+                    docker run -d --rm --name icrawler-searxng \
+                        -p $PORT_SEARXNG:8080 \
+                        -v "$PROJECT_DIR/searxng_settings.yml:/etc/searxng/settings.yml:ro" \
+                        searxng/searxng > "$LOG_DIR/searxng.log" 2>&1
+                fi
+                if ! wait_for_port $PORT_SEARXNG "SearXNG" 20; then
+                    echo "  ⚠️  SearXNG non risponde. Hashtag offline."
+                fi
+            else
+                echo "  ⚠️  Docker/OrbStack non avviabile. SearXNG saltato (hashtag offline)."
             fi
         else
-            echo "  ⚠️  Docker assente. SearXNG saltato (hashtag offline)."
+            echo "  ⚠️  Docker non installato. SearXNG saltato (hashtag offline)."
         fi
     else echo "  ⏭️  SearXNG già attivo"; fi
     if ! check_port $PORT_GLINER; then

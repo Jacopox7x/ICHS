@@ -1,0 +1,6 @@
+id,expected,predicted,correct,time_sec,motivazione_api
+1,False,False,True,31.69,Il post è stato bloccato a causa della coerenza visiva traca caption estival ed immagine mostrando un capo da inverno.
+2,True,True,True,21.43,Il post non è bloccato; soddisfa i criteri tecnici specificando un completo elegante realizzato nella pelle della lana adatto alla temperatura minima indicata.
+3,False,False,True,22.62,Il post è stato bloccato perché contravviene i temi del marchio Copper; presenta un prodotto da trekking quando il focus della linea é eleganza urbana.
+4,True,True,True,18.21,Verdetto è permesso poich extrassione deta i limitazioni temporali indicates da lineee del manifesto dove si dice 'Maggiore = settembre Blocco dei capìp piu estatiji.
+5,False,False,True,22.92,Il post è stato bloccato perché non aderisce al periodo appropriato della linea guida del marchio poichse presenta un costume da bagno a quipos durante i mesi indicati come natalizio quando tipicament
